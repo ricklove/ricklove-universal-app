@@ -1,2 +1,2 @@
-export const exampleA = `ThisIsA --- 18`;
+export const exampleA = `ThisIsA --- 23`;
 export const exampleA2 = `ThisIsAToo`;
