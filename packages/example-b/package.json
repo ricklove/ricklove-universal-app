@@ -3,7 +3,7 @@
   "module": "index.ts",
   "type": "module",
   "dependencies": {
-    "example-a": "workspace:*"
+    "@bc2/example-a": "workspace:*"
   },
   "devDependencies": {
     "bun-types": "latest"
