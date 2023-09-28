@@ -6,8 +6,8 @@
     "example": "bun ./packages/example-b/run"
   },
   "workspaces": [
-    "packages/*",
-    "apps/*"
+    "apps/*",
+    "packages/*"
   ],
   "devDependencies": {
     "bun-types": "latest"
