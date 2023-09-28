@@ -2,6 +2,13 @@
   "name": "bc-common",
   "private": "true",
   "type": "module",
+  "scripts": {
+    "test": "bun ./packages/example-b/run"
+  },
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
   "devDependencies": {
     "bun-types": "latest"
   },
