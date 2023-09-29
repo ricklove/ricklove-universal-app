@@ -1,24 +1,20 @@
 {
-    "name": "@bc2/example-app",
+    "name": "@bc2/cl",
     "module": "out/index.js",
     "type": "module",
-    "scripts": {
-        "build": "bun build ./index.ts --external react --external react-native --outdir ./out",
-        "dev": "bun build ./index.ts --external react --external react-native --outdir ./out --watch"
-    },
     "dependencies": {
-        "@bc2/cl": "workspace:*",
-        "@bc2/example-a": "workspace:*",
         "@expo/webpack-config": "^19.0.0",
         "expo": "~49.0.13",
         "expo-status-bar": "~1.6.0",
+        "nativewind": "^2.0.11",
         "react": "18.2.0",
         "react-dom": "18.2.0",
         "react-native": "0.72.5",
         "react-native-web": "~0.19.6"
     },
     "devDependencies": {
-        "bun-types": "latest"
+        "bun-types": "latest",
+        "tailwindcss": "^3.3.3"
     },
     "peerDependencies": {
         "typescript": "^5.0.0"

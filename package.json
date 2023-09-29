@@ -8,7 +8,8 @@
         "web": "cd apps/expo-app && bun run web",
         "lint": "eslint . --fix",
         "format": "prettier . --write",
-        "fix": "prettier . --write && eslint . --fix"
+        "fix": "prettier . --write && eslint . --fix",
+        "theme": "bun build ./packages/cl/src/design/tailwind/config.ts --outfile tailwind.config.js"
     },
     "workspaces": [
         "apps/*",
