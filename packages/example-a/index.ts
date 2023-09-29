@@ -1,3 +1,3 @@
-import { exampleA, exampleA2 } from "./src";
+import { exampleA, exampleA2 } from './src';
 
-export { exampleA, exampleA2 }
+export { exampleA, exampleA2 };

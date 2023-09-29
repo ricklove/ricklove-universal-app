@@ -1,14 +1,14 @@
 {
-  "name": "@bc2/example-b",
-  "module": "index.ts",
-  "type": "module",
-  "dependencies": {
-    "@bc2/example-a": "workspace:*"
-  },
-  "devDependencies": {
-    "bun-types": "latest"
-  },
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  }
+    "name": "@bc2/example-b",
+    "module": "index.ts",
+    "type": "module",
+    "dependencies": {
+        "@bc2/example-a": "workspace:*"
+    },
+    "devDependencies": {
+        "bun-types": "latest"
+    },
+    "peerDependencies": {
+        "typescript": "^5.0.0"
+    }
 }
