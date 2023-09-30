@@ -11,7 +11,7 @@ export const ExampleView = () => {
 
     return (
         <View className='w-full h-full flex-col flex-1 items-center justify-center bg-white'>
-            <Text className=''>{`ExampleView ... ${exampleA}`}</Text>
+            <Text className='text-cyan-800'>{`ExampleView ... ${exampleA}`}</Text>
             <Pressable onPress={increment}>
                 <Text>{`Increment count:${count}`}</Text>
             </Pressable>
