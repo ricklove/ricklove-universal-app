@@ -12,7 +12,8 @@
         "dev2": "esbuild ../../packages/example-app/index.ts --bundle --format=cjs --external:react --external:react-native --outfile=./out/index.js --loader:.js=jsx --sourcemap=inline --watch",
         "dev3": "esbuild ../../packages/example-app/index.ts --bundle --format=esm --external:react --external:react-native --outfile=./out/index.js --loader:.js=jsx --sourcemap=inline --watch",
         "dev": "esbuild ../../packages/example-app/index.ts --bundle --format=esm --external:react --external:react-native --outfile=./src/app.gen.jsx --loader:.js=jsx --jsx=preserve --sourcemap=inline --watch",
-        "dev:theme": "esbuild ../../packages/cl/src/design/tailwind/theme.ts --bundle --format=cjs --external:react --external:react-native --outfile=./src/theme.gen.js --watch"
+        "dev:theme": "esbuild ../../packages/cl/src/design/tailwind/theme.ts --bundle --format=cjs --external:react --external:react-native --outfile=./src/theme.gen.js --watch",
+        "dev:tailwind": "tailwindcss -c tailwind.config.js -o ./src/output.gen.css --watch"
     },
     "dependencies": {
         "@bc2/example-app": "workspace:*",
