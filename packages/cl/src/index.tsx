@@ -11,7 +11,7 @@ export const ExampleView = () => {
 
     return (
         <View className='w-full h-full flex-col flex-1 items-center justify-center bg-white'>
-            <Text className='text-cyan-700'>{`ExampleView ... ${exampleA} - nice - it's instant!!!! but the styles is broken sad face `}</Text>
+            <Text className='text-cyan-700'>{`ExampleView ... ${exampleA} - wait a min, it is retaining state now - cool`}</Text>
             <Pressable onPress={increment}>
                 <Text>{`Increment count:${count}`}</Text>
             </Pressable>
