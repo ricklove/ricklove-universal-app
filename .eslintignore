@@ -4,3 +4,5 @@ node_modules
 **/*.lockb
 **/*.gen.ts
 **/*.gen.js
+**/*.gen.jsx
+**/*.gen.tsx

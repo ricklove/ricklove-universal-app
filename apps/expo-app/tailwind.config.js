@@ -1,8 +1,8 @@
-const { tailwindTheme } = require(`./out/index`);
+const { tailwindTheme } = require(`./src/theme.gen`);
 
 /** @type {import('tailwindcss').Config} */
-export default {
-  content: [`./out/index.js`],
+module.exports = {
+  content: [`./src/app.gen.jsx`],
   theme: {
     ...tailwindTheme,
   },

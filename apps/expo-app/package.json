@@ -7,7 +7,12 @@
         "android": "expo start --android",
         "ios": "expo start --ios",
         "web": "expo start --web",
-        "dev": "esbuild ../../packages/example-app/index.ts --bundle --format=cjs --external:react --external:react-native --outfile=./out/index.js --loader:.js=jsx --jsx=preserve --watch"
+        "dev0": "bun build ../../packages/example-app/index.ts --external react --external react-native --sourcemap=inline --outdir ./out --watch",
+        "dev1": "esbuild ../../packages/example-app/index.ts --bundle --format=cjs --external:react --external:react-native --outfile=./out/index.jsx --loader:.js=jsx --jsx=preserve --sourcemap=inline --watch",
+        "dev2": "esbuild ../../packages/example-app/index.ts --bundle --format=cjs --external:react --external:react-native --outfile=./out/index.js --loader:.js=jsx --sourcemap=inline --watch",
+        "dev3": "esbuild ../../packages/example-app/index.ts --bundle --format=esm --external:react --external:react-native --outfile=./out/index.js --loader:.js=jsx --sourcemap=inline --watch",
+        "dev": "esbuild ../../packages/example-app/index.ts --bundle --format=esm --external:react --external:react-native --outfile=./src/app.gen.jsx --loader:.js=jsx --jsx=preserve --sourcemap=inline --watch",
+        "dev:theme": "esbuild ../../packages/cl/src/design/tailwind/theme.ts --bundle --format=cjs --external:react --external:react-native --outfile=./src/theme.gen.js --watch"
     },
     "dependencies": {
         "@bc2/example-app": "workspace:*",
