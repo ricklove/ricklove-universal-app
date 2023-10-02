@@ -3,6 +3,7 @@
   "private": "true",
   "type": "module",
   "scripts": {
+    "deps:reinstall": "rm -f bun.lockb && bun install --yarn",
     "example": "bun ./packages/example-b/run",
     "dev": "cd apps/expo-app && bun run dev",
     "web": "cd apps/expo-app && bun run web",
@@ -12,11 +13,11 @@
     "theme": "bun build ./packages/cl/src/design/tailwind/config.ts --outfile tailwind.config.gen.js"
   },
   "workspaces": [
-    "apps/*",
     "packages/*"
   ],
   "devDependencies": {
-    "bun-types": "latest"
+    "bun-types": "latest",
+    "prettier": "^3.0.3"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
@@ -24,7 +25,6 @@
   "dependencies": {
     "esbuild": "^0.19.4",
     "eslint": "^8.50.0",
-    "eslint-config-universe": "^12.0.0",
-    "prettier": "^3.0.3"
+    "eslint-config-universe": "^12.0.0"
   }
 }

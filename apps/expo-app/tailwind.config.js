@@ -3,6 +3,7 @@ module.exports = {
   content: [`./src/app.gen.jsx`],
   theme: {
     extend: {},
+    //TODO
   },
   plugins: [],
 };
