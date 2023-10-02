@@ -10,10 +10,11 @@ export const ExampleView = () => {
     };
 
     return (
-        <View className='w-full h-full flex-col flex-1 items-center justify-center bg-white'>
+        <View className='w-full h-full flex-col flex-1 items-center justify-center bg-green-900'>
             <Text className='text-cyan-700'>{`ExampleView ... ${exampleA} - wait a min, it is retaining state now - cool`}</Text>
             <Pressable onPress={increment}>
                 <Text>{`Increment count:${count}`}</Text>
+                <Text>001</Text>
             </Pressable>
             <StatusBar style='auto' />
         </View>
