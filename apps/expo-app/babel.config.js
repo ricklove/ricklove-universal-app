@@ -6,10 +6,12 @@ module.exports = function (api) {
             `expo-router/babel`,
             [
                 `nativewind/babel`,
-                // {
-                //     // this must be used for expo web so the className passes through
-                //     mode: `transformOnly`,
-                // },
+                {
+                    // this must be used for expo web so the className passes through
+
+                    // mode: `transformOnly`,
+                    // mode: `compileOnly`,
+                },
             ],
         ],
     };
