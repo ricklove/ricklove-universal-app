@@ -1,13 +1,16 @@
 import { watch } from 'fs';
 import fs from 'fs/promises';
 
+const stylesPath = `../public/styles-web.gen.css`;
+const styleVersionPath = `../app/_style-version.gen.css`;
+
 export const run = async () => {
-    const info = await fs.stat(`../public/styles-web.gen.css`);
+    const info = await fs.stat(stylesPath);
     const modified = info.mtime;
 
-    fs.writeFile(`../app/style-version.gen.ts`, `export const styleVersion = '${modified}';`);
+    fs.writeFile(styleVersionPath, `export const styleVersion = '${modified}';`);
 };
 
-watch(`../public/styles-web.gen.css`, {}, () => {
+watch(stylesPath, {}, () => {
     run();
 });

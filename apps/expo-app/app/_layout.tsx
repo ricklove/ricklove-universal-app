@@ -2,7 +2,7 @@ import { Stack } from 'expo-router/stack';
 import { useEffect } from 'react';
 import { Platform } from 'react-native';
 
-import { styleVersion } from './style-version.gen';
+import { styleVersion } from './_style-version.gen';
 
 export default function Layout() {
     // hot reload css during development
