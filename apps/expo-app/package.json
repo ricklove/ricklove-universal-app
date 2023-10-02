@@ -6,7 +6,9 @@
         "start": "expo start --tunnel",
         "android": "expo start --android --tunnel",
         "ios": "expo start --ios --tunnel",
-        "web": "expo start --web --tunnel",
+        "web": "expo start --web",
+        "build": "expo export",
+        "build:web": "expo export --platform web",
         "ts:check": "tsc",
         "dev0": "bun build ../../packages/example-app/index.ts --external react --external react-native --sourcemap=inline --outdir ./out --watch",
         "dev": "esbuild ../../packages/example-app/index.ts --bundle --format=esm --external:react --external:react-native --outfile=./src/app.gen.jsx --loader:.js=jsx --jsx=preserve --sourcemap=inline --watch",
@@ -20,6 +22,7 @@
         "expo-linking": "~5.0.2",
         "expo-router": "^2.0.0",
         "expo-status-bar": "~1.6.0",
+        "nativewind": "^2.0.11",
         "react": "18.2.0",
         "react-dom": "18.2.0",
         "react-native": "0.72.5",
@@ -31,13 +34,29 @@
     "devDependencies": {
         "@babel/core": "^7.20.0",
         "@types/react": "~18.2.14",
-        "typescript": "^5.1.3",
         "@types/react-native": "~0.69.1",
         "autoprefixer": "^10.4.8",
         "babel-preset-expo": "^9.2.0",
-        "postcss": "^8.4.16",
-        "postcss-loader": "^4.2.0",
-        "tailwindcss": "^3.1.8"
+        "postcss": "8.4.23",
+        "tailwindcss": "3.3.2",
+        "typescript": "^5.1.3"
+    },
+    "overrides -- not supported by bun": {
+        "@expo/metro-config@~0.10.0": {
+            "postcss": "8.4.23"
+        },
+        "css-loader@^6.5.1": {
+            "postcss": "8.4.23"
+        },
+        "css-minimizer-webpack-plugin@^3.4.1": {
+            "postcss": "8.4.23"
+        },
+        "nativewind@^2.0.11": {
+            "postcss": "8.4.23"
+        },
+        "tailwindcss@3.3.2": {
+            "postcss": "8.4.23"
+        }
     },
     "private": true
 }

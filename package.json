@@ -3,7 +3,7 @@
   "private": "true",
   "type": "module",
   "scripts": {
-    "reinstall": "rm -f bun.lockb && bun install",
+    "deps:reinstall": "rm -f bun.lockb && bun install --yarn",
     "example": "bun ./packages/example-b/run",
     "dev": "cd apps/expo-app && bun run dev",
     "web": "cd apps/expo-app && bun run web",
