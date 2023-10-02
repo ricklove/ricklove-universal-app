@@ -13,7 +13,6 @@
     "theme": "bun build ./packages/cl/src/design/tailwind/config.ts --outfile tailwind.config.gen.js"
   },
   "workspaces": [
-    "apps/*",
     "packages/*"
   ],
   "devDependencies": {
