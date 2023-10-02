@@ -6,4 +6,4 @@ node_modules
 **/*.gen.js
 **/*.gen.jsx
 **/*.gen.tsx
-**/package.json
+**/*.json

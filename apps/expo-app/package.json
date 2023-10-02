@@ -14,7 +14,7 @@
         "dev0": "bun build ../../packages/example-app/index.ts --external react --external react-native --sourcemap=inline --outdir ./out --watch",
         "dev": "esbuild ../../packages/example-app/index.ts --bundle --format=esm --external:react --external:react-native --outfile=./src/app.gen.jsx --loader:.js=jsx --jsx=preserve --sourcemap=inline --watch",
         "dev:theme": "esbuild ../../packages/cl/src/design/tailwind/theme.ts --bundle --format=cjs --external:react --external:react-native --outfile=./src/theme.gen.js --watch",
-        "debug:tailwind": "tailwindcss -c tailwind.config.js -o ./src/output.gen.css"
+        "dev:styles": "tailwindcss -c tailwind.config.js -o ./public/styles-web.gen.css --watch"
     },
     "dependencies": {
         "@expo/webpack-config": "^19.0.0",
