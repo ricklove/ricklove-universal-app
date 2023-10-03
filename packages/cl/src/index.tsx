@@ -1,4 +1,3 @@
-import { exampleA } from '@ricklove-universal/example-a';
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
@@ -11,7 +10,7 @@ export const ExampleView = () => {
 
     return (
         <View className='w-full h-full flex-col flex-1 items-center justify-center bg-red-100'>
-            <Text className='text-cyan-700'>{`ExampleView ... ${exampleA} - wait a min, it is retaining state now - cool`}</Text>
+            <Text className='text-cyan-700'>ExampleView ...</Text>
             <Pressable onPress={increment}>
                 <Text>{`Increment count:${count}`}</Text>
                 <Text>003</Text>

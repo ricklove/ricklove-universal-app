@@ -1,4 +1,4 @@
-# @ricklove-universal
+# @ricklove universal
 
 To install dependencies:
 
