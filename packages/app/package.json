@@ -1,14 +1,9 @@
 {
     "name": "@ricklove-universal/app",
-    "module": "out/index.js",
+    "module": "index.ts",
     "type": "module",
-    "scripts": {
-        "build": "bun build ./index.ts --external react --external react-native --outdir ./out",
-        "dev": "bun build ./index.ts --external react --external react-native --outdir ./out --watch"
-    },
     "dependencies": {
         "@ricklove-universal/cl": "workspace:*",
-        "@expo/webpack-config": "^19.0.0",
         "expo": "~49.0.13",
         "expo-status-bar": "~1.6.0",
         "react": "18.2.0",
