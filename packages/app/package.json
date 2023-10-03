@@ -1,5 +1,5 @@
 {
-    "name": "@rickloveuniversal/app",
+    "name": "@ricklove-universal/app",
     "module": "out/index.js",
     "type": "module",
     "scripts": {
@@ -7,8 +7,8 @@
         "dev": "bun build ./index.ts --external react --external react-native --outdir ./out --watch"
     },
     "dependencies": {
-        "@rickloveuniversal/cl": "workspace:*",
-        "@rickloveuniversal/example-a": "workspace:*",
+        "@ricklove-universal/cl": "workspace:*",
+        "@ricklove-universal/example-a": "workspace:*",
         "@expo/webpack-config": "^19.0.0",
         "expo": "~49.0.13",
         "expo-status-bar": "~1.6.0",

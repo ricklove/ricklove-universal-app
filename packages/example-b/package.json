@@ -1,9 +1,9 @@
 {
-    "name": "@rickloveuniversal/example-b",
+    "name": "@ricklove-universal/example-b",
     "module": "index.ts",
     "type": "module",
     "dependencies": {
-        "@rickloveuniversal/example-a": "workspace:*"
+        "@ricklove-universal/example-a": "workspace:*"
     },
     "devDependencies": {
         "bun-types": "latest"

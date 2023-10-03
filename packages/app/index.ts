@@ -1,2 +1,2 @@
 export { App } from './src';
-export { tailwindTheme } from '@rickloveuniversal/cl';
+export { tailwindTheme } from '@ricklove-universal/cl';

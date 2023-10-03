@@ -1,9 +1,9 @@
 {
-    "name": "@rickloveuniversal/cl",
+    "name": "@ricklove-universal/cl",
     "module": "out/index.js",
     "type": "module",
     "dependencies": {
-        "@rickloveuniversal/example-a": "workspace:*",
+        "@ricklove-universal/example-a": "workspace:*",
         "@expo/webpack-config": "^19.0.0",
         "expo": "~49.0.13",
         "expo-status-bar": "~1.6.0",

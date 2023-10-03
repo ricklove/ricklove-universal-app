@@ -1,5 +1,5 @@
 {
-    "name": "@rickloveuniversal/example-a",
+    "name": "@ricklove-universal/example-a",
     "module": "index.ts",
     "type": "module",
     "devDependencies": {

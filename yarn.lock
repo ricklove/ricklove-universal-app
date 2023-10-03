@@ -2110,14 +2110,14 @@
     invariant "^2.2.4"
     nullthrows "^1.1.1"
 
-"@rickloveuniversal/cl@packages/cl":
+"@ricklove-universal/cl@packages/cl":
   version "workspace:packages/cl"
   resolved "workspace:packages/cl"
   devDependencies:
     bun-types "latest"
   dependencies:
     "@expo/webpack-config" "^19.0.0"
-    "@rickloveuniversal/example-a" "packages/example-a"
+    "@ricklove-universal/example-a" "packages/example-a"
     expo "~49.0.13"
     expo-status-bar "~1.6.0"
     nativewind "^2.0.11"
@@ -2126,21 +2126,21 @@
     react-native "0.72.5"
     react-native-web "~0.19.6"
 
-"@rickloveuniversal/example-a@packages/example-a":
+"@ricklove-universal/example-a@packages/example-a":
   version "workspace:packages/example-a"
   resolved "workspace:packages/example-a"
   devDependencies:
     bun-types "latest"
 
-"@rickloveuniversal/example-app@packages/example-app":
+"@ricklove-universal/example-app@packages/example-app":
   version "workspace:packages/example-app"
   resolved "workspace:packages/example-app"
   devDependencies:
     bun-types "latest"
   dependencies:
     "@expo/webpack-config" "^19.0.0"
-    "@rickloveuniversal/cl" "packages/cl"
-    "@rickloveuniversal/example-a" "packages/example-a"
+    "@ricklove-universal/cl" "packages/cl"
+    "@ricklove-universal/example-a" "packages/example-a"
     expo "~49.0.13"
     expo-status-bar "~1.6.0"
     react "18.2.0"
@@ -2148,13 +2148,13 @@
     react-native "0.72.5"
     react-native-web "~0.19.6"
 
-"@rickloveuniversal/example-b@packages/example-b":
+"@ricklove-universal/example-b@packages/example-b":
   version "workspace:packages/example-b"
   resolved "workspace:packages/example-b"
   devDependencies:
     bun-types "latest"
   dependencies:
-    "@rickloveuniversal/example-a" "packages/example-a"
+    "@ricklove-universal/example-a" "packages/example-a"
 
 "@segment/loosely-validate-event@^2.0.0":
   version "2.0.0"
