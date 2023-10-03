@@ -1,5 +1,5 @@
 {
-  "name": "ricklove-universal-app",
+  "name": "@rickloveuniversal/root",
   "private": "true",
   "type": "module",
   "scripts": {

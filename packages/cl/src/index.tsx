@@ -1,4 +1,4 @@
-import { exampleA } from '@rl2/example-a';
+import { exampleA } from '@rickloveuniversal/example-a';
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import { Pressable, Text, View } from 'react-native';
