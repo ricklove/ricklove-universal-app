@@ -1,5 +1,5 @@
 {
-    "name": "@bc2/example-a",
+    "name": "@rl2/example-a",
     "module": "index.ts",
     "type": "module",
     "devDependencies": {

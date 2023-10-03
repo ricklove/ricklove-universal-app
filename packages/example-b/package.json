@@ -1,9 +1,9 @@
 {
-    "name": "@bc2/example-b",
+    "name": "@rl2/example-b",
     "module": "index.ts",
     "type": "module",
     "dependencies": {
-        "@bc2/example-a": "workspace:*"
+        "@rl2/example-a": "workspace:*"
     },
     "devDependencies": {
         "bun-types": "latest"

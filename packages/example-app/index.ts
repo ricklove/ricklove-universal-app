@@ -1,2 +1,2 @@
 export { App } from './src';
-export { tailwindTheme } from '@bc2/cl';
+export { tailwindTheme } from '@rl2/cl';

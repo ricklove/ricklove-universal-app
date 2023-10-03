@@ -1,5 +1,5 @@
 {
-  "name": "bc-common",
+  "name": "rl-common",
   "private": "true",
   "type": "module",
   "scripts": {

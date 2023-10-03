@@ -1,5 +1,5 @@
 {
-    "name": "@bc2/example-app",
+    "name": "@rl2/example-app",
     "module": "out/index.js",
     "type": "module",
     "scripts": {
@@ -7,8 +7,8 @@
         "dev": "bun build ./index.ts --external react --external react-native --outdir ./out --watch"
     },
     "dependencies": {
-        "@bc2/cl": "workspace:*",
-        "@bc2/example-a": "workspace:*",
+        "@rl2/cl": "workspace:*",
+        "@rl2/example-a": "workspace:*",
         "@expo/webpack-config": "^19.0.0",
         "expo": "~49.0.13",
         "expo-status-bar": "~1.6.0",
