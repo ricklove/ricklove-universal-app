@@ -6,7 +6,13 @@ import ts, {
     SourceFile,
 } from 'typescript';
 
-import { PipescriptPipe, PipescriptType, PipescriptVariable, PipescriptWorkflow } from './types';
+import {
+    PipescriptNode,
+    PipescriptPipe,
+    PipescriptType,
+    PipescriptVariable,
+    PipescriptWorkflow,
+} from './types';
 
 export const convertTypescriptToPipescript = (
     fileCode: { filename: string; code: string }[],
@@ -89,7 +95,10 @@ const visitFile = (
     // console.log(`visitFile`, { file });
 
     const outputs: PipescriptWorkflow[`outputs`] = [];
+    const nodes: PipescriptWorkflow[`nodes`] = [];
     const outputPipes: PipescriptWorkflow[`outputPipes`] = [];
+    let nextNodeId = 1;
+
     file.forEachChild(n => {
         if (n.kind === ts.SyntaxKind.VariableStatement) {
             const t = n as ts.VariableStatement;
@@ -105,23 +114,41 @@ const visitFile = (
                 // console.log(`visitFile type`, { d, type });
                 // TODO: these are workflow outputs
                 const varName = name.getText(file);
+                const varType = getType(file, type);
                 const outputVar: PipescriptVariable = {
                     name: varName,
-                    type: getType(file, type),
+                    type: varType,
                 };
+
+                const node: undefined | PipescriptNode = !initializer
+                    ? undefined
+                    : {
+                          nodeId: `${nextNodeId++}`,
+                          implementation: {
+                              kind: `data`,
+                              output: {
+                                  type: varType,
+                                  name: `data`,
+                              },
+                              json: initializer.getText(file),
+                          },
+                          inputPipes: [],
+                      };
 
                 const outputPipe: undefined | PipescriptPipe = !initializer
                     ? undefined
                     : {
-                          kind: `data`,
                           name: varName,
-                          json: initializer.getText(file),
+                          kind: `node`,
+                          sourceNodeId: node?.nodeId ?? `${nextNodeId - 1}`,
+                          sourceNodeOutputName: `data`,
                       };
 
-                return { outputVar, outputPipe };
+                return { outputVar, outputPipe, node };
             });
 
             outputs.push(...declarations.map(x => x.outputVar));
+            nodes.push(...declarations.map(x => x.node!).filter(x => x));
             outputPipes.push(...declarations.map(x => x.outputPipe!).filter(x => x));
         }
     });
@@ -133,12 +160,11 @@ const visitFile = (
         outputs,
         outputPipes,
         workflows: [],
-        nodes: [],
+        nodes,
     };
 };
 
 const getType = (file: ts.SourceFile, type: undefined | ts.Type): PipescriptType => {
-    // console.log(`getType`, { type });
     if (!type) {
         return {
             kind: `unknown`,
@@ -170,6 +196,29 @@ const getType = (file: ts.SourceFile, type: undefined | ts.Type): PipescriptType
         //     type: getValueType(type.value),
         // };
     }
+
+    console.log(`getType`, { flags: type?.flags });
+
+    if (type.flags & ts.TypeFlags.String) {
+        return {
+            kind: `simple`,
+            type: `string`,
+        };
+    }
+    if (type.flags & ts.TypeFlags.Number) {
+        return {
+            kind: `simple`,
+            type: `float`,
+        };
+    }
+    if (type.flags & ts.TypeFlags.Boolean) {
+        return {
+            kind: `simple`,
+            type: `bool`,
+        };
+    }
+
+    console.log(`getType - not handled`, { flags: type?.flags });
 
     return {
         kind: `type`,

@@ -100,9 +100,19 @@ export type PipescriptNodeImplementation =
           kind: `workflow`;
           workflowUri: string;
       }
+    // | {
+    //       kind: `code`;
+    //       code: string;
+    //   }
     | {
-          kind: `code`;
-          code: string;
+          /** json is mapped to single output
+           *
+           * serialized data, user input, constants, literals */
+          kind: `data`;
+          /** single output type */
+          output: PipescriptVariable;
+          /** json must fulfill output type */
+          json: string;
       };
 
 /** passed arguments */
@@ -119,12 +129,6 @@ export type PipescriptPipe = {
           /** connected to input of parent workflow */
           kind: `workflow-input`;
           workflowInputName: string;
-      }
-    | {
-          /** serialized data, user input, constants, literals */
-          kind: `data`;
-          /** parsed based on input type */
-          json: string;
       }
 );
 
