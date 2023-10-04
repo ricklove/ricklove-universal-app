@@ -1,5 +1,7 @@
 // Serializable types
 
+import { PseudoBigInt } from 'typescript';
+
 /** function definition, operator definition, class constructors, code documents, modules, repos, etc */
 export type PipescriptWorkflow = {
     /** uri, should be sufficient to find implementation
@@ -7,13 +9,21 @@ export type PipescriptWorkflow = {
      * - internal stored workflows use uuid
      * - external stored workflows use full path
      */
-    workflowId: string;
+    workflowUri: string;
+
+    // external
+
     /** functionName, fileName, etc */
     name: string;
     /** parameters, scope captures, imports */
-    inputs: PipescriptValue[];
+    inputs: PipescriptVariable[];
     /** returns, scope capture mutations, exports */
-    outputs: PipescriptValue[];
+    outputs: PipescriptVariable[];
+
+    // internal
+
+    /** connections to output */
+    outputPipes: PipescriptPipe[];
 
     /** body = function calls, assignments */
     nodes: PipescriptNode[];
@@ -23,50 +33,57 @@ export type PipescriptWorkflow = {
 };
 
 /** variable */
-export type PipescriptValue = {
+export type PipescriptVariable = {
     name: string;
     type: PipescriptType;
 };
 
 /** type */
-export type PipescriptType =
+export type PipescriptType = {
+    nullable?: boolean;
+    array?: boolean;
+} & (
+    | {
+          kind: `unknown`;
+      }
+    | {
+          kind: `literal`;
+          value: string | number;
+          type: `int` | `float` | `string` | `bool`;
+      }
     | {
           kind: `simple`;
-          nullable: boolean;
-          array: boolean;
-          value: `int` | `float` | `string` | `bool`;
+          type: `int` | `float` | `string` | `bool`;
       }
     | {
           kind: `object`;
-          nullable: boolean;
-          array: boolean;
-          fields: PipescriptValue[];
+          fields: PipescriptVariable[];
       }
     | {
-          /** partially applied functions, function callbacks, promises, observables, object methods, etc */
+          /** ?? partially applied functions, function callbacks, promises, observables, object methods, etc */
           kind: `node`;
-          nullable: boolean;
-          array: boolean;
           node: PipescriptNode;
-      };
+      }
+    | {
+          /** ?? generic types, compile time type algebra */
+          kind: `type`;
+          name: string;
+      }
+);
 
 /** function call, expressions */
 export type PipescriptNode = {
-    workflowId: string;
-    inputs: {
-        name: string;
-        /** auto assigned unique id
-         *
-         * - workspace scoped incrementing id in storage */
-        pipeId: string;
-    }[];
-    outputs: {
-        name: string;
-        /** the pipeId of the destination input
-         *
-         * - only one output can ever use a specific pipeId */
-        pipeIds: string[];
-    }[];
+    /** auto assigned unique id
+     *
+     * - workspace scoped incrementing id in storage */
+    nodeId: string;
+
+    /** node type */
+    implementation: PipescriptNodeImplementation;
+
+    /** connected inputs */
+    inputPipes: PipescriptPipe[];
+
     /** workflow canvas position, if pinned */
     layout?: {
         position: {
@@ -77,6 +94,39 @@ export type PipescriptNode = {
         scale?: number;
     };
 };
+
+export type PipescriptNodeImplementation =
+    | {
+          kind: `workflow`;
+          workflowUri: string;
+      }
+    | {
+          kind: `code`;
+          code: string;
+      };
+
+/** passed arguments */
+export type PipescriptPipe = {
+    name: string;
+} & (
+    | {
+          /** connected to peer node */
+          kind: `node`;
+          sourceNodeId: string;
+          sourceNodeOutputName: string;
+      }
+    | {
+          /** connected to input of parent workflow */
+          kind: `workflow-input`;
+          workflowInputName: string;
+      }
+    | {
+          /** serialized data, user input, constants, literals */
+          kind: `data`;
+          /** parsed based on input type */
+          json: string;
+      }
+);
 
 // /** arguments, imports */
 // export type PipescriptNodeInputConnection = {
