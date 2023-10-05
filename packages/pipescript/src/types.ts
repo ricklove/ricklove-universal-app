@@ -18,18 +18,21 @@ export type PipescriptWorkflow = {
     /** parameters, scope captures, imports */
     inputs: PipescriptVariable[];
     /** returns, scope capture mutations, exports */
-    outputs: PipescriptVariable[];
+    outputs: (PipescriptVariable & {
+        /** connections to output */
+        pipe?: PipescriptPipeValue;
+    })[];
 
     // internal
 
     /** connections to output */
-    outputPipes: PipescriptPipe[];
+    // outputPipes?: PipescriptPipe[];
 
     /** body = function calls, assignments */
     nodes: PipescriptNode[];
 
     /** nested workflows */
-    workflows: PipescriptWorkflow[];
+    workflows?: PipescriptWorkflow[];
 };
 
 /** variable */
@@ -118,7 +121,9 @@ export type PipescriptNodeImplementation =
 /** passed arguments */
 export type PipescriptPipe = {
     name: string;
-} & (
+} & PipescriptPipeValue;
+
+export type PipescriptPipeValue =
     | {
           /** connected to peer node */
           kind: `node`;
@@ -130,7 +135,14 @@ export type PipescriptPipe = {
           kind: `workflow-input`;
           workflowInputName: string;
       }
-);
+    | {
+          /** json data
+           *
+           * serialized data, user input, constants, literals */
+          kind: `data`;
+          /** json must fulfill output type */
+          json: string;
+      };
 
 // /** arguments, imports */
 // export type PipescriptNodeInputConnection = {

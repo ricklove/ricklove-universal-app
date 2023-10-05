@@ -28,7 +28,6 @@ export const convertTypescriptToPipescript = (
         workflowUri: ``,
         inputs: [],
         outputs: [],
-        outputPipes: [],
         nodes: [],
         workflows,
     };
@@ -95,61 +94,121 @@ const visitFile = (
     // console.log(`visitFile`, { file });
 
     const outputs: PipescriptWorkflow[`outputs`] = [];
+    const workflows: PipescriptWorkflow[`workflows`] = [];
     const nodes: PipescriptWorkflow[`nodes`] = [];
-    const outputPipes: PipescriptWorkflow[`outputPipes`] = [];
     let nextNodeId = 1;
 
+    const findNodeSource = (varName: string) => {
+        const node = nodes.findLast(x => {
+            const implementation = x.implementation;
+            if (implementation.kind !== `workflow`) {
+                return false;
+            }
+
+            const workflow = workflows.find(w => w.workflowUri === implementation.workflowUri);
+            const workflowOutput = workflow?.outputs.find(o => o.name === varName);
+
+            return !!workflowOutput;
+        });
+        return node;
+    };
+
+    // order of declarations does not matter
     file.forEachChild(n => {
         if (n.kind === ts.SyntaxKind.VariableStatement) {
             const t = n as ts.VariableStatement;
             const isExport = t.modifiers?.some(x => x.kind === ts.SyntaxKind.ExportKeyword);
-            if (!isExport) {
-                return;
-            }
+            // if (!isExport) {
+            //     return;
+            // }
 
             const declarations = t.declarationList.declarations.map(d => {
-                const { name, initializer } = d;
+                const { name: declarationName, initializer } = d;
                 const type = typeChecker.getTypeAtLocation(d);
 
                 // console.log(`visitFile type`, { d, type });
                 // TODO: these are workflow outputs
-                const varName = name.getText(file);
+                const varName = declarationName.getText(file);
                 const varType = getType(file, type);
-                const outputVar: PipescriptVariable = {
+                const nodeId = !initializer ? `` : `${nextNodeId++}`;
+
+                const outputVar: PipescriptWorkflow[`outputs`][number] = {
                     name: varName,
                     type: varType,
+                    pipe: !initializer
+                        ? undefined
+                        : {
+                              kind: `node`,
+                              sourceNodeId: nodeId,
+                              sourceNodeOutputName: varName,
+                          },
+                };
+
+                const workflow: PipescriptWorkflow = {
+                    workflowUri: `${varName}-declaration`,
+                    name: `${varName}-declaration`,
+                    inputs: [],
+                    outputs: [
+                        {
+                            name: varName,
+                            type: varType,
+                            pipe: !initializer
+                                ? undefined
+                                : {
+                                      kind: `data`,
+                                      json: initializer.getText(file),
+                                  },
+                        },
+                    ],
+                    nodes: [],
                 };
 
                 const node: undefined | PipescriptNode = !initializer
                     ? undefined
                     : {
-                          nodeId: `${nextNodeId++}`,
+                          nodeId,
                           implementation: {
-                              kind: `data`,
-                              output: {
-                                  type: varType,
-                                  name: `data`,
-                              },
-                              json: initializer.getText(file),
+                              kind: `workflow`,
+                              workflowUri: `${varName}-declaration`,
                           },
                           inputPipes: [],
                       };
 
-                const outputPipe: undefined | PipescriptPipe = !initializer
-                    ? undefined
-                    : {
-                          name: varName,
-                          kind: `node`,
-                          sourceNodeId: node?.nodeId ?? `${nextNodeId - 1}`,
-                          sourceNodeOutputName: `data`,
-                      };
-
-                return { outputVar, outputPipe, node };
+                return { outputVar, workflow, node };
             });
 
-            outputs.push(...declarations.map(x => x.outputVar));
+            workflows.push(...declarations.map(x => x.workflow!).filter(x => x));
             nodes.push(...declarations.map(x => x.node!).filter(x => x));
-            outputPipes.push(...declarations.map(x => x.outputPipe!).filter(x => x));
+            if (isExport) {
+                outputs.push(...declarations.map(x => x.outputVar));
+            }
+        }
+    });
+
+    // non declarations
+    file.forEachChild(n => {
+        if (n.kind === ts.SyntaxKind.ExportDeclaration) {
+            const t = n as ts.ExportDeclaration;
+            const clause = t.exportClause;
+            if (clause?.kind === ts.SyntaxKind.NamedExports) {
+                const elements = clause.elements;
+
+                for (const e of elements) {
+                    const varName = e.name.text;
+                    const type = typeChecker.getTypeAtLocation(e);
+                    const varType = getType(file, type);
+
+                    outputs.push({
+                        name: varName,
+                        type: varType,
+                        pipe: {
+                            kind: `node`,
+                            sourceNodeId: findNodeSource(varName)?.nodeId ?? ``,
+                            sourceNodeOutputName: varName,
+                        },
+                    });
+                }
+            }
         }
     });
 
@@ -158,8 +217,7 @@ const visitFile = (
         name: filename,
         inputs: [],
         outputs,
-        outputPipes,
-        workflows: [],
+        workflows,
         nodes,
     };
 };
