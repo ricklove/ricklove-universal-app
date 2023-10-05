@@ -1,5 +1,6 @@
 {
     "cSpell.words": [
         "pipescript"
-    ]
+    ],
+    "prettier.prettierPath": "./node_modules/prettier"
 }

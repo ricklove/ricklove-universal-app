@@ -1,6 +1,8 @@
 import ts, {
     CompilerHost,
     CompilerOptions,
+    LiteralExpression,
+    NumericLiteral,
     PseudoBigInt,
     ScriptTarget,
     SourceFile,
@@ -9,6 +11,7 @@ import ts, {
 import {
     PipescriptNode,
     PipescriptPipe,
+    PipescriptPipeValue,
     PipescriptType,
     PipescriptVariable,
     PipescriptWorkflow,
@@ -132,6 +135,24 @@ const visitFile = (
                 const varType = getType(file, type);
                 const nodeId = !initializer ? `` : `${nextNodeId++}`;
 
+                const initializerInfo = (() => {
+                    if (
+                        initializer?.kind === ts.SyntaxKind.NumericLiteral
+                        || initializer?.kind === ts.SyntaxKind.StringLiteral
+                        || initializer?.kind === ts.SyntaxKind.ObjectLiteralExpression
+                    ) {
+                        const init = initializer as LiteralExpression;
+                        const pipe: PipescriptPipeValue = {
+                            kind: `data`,
+                            json: init.text,
+                        };
+
+                        return {
+                            pipe,
+                        };
+                    }
+                })();
+
                 const outputVar: PipescriptWorkflow[`outputs`][number] = {
                     name: varName,
                     type: varType,
@@ -152,12 +173,7 @@ const visitFile = (
                         {
                             name: varName,
                             type: varType,
-                            pipe: !initializer
-                                ? undefined
-                                : {
-                                      kind: `data`,
-                                      json: initializer.getText(file),
-                                  },
+                            pipe: initializerInfo?.pipe,
                         },
                     ],
                     nodes: [],

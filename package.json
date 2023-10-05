@@ -1,5 +1,6 @@
 {
   "name": "@ricklove-universal/root",
+  "version": "1.0.0",
   "private": "true",
   "type": "module",
   "scripts": {
@@ -17,7 +18,7 @@
   ],
   "devDependencies": {
     "bun-types": "latest",
-    "prettier": "^3.0.3"
+    "prettier": "npm:@btmills/prettier"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
