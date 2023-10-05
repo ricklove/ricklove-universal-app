@@ -1,6 +1,7 @@
 import ts, {
     CompilerHost,
     CompilerOptions,
+    Identifier,
     LiteralExpression,
     NumericLiteral,
     PseudoBigInt,
@@ -142,15 +143,40 @@ const visitFile = (
                         || initializer?.kind === ts.SyntaxKind.ObjectLiteralExpression
                     ) {
                         const init = initializer as LiteralExpression;
-                        const pipe: PipescriptPipeValue = {
+                        const outputPipe: PipescriptPipeValue = {
                             kind: `data`,
                             json: init.text,
                         };
 
                         return {
-                            pipe,
+                            outputPipe,
                         };
                     }
+
+                    if (initializer?.kind === ts.SyntaxKind.Identifier) {
+                        const init = initializer as Identifier;
+                        const initVarName = init.text;
+                        const inputPipe: PipescriptPipe = {
+                            name: varName,
+                            kind: `node`,
+                            sourceNodeId: findNodeSource(initVarName)?.nodeId ?? ``,
+                            sourceNodeOutputName: initVarName,
+                        };
+                        const outputPipe: PipescriptPipeValue = {
+                            kind: `workflow-input`,
+                            workflowInputName: varName,
+                        };
+
+                        return {
+                            inputPipe,
+                            outputPipe,
+                        };
+                    }
+
+                    console.log(`UNKNOWN initializer`, {
+                        kind: ts.SyntaxKind[initializer?.kind ?? 0],
+                        kindRaw: initializer?.kind,
+                    });
                 })();
 
                 const outputVar: PipescriptWorkflow[`outputs`][number] = {
@@ -168,12 +194,21 @@ const visitFile = (
                 const workflow: PipescriptWorkflow = {
                     workflowUri: `${varName}-declaration`,
                     name: `${varName}-declaration`,
-                    inputs: [],
+                    inputs: [
+                        ...(!initializerInfo?.inputPipe
+                            ? []
+                            : [
+                                  {
+                                      name: varName,
+                                      type: varType,
+                                  },
+                              ]),
+                    ],
                     outputs: [
                         {
                             name: varName,
                             type: varType,
-                            pipe: initializerInfo?.pipe,
+                            pipe: initializerInfo?.outputPipe,
                         },
                     ],
                     nodes: [],
@@ -187,7 +222,9 @@ const visitFile = (
                               kind: `workflow`,
                               workflowUri: `${varName}-declaration`,
                           },
-                          inputPipes: [],
+                          inputPipes: [
+                              ...(!initializerInfo?.inputPipe ? [] : [initializerInfo.inputPipe]),
+                          ],
                       };
 
                 return { outputVar, workflow, node };
@@ -210,12 +247,13 @@ const visitFile = (
                 const elements = clause.elements;
 
                 for (const e of elements) {
-                    const varName = e.name.text;
+                    const varName = e.propertyName?.text ?? e.name.text;
+                    const exportedName = e.name.text;
                     const type = typeChecker.getTypeAtLocation(e);
                     const varType = getType(file, type);
 
                     outputs.push({
-                        name: varName,
+                        name: exportedName,
                         type: varType,
                         pipe: {
                             kind: `node`,

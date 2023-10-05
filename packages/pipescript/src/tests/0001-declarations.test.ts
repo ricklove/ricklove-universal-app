@@ -165,4 +165,35 @@ const notAnswer = 43;
             },
         );
     });
+
+    it(`should parse a const value that is renamed exported`, () => {
+        expectSingleCodeFileWorkflow(
+            `file.ts`,
+            `
+export { answer as answerExport };
+const answer = 42;
+        `,
+            {
+                workflowUri: `file.ts`,
+                name: `file.ts`,
+                inputs: [],
+                outputs: [
+                    {
+                        name: `answerExport`,
+                        type: {
+                            kind: `simple`,
+                            type: `int`,
+                        },
+                        pipe: {
+                            kind: `node`,
+                            sourceNodeId: `1`,
+                            sourceNodeOutputName: `answer`,
+                        },
+                    },
+                ],
+                workflows: [expectedDeclarationFromLiteralWorkflow(`answer`, 42)],
+                nodes: [expectedDeclarationFromLiteralNode(`answer`, 1)],
+            },
+        );
+    });
 });
