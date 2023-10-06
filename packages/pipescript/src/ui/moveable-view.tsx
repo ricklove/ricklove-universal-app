@@ -2,7 +2,12 @@ import { useStableCallback } from '@ricklove-universal/cl/src/utils/stable-callb
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, Pressable, PointerEvent } from 'react-native';
 
-export type MouseEvent = PointerEvent & { clientX?: number; clientY?: number; pointerId?: number };
+export type MouseEvent = PointerEvent & {
+    clientX?: number;
+    clientY?: number;
+    pointerId?: number;
+    buttons?: number;
+};
 export type WheelEvent = PointerEvent & { deltaX: number; deltaY: number; deltaZ: number };
 export type MouseHost = View & {
     setPointerCapture: (pointerId: number) => void;
@@ -10,14 +15,25 @@ export type MouseHost = View & {
     onwheel?: (e: WheelEvent) => void;
 };
 
+export enum MouseButton {
+    Left = 1,
+    Right = 2,
+    Middle = 4,
+    All = 7,
+}
+
 export const MoveableView = ({
     children,
     position: initPosition,
     onMove,
+    mouseButton = MouseButton.All,
+    className,
 }: {
     children: JSX.Element;
     position: { x: number; y: number; scale: number };
     onMove: (position: { x: number; y: number; scale: number }) => void;
+    mouseButton?: MouseButton;
+    className?: string;
 }) => {
     const [position, setPosition] = useState({
         x: initPosition.x,
@@ -31,6 +47,10 @@ export const MoveableView = ({
     });
 
     const startDrag = useStableCallback((e: MouseEvent) => {
+        if (!((e.buttons ?? 0) & mouseButton)) {
+            return;
+        }
+
         e.stopPropagation();
         e.preventDefault();
 
@@ -93,9 +113,14 @@ export const MoveableView = ({
 
     const scrollWheel = useStableCallback((e: WheelEvent) => {
         console.log(`onwheel`, { e, position });
+        const deltaY = e.deltaY;
+        if (!deltaY) {
+            return;
+        }
+
         setPosition(s => ({
             ...s,
-            scale: s.scale * Math.pow(0.9, e.deltaY > 0 ? 1 : -1),
+            scale: s.scale * Math.pow(0.9, deltaY > 0 ? 1 : -1),
         }));
     });
 
@@ -114,20 +139,20 @@ export const MoveableView = ({
     }, [!hostRef.current]);
 
     return (
-        <View className='relative'>
+        <View>
             <Pressable
                 ref={hostRef}
-                className='absolute'
-                onPointerDown={e => startDrag(e)}
                 onPointerUp={e => endDrag(e)}
+                onPointerDown={e => startDrag(e)}
                 onPointerMove={e => moveDrag(e)}
             >
                 <View
+                    className={className}
                     style={{
                         transform: `translate(${position.x}px, ${position.y}px) scale(${position.scale})`,
                     }}
                 >
-                    {children}
+                    <Pressable>{children}</Pressable>
                 </View>
             </Pressable>
         </View>

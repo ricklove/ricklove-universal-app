@@ -25,14 +25,6 @@ export const WorkFlowView = ({
             className={`flex-column relative border-blue-100 border-solid border-[1px] rounded
             ${full ? `w-[100vw] h-[100vh]` : `min-w-[200px] min-h-[100px]`}`}
         >
-            <View className='absolute'>
-                {workflow.nodes.map(n => (
-                    <React.Fragment key={n.nodeId}>
-                        <NodeView node={n} container={workflow} />
-                    </React.Fragment>
-                ))}
-            </View>
-
             <Text className='text-yellow-400 self-center'>{`${workflow.name}`}</Text>
 
             <View className='flex-row flex-1'>
@@ -65,6 +57,16 @@ export const WorkFlowView = ({
                             </View>
                         </React.Fragment>
                     ))}
+                </View>
+
+                <View className='absolute top-0 left-0'>
+                    <View>
+                        {workflow.nodes.map(n => (
+                            <React.Fragment key={n.nodeId}>
+                                <NodeView node={n} container={workflow} />
+                            </React.Fragment>
+                        ))}
+                    </View>
                 </View>
             </View>
 
@@ -105,9 +107,10 @@ const NodeView = ({ node, container }: { node: PipescriptNode; container: Pipesc
                 scale: position.scale,
             }}
             onMove={moveNode}
+            className='bg-red-400 w-10 h-10'
         >
             <View
-                className='p-2 flex-column bg-slate-600 border-blue-100 border-solid border-[1px] rounded'
+                className='p-2 flex-column border-blue-100 border-solid border-[1px] rounded'
                 style={{
                     left: position.x,
                     top: position.y,
@@ -129,7 +132,7 @@ const NodeView = ({ node, container }: { node: PipescriptNode; container: Pipesc
                                 </React.Fragment>
                             ))}
                         </View>
-                        <View className='flex-1 relative'>
+                        <View className='flex-1'>
                             <WorkFlowView workflow={workflow} />
                         </View>
                         <View className='flex-col justify-center items-end'>

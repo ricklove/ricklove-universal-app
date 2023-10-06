@@ -2,7 +2,7 @@ import { useStableCallback } from '@ricklove-universal/cl/src/utils/stable-callb
 import { useEffect, useRef, useState } from 'react';
 import { View, Text, Pressable, PointerEvent } from 'react-native';
 
-import { MoveableView } from './moveable-view';
+import { MouseButton, MoveableView } from './moveable-view';
 import { WorkFlowView } from './work-flow-view';
 import { PipescriptWorkflow } from '../types';
 
@@ -18,6 +18,7 @@ export const WorkCanvasView = ({ workflow }: { workflow: PipescriptWorkflow }) =
                 onMove={() => {
                     // ignore
                 }}
+                mouseButton={MouseButton.Middle}
             >
                 <View className=''>
                     <WorkFlowView workflow={workflow} full />
