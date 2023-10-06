@@ -1,0 +1,89 @@
+{
+  "workflowUri": "file.ts",
+  "name": "file.ts",
+  "inputs": [],
+  "outputs": [
+    {
+      "name": "notAnswer",
+      "type": {
+        "kind": "simple",
+        "type": "int"
+      },
+      "pipe": {
+        "kind": "node",
+        "sourceNodeId": "2",
+        "sourceNodeOutputName": "notAnswer"
+      }
+    },
+    {
+      "name": "answer",
+      "type": {
+        "kind": "simple",
+        "type": "int"
+      },
+      "pipe": {
+        "kind": "node",
+        "sourceNodeId": "1",
+        "sourceNodeOutputName": "answer"
+      }
+    }
+  ],
+  "workflows": [
+    {
+      "workflowUri": "answer-declaration",
+      "name": "answer-declaration",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "answer",
+          "type": {
+            "kind": "simple",
+            "type": "int"
+          },
+          "pipe": {
+            "kind": "data",
+            "json": "42"
+          }
+        }
+      ],
+      "nodes": []
+    },
+    {
+      "workflowUri": "notAnswer-declaration",
+      "name": "notAnswer-declaration",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "notAnswer",
+          "type": {
+            "kind": "simple",
+            "type": "int"
+          },
+          "pipe": {
+            "kind": "data",
+            "json": "43"
+          }
+        }
+      ],
+      "nodes": []
+    }
+  ],
+  "nodes": [
+    {
+      "nodeId": "1",
+      "implementation": {
+        "kind": "workflow",
+        "workflowUri": "answer-declaration"
+      },
+      "inputPipes": []
+    },
+    {
+      "nodeId": "2",
+      "implementation": {
+        "kind": "workflow",
+        "workflowUri": "notAnswer-declaration"
+      },
+      "inputPipes": []
+    }
+  ]
+}

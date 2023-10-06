@@ -6,21 +6,23 @@ import {
 } from './_utils';
 import { PipescriptWorkflow } from '../types';
 
-const name = `answer`;
-const value = 42;
-const nodeId = 1;
-
-const code = `
-const a = 42;
-const b = a;
-export { b };
-`;
-
 export const exampleDeclarationWorkflow: PipescriptWorkflow = {
     workflowUri: `file.ts`,
     name: `file.ts`,
     inputs: [],
     outputs: [
+        {
+            name: `a`,
+            type: {
+                kind: `simple`,
+                type: `int`,
+            },
+            pipe: {
+                kind: `node`,
+                sourceNodeId: `1`,
+                sourceNodeOutputName: `a`,
+            },
+        },
         {
             name: `b`,
             type: {

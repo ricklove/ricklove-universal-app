@@ -1,0 +1,37 @@
+{
+  "workflowUri": "file.ts",
+  "name": "file.ts",
+  "inputs": [],
+  "outputs": [],
+  "workflows": [
+    {
+      "workflowUri": "answer-declaration",
+      "name": "answer-declaration",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "answer",
+          "type": {
+            "kind": "simple",
+            "type": "int"
+          },
+          "pipe": {
+            "kind": "data",
+            "json": "42"
+          }
+        }
+      ],
+      "nodes": []
+    }
+  ],
+  "nodes": [
+    {
+      "nodeId": "1",
+      "implementation": {
+        "kind": "workflow",
+        "workflowUri": "answer-declaration"
+      },
+      "inputPipes": []
+    }
+  ]
+}
