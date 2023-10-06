@@ -1,5 +1,5 @@
 import { useStableCallback } from '@ricklove-universal/cl/src/utils/stable-callback';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { createContext, useEffect, useRef, useState } from 'react';
 import { View, Text, Pressable, PointerEvent } from 'react-native';
 
 export type MouseEvent = PointerEvent & {
@@ -27,12 +27,14 @@ export const MoveableView = ({
     position: initPosition,
     onMove,
     mouseButton = MouseButton.All,
+    enableScaling = false,
     className,
 }: {
     children: JSX.Element;
     position: { x: number; y: number; scale: number };
     onMove: (position: { x: number; y: number; scale: number }) => void;
     mouseButton?: MouseButton;
+    enableScaling?: boolean;
     className?: string;
 }) => {
     const [position, setPosition] = useState({
@@ -46,7 +48,7 @@ export const MoveableView = ({
         yPointerDragStart: undefined as undefined | number,
     });
 
-    const startDrag = useStableCallback((e: MouseEvent) => {
+    const startDrag = useStableCallback((e: MouseEvent, contextScale: number) => {
         if (!((e.buttons ?? 0) & mouseButton)) {
             return;
         }
@@ -56,7 +58,7 @@ export const MoveableView = ({
 
         const xPointer = e.clientX ?? 0;
         const yPointer = e.clientY ?? 0;
-        console.log(`startDrag`, { xPointer, yPointer, e, position });
+        console.log(`startDrag`, { xPointer, yPointer, e, position, contextScale });
 
         hostRef.current?.setPointerCapture(e.pointerId ?? 0);
 
@@ -69,7 +71,7 @@ export const MoveableView = ({
             yPointerDragStart: yPointer,
         }));
     });
-    const endDrag = useStableCallback((e: MouseEvent) => {
+    const endDrag = useStableCallback((e: MouseEvent, contextScale: number) => {
         if (position.dragPointerId === undefined) {
             return;
         }
@@ -80,19 +82,19 @@ export const MoveableView = ({
 
         const xPointer = e.clientX ?? 0;
         const yPointer = e.clientY ?? 0;
-        console.log(`endDrag`, { xPointer, yPointer, e, position });
+        console.log(`endDrag`, { xPointer, yPointer, e, position, contextScale });
 
         setPosition(s => ({
             ...s,
-            x: (s.xDragStart ?? 0) + xPointer - (s.xPointerDragStart ?? 0),
-            y: (s.yDragStart ?? 0) + yPointer - (s.yPointerDragStart ?? 0),
+            x: (s.xDragStart ?? 0) + (xPointer - (s.xPointerDragStart ?? 0)) / contextScale,
+            y: (s.yDragStart ?? 0) + (yPointer - (s.yPointerDragStart ?? 0)) / contextScale,
             dragPointerId: undefined,
             xPointerDragStart: undefined,
             yPointerDragStart: undefined,
         }));
     });
 
-    const moveDrag = useStableCallback((e: MouseEvent) => {
+    const moveDrag = useStableCallback((e: MouseEvent, contextScale: number) => {
         if (position.dragPointerId === undefined) {
             return;
         }
@@ -102,12 +104,12 @@ export const MoveableView = ({
 
         const xPointer = e.clientX ?? 0;
         const yPointer = e.clientY ?? 0;
-        console.log(`moveDrag`, { xPointer, yPointer, e, position });
+        console.log(`moveDrag`, { xPointer, yPointer, e, position, contextScale });
 
         setPosition(s => ({
             ...s,
-            x: (s.xDragStart ?? 0) + xPointer - (s.xPointerDragStart ?? 0),
-            y: (s.yDragStart ?? 0) + yPointer - (s.yPointerDragStart ?? 0),
+            x: (s.xDragStart ?? 0) + (xPointer - (s.xPointerDragStart ?? 0)) / contextScale,
+            y: (s.yDragStart ?? 0) + (yPointer - (s.yPointerDragStart ?? 0)) / contextScale,
         }));
     });
 
@@ -115,6 +117,10 @@ export const MoveableView = ({
         console.log(`onwheel`, { e, position });
         const deltaY = e.deltaY;
         if (!deltaY) {
+            return;
+        }
+
+        if (!enableScaling) {
             return;
         }
 
@@ -140,21 +146,29 @@ export const MoveableView = ({
 
     return (
         <View>
-            <Pressable
-                ref={hostRef}
-                onPointerUp={e => endDrag(e)}
-                onPointerDown={e => startDrag(e)}
-                onPointerMove={e => moveDrag(e)}
-            >
-                <View
-                    className={className}
-                    style={{
-                        transform: `translate(${position.x}px, ${position.y}px) scale(${position.scale})`,
-                    }}
-                >
-                    <Pressable>{children}</Pressable>
-                </View>
-            </Pressable>
+            <ScaleContext.Consumer>
+                {contextScale => (
+                    <Pressable
+                        ref={hostRef}
+                        onPointerUp={e => endDrag(e, contextScale.scale)}
+                        onPointerDown={e => startDrag(e, contextScale.scale)}
+                        onPointerMove={e => moveDrag(e, contextScale.scale)}
+                    >
+                        <View
+                            className={className}
+                            style={{
+                                transform: `translate(${position.x}px, ${position.y}px) scale(${position.scale})`,
+                            }}
+                        >
+                            <ScaleContext.Provider value={position}>
+                                <Pressable>{children}</Pressable>
+                            </ScaleContext.Provider>
+                        </View>
+                    </Pressable>
+                )}
+            </ScaleContext.Consumer>
         </View>
     );
 };
+
+export const ScaleContext = createContext({ scale: 1 });

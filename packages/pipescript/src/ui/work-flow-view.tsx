@@ -2,7 +2,7 @@ import { useStableCallback } from '@ricklove-universal/cl/src/utils/stable-callb
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, Pressable, PointerEvent } from 'react-native';
 
-import { MoveableView } from './moveable-view';
+import { MouseButton, MoveableView } from './moveable-view';
 import { PipescriptNode, PipescriptType, PipescriptWorkflow } from '../types';
 
 const getTypeName = (type: PipescriptType) => {
@@ -107,7 +107,7 @@ const NodeView = ({ node, container }: { node: PipescriptNode; container: Pipesc
                 scale: position.scale,
             }}
             onMove={moveNode}
-            className='bg-red-400 w-10 h-10'
+            mouseButton={MouseButton.Left}
         >
             <View
                 className='p-2 flex-column border-blue-100 border-solid border-[1px] rounded'

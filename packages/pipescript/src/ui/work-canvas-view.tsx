@@ -19,6 +19,7 @@ export const WorkCanvasView = ({ workflow }: { workflow: PipescriptWorkflow }) =
                     // ignore
                 }}
                 mouseButton={MouseButton.Middle}
+                enableScaling
             >
                 <View className=''>
                     <WorkFlowView workflow={workflow} full />
