@@ -1,6 +1,7 @@
 {
     "cSpell.words": [
-        "pipescript"
+        "pipescript",
+        "reactivex"
     ],
     "prettier.prettierPath": "./node_modules/prettier"
 }

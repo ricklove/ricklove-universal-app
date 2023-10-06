@@ -62,7 +62,7 @@ export const MoveableView = ({
 
         const xPointer = e.clientX ?? 0;
         const yPointer = e.clientY ?? 0;
-        console.log(`startDrag`, { xPointer, yPointer, e, position, contextScale });
+        // console.log(`startDrag`, { xPointer, yPointer, e, position, contextScale });
 
         hostRef.current?.setPointerCapture(e.pointerId ?? 0);
 
@@ -86,7 +86,7 @@ export const MoveableView = ({
 
         const xPointer = e.clientX ?? 0;
         const yPointer = e.clientY ?? 0;
-        console.log(`endDrag`, { xPointer, yPointer, e, position, contextScale });
+        // console.log(`endDrag`, { xPointer, yPointer, e, position, contextScale });
 
         setPosition(s => ({
             ...s,
@@ -108,7 +108,7 @@ export const MoveableView = ({
 
         const xPointer = e.clientX ?? 0;
         const yPointer = e.clientY ?? 0;
-        console.log(`moveDrag`, { xPointer, yPointer, e, position, contextScale });
+        // console.log(`moveDrag`, { xPointer, yPointer, e, position, contextScale });
 
         setPosition(s => ({
             ...s,
@@ -118,7 +118,7 @@ export const MoveableView = ({
     });
 
     const scrollWheel = useStableCallback((e: WheelEvent) => {
-        console.log(`onwheel`, { e, position });
+        // console.log(`onwheel`, { e, position });
         const deltaY = e.deltaY;
         if (!deltaY) {
             return;
@@ -163,8 +163,8 @@ export const MoveableView = ({
     }, [!wholeHostRef.current]);
 
     return (
-        <ScaleContext.Consumer>
-            {contextScale => (
+        <MoveableContext.Consumer>
+            {({ position: contextScale }) => (
                 <>
                     {wholeCanvas && (
                         <Pressable
@@ -189,15 +189,22 @@ export const MoveableView = ({
                             }}
                             onPointerDown={e => startDrag(e, contextScale.scale)}
                         >
-                            <ScaleContext.Provider value={position}>
+                            <MoveableContext.Provider value={{ position, wholeCanvas }}>
                                 {children}
-                            </ScaleContext.Provider>
+                            </MoveableContext.Provider>
                         </Pressable>
                     </Pressable>
                 </>
             )}
-        </ScaleContext.Consumer>
+        </MoveableContext.Consumer>
     );
 };
 
-export const ScaleContext = createContext({ scale: 1 });
+export const MoveableContext = createContext({
+    wholeCanvas: false,
+    position: {
+        x: 0,
+        y: 0,
+        scale: 1,
+    },
+});

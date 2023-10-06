@@ -1,9 +1,24 @@
 import { useStableCallback } from '@ricklove-universal/cl/src/utils/stable-callback';
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from 'react';
 import { View, Text, Pressable, PointerEvent } from 'react-native';
+import { Subject, combineLatest, zip } from 'rxjs';
 
-import { MouseButton, MoveableView } from './moveable-view';
-import { PipescriptNode, PipescriptType, PipescriptWorkflow } from '../types';
+import { MouseButton, MoveableContext, MoveableView } from './moveable-view';
+import {
+    PipescriptNode,
+    PipescriptPipe,
+    PipescriptPipeValue,
+    PipescriptType,
+    PipescriptVariable,
+    PipescriptWorkflow,
+} from '../types';
 
 const getTypeName = (type: PipescriptType) => {
     if (type.kind === `simple`) {
@@ -36,13 +51,24 @@ export const WorkFlowView = ({
                 <View className='flex-col justify-start items-start'>
                     {workflow.inputs.map(input => (
                         <React.Fragment key={input.name}>
-                            <View className='p-1 flex-row justify-start'>
+                            <View className='p-1 flex-row justify-start items-center'>
                                 <Text className='text-blue-300'>{`${input.name}`}</Text>
                                 <Text className='text-white'>:</Text>
                                 <Text className='pl-1 text-green-800'>{`${getTypeName(
                                     input.type,
                                 )}`}</Text>
-                                <Text className='pl-1'>🔵</Text>
+                                <Text className='pl-1' />
+                                <View className=''>
+                                    <PipeEndpointView
+                                        id={calculatePipeEndpointIdForWorkflow({
+                                            workflowUri: workflow.workflowUri,
+                                            direction: `in`,
+                                            name: input.name,
+                                        })}
+                                        container={workflow}
+                                    />
+                                </View>
+                                <Text className='pl-1' />
                             </View>
                         </React.Fragment>
                     ))}
@@ -61,7 +87,7 @@ export const WorkFlowView = ({
                 <View className='flex-col justify-end items-end'>
                     {workflow.outputs.map(output => (
                         <React.Fragment key={output.name}>
-                            <View className='p-1 flex-row justify-end'>
+                            <View className='p-1 flex-row justify-end items-center'>
                                 {output.pipe && (
                                     <>
                                         {output.pipe.kind === `data` && (
@@ -71,7 +97,29 @@ export const WorkFlowView = ({
                                         )}
                                     </>
                                 )}
-                                <Text className='pr-1'>🔵</Text>
+                                <Text className='pr-1' />
+                                <View className=''>
+                                    <PipeEndpointView
+                                        id={calculatePipeEndpointIdForWorkflow({
+                                            workflowUri: workflow.workflowUri,
+                                            direction: `out`,
+                                            name: output.name,
+                                        })}
+                                        container={workflow}
+                                    />
+                                    <PipeView
+                                        destinationId={calculatePipeEndpointIdForWorkflow({
+                                            workflowUri: workflow.workflowUri,
+                                            direction: `out`,
+                                            name: output.name,
+                                        })}
+                                        sourceId={calculatePipeEndpointIdForPipeSource({
+                                            workflow,
+                                            pipe: output.pipe,
+                                        })}
+                                    />
+                                </View>
+                                <Text className='pr-1' />
                                 <Text className='text-blue-300'>{`${output.name}`}</Text>
                                 <Text className='text-white'>:</Text>
                                 <Text className='pl-1 text-green-800'>{`${getTypeName(
@@ -143,8 +191,30 @@ const NodeView = ({ node, container }: { node: PipescriptNode; container: Pipesc
                         <View className='flex-col justify-start items-start'>
                             {workflow.inputs.map(input => (
                                 <React.Fragment key={input.name}>
-                                    <View className='p-1 flex-row justify-center relative'>
-                                        <Text className='absolute left-[-10px]'>🔵</Text>
+                                    <View className='p-1 flex-row justify-center items-center relative'>
+                                        <View className='ml-[-8px] mr-[0px]'>
+                                            <PipeEndpointView
+                                                id={calculatePipeEndpointIdForNode({
+                                                    nodeId: node.nodeId,
+                                                    direction: `in`,
+                                                    name: input.name,
+                                                })}
+                                                container={container}
+                                            />
+                                            <PipeView
+                                                destinationId={calculatePipeEndpointIdForNode({
+                                                    nodeId: node.nodeId,
+                                                    direction: `in`,
+                                                    name: input.name,
+                                                })}
+                                                sourceId={calculatePipeEndpointIdForPipeSource({
+                                                    workflow,
+                                                    pipe: node.inputPipes.find(
+                                                        x => x.name === input.name,
+                                                    ),
+                                                })}
+                                            />
+                                        </View>
                                         <Text className='pl-1' />
                                         <Text className='text-blue-300'>{`${input.name}`}</Text>
                                         {/* <Text className='text-white'>:</Text>
@@ -161,14 +231,23 @@ const NodeView = ({ node, container }: { node: PipescriptNode; container: Pipesc
                         <View className='flex-col justify-end items-end'>
                             {workflow.outputs.map(output => (
                                 <React.Fragment key={output.name}>
-                                    <View className='p-1 flex-row justify-center relative'>
+                                    <View className='p-1 flex-row justify-center items-center relative'>
                                         <Text className='text-blue-300'>{`${output.name}`}</Text>
                                         {/* <Text className='text-white'>:</Text>
                                         <Text className='pl-1 text-green-800'>{`${getTypeName(
                                             output.type,
                                         )}`}</Text> */}
                                         <Text className='pr-1' />
-                                        <Text className='absolute right-[-10px]'>🔵</Text>
+                                        <View className='ml-[0px] mr-[-8px]'>
+                                            <PipeEndpointView
+                                                id={calculatePipeEndpointIdForNode({
+                                                    nodeId: node.nodeId,
+                                                    direction: `out`,
+                                                    name: output.name,
+                                                })}
+                                                container={container}
+                                            />
+                                        </View>
                                     </View>
                                 </React.Fragment>
                             ))}
@@ -178,5 +257,198 @@ const NodeView = ({ node, container }: { node: PipescriptNode; container: Pipesc
                 {/* <Text className='text-yellow-400 self-center'>{node.implementation.}</Text> */}
             </View>
         </MoveableView>
+    );
+};
+
+const calculatePipeEndpointIdForNode = ({
+    nodeId,
+    name,
+    direction,
+}: {
+    nodeId: string;
+    name: string;
+    direction: `out` | `in`;
+}) => {
+    return `node:${nodeId}:${direction}:${name}`;
+};
+
+const calculatePipeEndpointIdForWorkflow = ({
+    workflowUri,
+    name,
+    direction,
+}: {
+    workflowUri: string;
+    name: string;
+    direction: `out` | `in`;
+}) => {
+    return `workflow:${workflowUri}:${direction}:${name}`;
+};
+
+const calculatePipeEndpointIdForPipeSource = ({
+    pipe,
+    workflow,
+}: {
+    pipe: undefined | PipescriptPipeValue;
+    workflow: PipescriptWorkflow;
+}) => {
+    if (!pipe) {
+        return undefined;
+    }
+
+    if (pipe.kind === `workflow-input`) {
+        return calculatePipeEndpointIdForWorkflow({
+            workflowUri: workflow.workflowUri,
+            direction: `in`,
+            name: pipe.workflowInputName,
+        });
+    }
+
+    if (pipe.kind === `node`) {
+        return calculatePipeEndpointIdForNode({
+            nodeId: pipe.sourceNodeId,
+            name: pipe.sourceNodeOutputName,
+            direction: `out`,
+        });
+    }
+
+    // if(pipe.kind === `data`){
+
+    // }
+
+    return undefined;
+};
+
+type PipeEndpointsRegistryType = {
+    hostRef: { current: null | View };
+    endpoints: {
+        [id: string]: undefined | Subject<{ x: number; y: number }>;
+    };
+};
+export const PipeEndpointsRegistry = createContext<PipeEndpointsRegistryType>({
+    hostRef: { current: null },
+    endpoints: {},
+});
+
+const getOrCreateEndpointSubject = (registry: PipeEndpointsRegistryType, id: string) => {
+    return registry.endpoints[id] ?? (registry.endpoints[id] = new Subject());
+};
+
+const PipeView = ({
+    sourceId,
+    destinationId,
+}: {
+    sourceId: undefined | string;
+    destinationId: string;
+}) => {
+    const registry = useContext(PipeEndpointsRegistry);
+
+    const destinationEndpoint = getOrCreateEndpointSubject(registry, destinationId);
+    const sourceEndpoint = !sourceId ? undefined : getOrCreateEndpointSubject(registry, sourceId);
+
+    const [position, setPosition] = useState({
+        source: { x: 0, y: 0 },
+        destination: { x: 0, y: 0 },
+    });
+
+    useLayoutEffect(() => {
+        if (!sourceEndpoint || !destinationEndpoint) {
+            console.log(`PipeView !sourceEndpoint || !destinationEndpoint`, {
+                sourceId,
+                destinationId,
+                registry,
+                sourceEndpoint,
+                destinationEndpoint,
+            });
+            return;
+        }
+
+        combineLatest([sourceEndpoint, destinationEndpoint]).subscribe(([source, destination]) => {
+            console.log(`PipeView draw`, { source, destination });
+            setPosition({ source, destination });
+        });
+    }, [!destinationEndpoint, !sourceEndpoint]);
+
+    const debug = false;
+    const xDelta = position.destination.x - position.source.x;
+    const yDelta = position.destination.y - position.source.y;
+    const length = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
+    const angle = Math.atan2(yDelta, xDelta);
+    return (
+        <View className='w-0 h-0 justify-center items-center'>
+            <View className='w-0 h-0 absolute'>
+                <View
+                    style={{
+                        transform: `translate(${-xDelta + 4}px,${-yDelta - 2}px)`,
+                    }}
+                >
+                    <View
+                        style={{
+                            transform: `rotate(${angle}rad)`,
+                        }}
+                    >
+                        <View
+                            className='bg-red-400'
+                            style={{
+                                height: 1,
+                                width: length,
+                            }}
+                        />
+                    </View>
+                </View>
+
+                {debug && (
+                    <>
+                        <View className='w-20'>
+                            <Text className='text-white'>{`(${position.source.x},${position.source.y})=>(${position.destination.x},${position.destination.y})`}</Text>
+                        </View>
+                    </>
+                )}
+            </View>
+        </View>
+    );
+};
+
+const PipeEndpointView = ({ id, container }: { id: string; container: PipescriptWorkflow }) => {
+    const size = 12;
+
+    const registry = useContext(PipeEndpointsRegistry);
+    const moveContext = useContext(MoveableContext);
+
+    const targetRef = useRef(null as null | View);
+
+    useLayoutEffect(() => {
+        // console.log(`PipeEndpointView useLayoutEffect`, { registry });
+
+        targetRef.current?.measureLayout(registry.hostRef.current!, (left, top, width, height) => {
+            console.log(`PipeEndpointView useLayoutEffect measureLayout NEXT`, {
+                id,
+                left,
+                top,
+                width,
+                height,
+                registry,
+            });
+            const s = getOrCreateEndpointSubject(registry, id);
+            s.next({
+                x: left + moveContext.position.x,
+                y: top + moveContext.position.y,
+            });
+        });
+    }, [moveContext.position.x, moveContext.position.y, moveContext.position.scale]);
+
+    return (
+        <View className='w-2 h-2 justify-center items-center'>
+            <View ref={targetRef} className='w-0 h-0 absolute pt-1'>
+                <View
+                    className='bg-blue-400 border-[1px] border-blue-950 rounded-full'
+                    style={{
+                        width: size,
+                        height: size,
+                        marginLeft: -size / 2,
+                        marginTop: -size / 2,
+                    }}
+                />
+            </View>
+        </View>
     );
 };

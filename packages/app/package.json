@@ -4,8 +4,8 @@
     "module": "index.ts",
     "type": "module",
     "dependencies": {
-        "@ricklove-universal/cl": "*",
-        "@ricklove-universal/pipescript": "*",
+        "@ricklove-universal/cl": "workspace:*",
+        "@ricklove-universal/pipescript": "workspace:*",
         "expo": "~49.0.13",
         "expo-status-bar": "~1.6.0",
         "react": "18.2.0",
