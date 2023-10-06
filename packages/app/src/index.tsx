@@ -1,5 +1,5 @@
-import { WorkflowView, exampleDeclarationWorkflow } from '@ricklove-universal/pipescript';
+import { WorkCanvasView, exampleDeclarationWorkflow } from '@ricklove-universal/pipescript';
 
 export const App = () => {
-    return <WorkflowView workflow={exampleDeclarationWorkflow} />;
+    return <WorkCanvasView workflow={exampleDeclarationWorkflow} />;
 };

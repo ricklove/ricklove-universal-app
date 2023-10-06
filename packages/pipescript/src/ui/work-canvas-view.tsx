@@ -2,6 +2,7 @@ import { useStableCallback } from '@ricklove-universal/cl/src/utils/stable-callb
 import { useEffect, useRef, useState } from 'react';
 import { View, Text, Pressable, PointerEvent } from 'react-native';
 
+import { WorkFlowView } from './work-flow-view';
 import { PipescriptWorkflow } from '../types';
 
 type MouseEvent = PointerEvent & { clientX?: number; clientY?: number; pointerId?: number };
@@ -12,7 +13,7 @@ type MouseHost = View & {
     onwheel?: (e: WheelEvent) => void;
 };
 
-export const WorkflowView = ({ workflow }: { workflow: PipescriptWorkflow }) => {
+export const WorkCanvasView = ({ workflow }: { workflow: PipescriptWorkflow }) => {
     const [position, setPosition] = useState({
         x: 0,
         y: 0,
@@ -110,12 +111,13 @@ export const WorkflowView = ({ workflow }: { workflow: PipescriptWorkflow }) => 
                 onPointerMove={e => moveDrag(e)}
             >
                 <View
-                    className='bg-gray-600'
                     style={{
                         transform: `translate(${position.x}px, ${position.y}px) scale(${position.scale})`,
                     }}
                 >
-                    <Text>test</Text>
+                    <View className=''>
+                        <WorkFlowView workflow={workflow} full />
+                    </View>
                 </View>
             </Pressable>
         </View>
