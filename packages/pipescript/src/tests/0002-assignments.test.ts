@@ -1,12 +1,12 @@
 import { describe, it } from 'bun:test';
 
+import { expectSingleCodeFileWorkflow } from './_utils';
 import {
-    expectSingleCodeFileWorkflow,
     expectedDeclarationFromLiteralNode,
     expectedDeclarationFromLiteralWorkflow,
     expectedDeclarationFromVariableNode,
     expectedDeclarationFromVariableWorkflow,
-} from './_utils';
+} from '../data/_utils';
 
 describe(`assignments`, () => {
     it(`should assign a variable`, () => {

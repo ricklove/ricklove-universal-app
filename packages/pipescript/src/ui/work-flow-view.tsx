@@ -15,30 +15,53 @@ const getTypeName = (type: PipescriptType) => {
 
 export const WorkFlowView = ({
     workflow,
-    full,
+    full = false,
+    hideTitles = false,
 }: {
     workflow: PipescriptWorkflow;
     full?: boolean;
+    hideTitles?: boolean;
 }) => {
+    // ${full ? `min-w-[20vw] min-h-[20vh]` : `min-w-[20px] min-h-[10px]`}
     return (
         <View
-            className={`flex-column relative border-blue-100 border-solid border-[1px] rounded
-            ${full ? `w-[100vw] h-[100vh]` : `min-w-[200px] min-h-[100px]`}`}
+            className={`flex-column relative border-blue-100 border-solid border-[1px] m-[-1px] rounded
+            `}
         >
-            <Text className='text-yellow-400 self-center'>{`${workflow.name}`}</Text>
+            {!hideTitles && (
+                <Text className='text-yellow-400 self-center'>{`${workflow.name}`}</Text>
+            )}
 
             <View className='flex-row flex-1'>
-                <View className='flex-col flex-1 justify-center'>
+                <View className='flex-col justify-start items-start'>
                     {workflow.inputs.map(input => (
                         <React.Fragment key={input.name}>
-                            <Text>{input.name}</Text>
+                            <View className='p-1 flex-row justify-start'>
+                                <Text className='text-blue-300'>{`${input.name}`}</Text>
+                                <Text className='text-white'>:</Text>
+                                <Text className='pl-1 text-green-800'>{`${getTypeName(
+                                    input.type,
+                                )}`}</Text>
+                                <Text className='pl-1'>🔵</Text>
+                            </View>
                         </React.Fragment>
                     ))}
                 </View>
-                <View className='flex-col flex-1 justify-center items-end'>
+                <View className='flex-1'>
+                    <View className='flex-row'>
+                        {workflow.nodes.map(n => (
+                            <React.Fragment key={n.nodeId}>
+                                <View className='p-2'>
+                                    <NodeView node={n} container={workflow} />
+                                </View>
+                            </React.Fragment>
+                        ))}
+                    </View>
+                </View>
+                <View className='flex-col justify-end items-end'>
                     {workflow.outputs.map(output => (
                         <React.Fragment key={output.name}>
-                            <View className='p-2 flex-row justify-center'>
+                            <View className='p-1 flex-row justify-end'>
                                 {output.pipe && (
                                     <>
                                         {output.pipe.kind === `data` && (
@@ -58,19 +81,11 @@ export const WorkFlowView = ({
                         </React.Fragment>
                     ))}
                 </View>
-
-                <View className='absolute top-0 left-0'>
-                    <View>
-                        {workflow.nodes.map(n => (
-                            <React.Fragment key={n.nodeId}>
-                                <NodeView node={n} container={workflow} />
-                            </React.Fragment>
-                        ))}
-                    </View>
-                </View>
             </View>
 
-            <Text className='text-yellow-400 self-center'>{`${workflow.workflowUri}`}</Text>
+            {!hideTitles && (
+                <Text className='text-yellow-400 self-center'>{`${workflow.workflowUri}`}</Text>
+            )}
 
             {/* {workflow.workflows?.map(w => (
                 <React.Fragment key={w.name}>
@@ -110,7 +125,7 @@ const NodeView = ({ node, container }: { node: PipescriptNode; container: Pipesc
             mouseButton={MouseButton.Left}
         >
             <View
-                className='p-2 flex-column border-blue-100 border-solid border-[1px] rounded'
+                className='flex-column border-blue-100 border-solid border-[1px] m-[-1px] rounded'
                 style={{
                     left: position.x,
                     top: position.y,
@@ -125,26 +140,35 @@ const NodeView = ({ node, container }: { node: PipescriptNode; container: Pipesc
                 </View>
                 {workflow && (
                     <View className='flex-row flex-1'>
-                        <View className='flex-col justify-center'>
+                        <View className='flex-col justify-start items-start'>
                             {workflow.inputs.map(input => (
                                 <React.Fragment key={input.name}>
-                                    <Text>{input.name}</Text>
+                                    <View className='p-1 flex-row justify-center relative'>
+                                        <Text className='absolute left-[-10px]'>🔵</Text>
+                                        <Text className='pl-1' />
+                                        <Text className='text-blue-300'>{`${input.name}`}</Text>
+                                        {/* <Text className='text-white'>:</Text>
+                                        <Text className='pl-1 text-green-800'>{`${getTypeName(
+                                            input.type,
+                                        )}`}</Text> */}
+                                    </View>
                                 </React.Fragment>
                             ))}
                         </View>
                         <View className='flex-1'>
-                            <WorkFlowView workflow={workflow} />
+                            <WorkFlowView workflow={workflow} hideTitles />
                         </View>
-                        <View className='flex-col justify-center items-end'>
+                        <View className='flex-col justify-end items-end'>
                             {workflow.outputs.map(output => (
                                 <React.Fragment key={output.name}>
-                                    <View className='p-2 flex-row justify-center relative'>
+                                    <View className='p-1 flex-row justify-center relative'>
                                         <Text className='text-blue-300'>{`${output.name}`}</Text>
-                                        <Text className='text-white'>:</Text>
+                                        {/* <Text className='text-white'>:</Text>
                                         <Text className='pl-1 text-green-800'>{`${getTypeName(
                                             output.type,
-                                        )}`}</Text>
-                                        <Text className='absolute right-[-18px]'>🔵</Text>
+                                        )}`}</Text> */}
+                                        <Text className='pr-1' />
+                                        <Text className='absolute right-[-10px]'>🔵</Text>
                                     </View>
                                 </React.Fragment>
                             ))}

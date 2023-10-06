@@ -1,6 +1,7 @@
+import { Slot } from 'expo-router';
 import { Stack } from 'expo-router/stack';
 import { useEffect } from 'react';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 
 import { styleVersion } from './_style-version.gen';
 
@@ -29,16 +30,17 @@ export default function Layout() {
     }, [styleVersion]);
 
     return (
-        <Stack
-            screenOptions={{
-                headerStyle: {
-                    backgroundColor: `#f4511e`,
-                },
-                headerTintColor: `#fff`,
-                headerTitleStyle: {
-                    fontWeight: `bold`,
-                },
-            }}
-        />
+        <Slot />
+        // <Stack
+        //     screenOptions={{
+        //         headerStyle: {
+        //             backgroundColor: `#f4511e`,
+        //         },
+        //         headerTintColor: `#fff`,
+        //         headerTitleStyle: {
+        //             fontWeight: `bold`,
+        //         },
+        //     }}
+        // />
     );
 }

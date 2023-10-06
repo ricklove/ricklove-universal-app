@@ -20,8 +20,11 @@ export const WorkCanvasView = ({ workflow }: { workflow: PipescriptWorkflow }) =
                 }}
                 mouseButton={MouseButton.Middle}
                 enableScaling
+                wholeCanvas
+                outerClassName='w-full h-full'
+                innerClassName='w-full h-full'
             >
-                <View className=''>
+                <View className='w-full h-full justify-center items-center'>
                     <WorkFlowView workflow={workflow} full />
                 </View>
             </MoveableView>

@@ -28,14 +28,18 @@ export const MoveableView = ({
     onMove,
     mouseButton = MouseButton.All,
     enableScaling = false,
-    className,
+    wholeCanvas = false,
+    innerClassName,
+    outerClassName,
 }: {
     children: JSX.Element;
     position: { x: number; y: number; scale: number };
     onMove: (position: { x: number; y: number; scale: number }) => void;
     mouseButton?: MouseButton;
     enableScaling?: boolean;
-    className?: string;
+    wholeCanvas?: boolean;
+    innerClassName?: string;
+    outerClassName?: string;
 }) => {
     const [position, setPosition] = useState({
         x: initPosition.x,
@@ -144,30 +148,55 @@ export const MoveableView = ({
         };
     }, [!hostRef.current]);
 
+    const wholeHostRef = useRef(null as null | MouseHost);
+    useEffect(() => {
+        const host = wholeHostRef.current;
+        if (!host) {
+            return;
+        }
+
+        console.log(`host`, { host });
+        host.onwheel = scrollWheel;
+        return () => {
+            host.onwheel = undefined;
+        };
+    }, [!wholeHostRef.current]);
+
     return (
-        <View>
-            <ScaleContext.Consumer>
-                {contextScale => (
+        <ScaleContext.Consumer>
+            {contextScale => (
+                <>
+                    {wholeCanvas && (
+                        <Pressable
+                            className='fixed top-0 bottom-0 left-0 right-0'
+                            ref={wholeHostRef}
+                            onPointerDown={e => wholeCanvas && startDrag(e, contextScale.scale)}
+                            onPointerUp={e => endDrag(e, contextScale.scale)}
+                            onPointerMove={e => moveDrag(e, contextScale.scale)}
+                        />
+                    )}
                     <Pressable
+                        className={outerClassName}
                         ref={hostRef}
+                        onPointerDown={e => wholeCanvas && startDrag(e, contextScale.scale)}
                         onPointerUp={e => endDrag(e, contextScale.scale)}
-                        onPointerDown={e => startDrag(e, contextScale.scale)}
                         onPointerMove={e => moveDrag(e, contextScale.scale)}
                     >
-                        <View
-                            className={className}
+                        <Pressable
+                            className={innerClassName}
                             style={{
                                 transform: `translate(${position.x}px, ${position.y}px) scale(${position.scale})`,
                             }}
+                            onPointerDown={e => startDrag(e, contextScale.scale)}
                         >
                             <ScaleContext.Provider value={position}>
-                                <Pressable>{children}</Pressable>
+                                {children}
                             </ScaleContext.Provider>
-                        </View>
+                        </Pressable>
                     </Pressable>
-                )}
-            </ScaleContext.Consumer>
-        </View>
+                </>
+            )}
+        </ScaleContext.Consumer>
     );
 };
 

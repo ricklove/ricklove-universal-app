@@ -1,10 +1,10 @@
 import { describe, it } from 'bun:test';
 
+import { expectSingleCodeFileWorkflow } from './_utils';
 import {
-    expectSingleCodeFileWorkflow,
     expectedDeclarationFromLiteralNode,
     expectedDeclarationFromLiteralWorkflow,
-} from './_utils';
+} from '../data/_utils';
 
 describe(`declarations`, () => {
     it(`should parse a const value`, () => {

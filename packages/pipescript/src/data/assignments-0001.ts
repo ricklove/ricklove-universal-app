@@ -4,6 +4,8 @@ const name = `answer`;
 const value = 42;
 const nodeId = 1;
 
+const code = `export const answer = 42;`;
+
 export const exampleDeclarationWorkflow: PipescriptWorkflow = {
     workflowUri: `file.ts`,
     name: `file.ts`,
