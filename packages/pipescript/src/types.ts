@@ -1,7 +1,5 @@
 // Serializable types
 
-import { PseudoBigInt } from 'typescript';
-
 /** function definition, operator definition, class constructors, code documents, modules, repos, etc */
 export type PipescriptWorkflow = {
     /** uri, should be sufficient to find implementation

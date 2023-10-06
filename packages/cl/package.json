@@ -13,7 +13,9 @@
         "react-native-web": "~0.19.6"
     },
     "devDependencies": {
-        "bun-types": "latest"
+        "bun-types": "latest",
+        "@types/react": "~18.2.14",
+        "@types/react-native": "~0.69.1"
     },
     "peerDependencies": {
         "typescript": "^5.0.0"

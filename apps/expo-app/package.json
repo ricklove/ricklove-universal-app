@@ -11,9 +11,9 @@
     "build": "expo export",
     "build:web": "expo export --platform web",
     "ts:check": "tsc",
-    "dev0": "bun build ../../packages/example-app/index.ts --external react --external react-native --sourcemap=inline --outdir ./out --watch",
+    "dev0": "bun build ../../packages/app/index.ts --external react --external react-native --sourcemap=inline --outdir ./out --watch",
     "dev": "concurrently \"bun run dev:code\" \"bun run dev:theme\" \"bun run dev:styles\" \"bun run dev:styles-reload\"",
-    "dev:code": "esbuild ../../packages/example-app/index.ts --bundle --format=esm --external:react --external:react-native --outfile=./src/app.gen.jsx --loader:.js=jsx --jsx=preserve --sourcemap=inline --watch",
+    "dev:code": "esbuild ../../packages/app/index.ts --bundle --format=esm --external:react --external:react-native --external:typescript --outfile=./src/app.gen.jsx --loader:.js=jsx --jsx=preserve --sourcemap=inline --watch",
     "dev:theme": "esbuild ../../packages/cl/src/design/tailwind/theme.ts --bundle --format=cjs --external:react --external:react-native --outfile=./src/theme.gen.js --watch",
     "dev:styles": "tailwindcss -c tailwind.config.js -o ./public/styles-web.gen.css --watch",
     "dev:styles-reload": "cd ./scripts && bun update-styles.ts --watch"

@@ -9,7 +9,7 @@ import {
 } from './_utils';
 
 describe(`assignments`, () => {
-    it(`should parse assign a variable`, () => {
+    it(`should assign a variable`, () => {
         expectSingleCodeFileWorkflow(
             `file.ts`,
             `

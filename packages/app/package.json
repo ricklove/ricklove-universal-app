@@ -5,6 +5,7 @@
     "type": "module",
     "dependencies": {
         "@ricklove-universal/cl": "*",
+        "@ricklove-universal/pipescript": "*",
         "expo": "~49.0.13",
         "expo-status-bar": "~1.6.0",
         "react": "18.2.0",
