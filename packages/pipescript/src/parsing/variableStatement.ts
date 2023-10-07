@@ -28,6 +28,10 @@ export const parseVariableStatement = (builder: WorkflowBuilder, t: ts.VariableS
         const nodeId = !initializer ? `` : `${builder.nextNodeId++}`;
 
         const initializerInfo = (() => {
+            if (!initializer) {
+                return;
+            }
+
             if (
                 initializer?.kind === ts.SyntaxKind.NumericLiteral
                 || initializer?.kind === ts.SyntaxKind.StringLiteral
@@ -44,53 +48,26 @@ export const parseVariableStatement = (builder: WorkflowBuilder, t: ts.VariableS
                 };
             }
 
-            if (initializer?.kind === ts.SyntaxKind.Identifier) {
-                const init = initializer as Identifier;
-                const initVarName = init.text;
-                const inputPipe: PipescriptPipe = {
-                    name: varName,
-                    kind: `node`,
-                    sourceNodeId: builder.findNodeSource(initVarName)?.nodeId ?? ``,
-                    sourceNodeOutputName: initVarName,
-                };
-                const outputPipe: PipescriptPipeValue = {
-                    kind: `workflow-input`,
-                    workflowInputNames: [varName],
-                };
+            const { expressionValue } = parseExpression(
+                builder,
+                initializer,
+                // varName,
+                // varType,
+            );
 
-                return {
-                    inputPipe,
-                    outputPipe,
-                };
-            }
+            const inputPipe: PipescriptPipe = {
+                name: varName,
+                ...expressionValue,
+            };
+            const outputPipe: PipescriptPipeValue = {
+                kind: `workflow-input`,
+                workflowInputNames: [varName],
+            };
 
-            if (initializer?.kind === ts.SyntaxKind.BinaryExpression) {
-                const { expressionValue } = parseExpression(
-                    builder,
-                    initializer,
-                    // varName,
-                    // varType,
-                );
-
-                const inputPipe: PipescriptPipe = {
-                    name: varName,
-                    ...expressionValue,
-                };
-                const outputPipe: PipescriptPipeValue = {
-                    kind: `workflow-input`,
-                    workflowInputNames: [varName],
-                };
-
-                return {
-                    inputPipe,
-                    outputPipe,
-                };
-            }
-
-            console.log(`UNKNOWN initializer`, {
-                kind: ts.SyntaxKind[initializer?.kind ?? 0],
-                kindRaw: initializer?.kind,
-            });
+            return {
+                inputPipe,
+                outputPipe,
+            };
         })();
 
         const outputVar: PipescriptWorkflow[`outputs`][number] = {
