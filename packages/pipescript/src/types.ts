@@ -14,12 +14,9 @@ export type PipescriptWorkflow = {
     /** functionName, fileName, etc */
     name: string;
     /** parameters, scope captures, imports */
-    inputs: PipescriptVariable[];
+    inputs: PipescriptWorkflowInput[];
     /** returns, scope capture mutations, exports */
-    outputs: (PipescriptVariable & {
-        /** connections to output */
-        pipe?: PipescriptPipeValue;
-    })[];
+    outputs: PipescriptWorkflowOutput[];
 
     // internal
 
@@ -31,6 +28,15 @@ export type PipescriptWorkflow = {
 
     /** nested workflows */
     workflows?: PipescriptWorkflow[];
+};
+
+export type PipescriptWorkflowInput = PipescriptVariable & {
+    ignored?: boolean;
+};
+
+export type PipescriptWorkflowOutput = PipescriptVariable & {
+    /** connections to output */
+    pipe?: PipescriptPipeValue;
 };
 
 /** variable */

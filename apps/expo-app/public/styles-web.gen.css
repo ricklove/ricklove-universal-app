@@ -584,6 +584,14 @@ video {
   top: 0px;
 }
 
+.left-\[-16px\] {
+  left: -16px;
+}
+
+.left-\[-24px\] {
+  left: -24px;
+}
+
 .m-\[-1px\] {
   margin: -1px;
 }
@@ -806,4 +814,22 @@ video {
 .text-yellow-400 {
   --tw-text-opacity: 1;
   color: rgb(250 204 21 / var(--tw-text-opacity));
+}
+
+.text-gray-600 {
+  --tw-text-opacity: 1;
+  color: rgb(75 85 99 / var(--tw-text-opacity));
+}
+
+.text-blue-600 {
+  --tw-text-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-text-opacity));
+}
+
+.line-through {
+  text-decoration-line: line-through;
+}
+
+.opacity-50 {
+  opacity: 0.5;
 }

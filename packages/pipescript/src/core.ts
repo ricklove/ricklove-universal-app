@@ -3,6 +3,7 @@ import ts, {
     CompilerHost,
     CompilerOptions,
     Expression,
+    ExpressionStatement,
     Identifier,
     LiteralExpression,
     NumericLiteral,
@@ -148,6 +149,11 @@ const visitFile = (
         workflow: { outputs, nodes, workflows },
     } = builder;
 
+    const statements = [] as ts.Node[];
+    file.forEachChild(x => statements.push(x));
+
+    const unhandledAsDeclaration = [] as ts.Node[];
+
     // order of declarations does not matter
     file.forEachChild(n => {
         if (n.kind === ts.SyntaxKind.VariableStatement) {
@@ -290,7 +296,11 @@ const visitFile = (
             if (isExport) {
                 outputs.push(...declarations.map(x => x.outputVar));
             }
+
+            return;
         }
+
+        unhandledAsDeclaration.push(n);
     });
 
     // non declarations
@@ -318,7 +328,34 @@ const visitFile = (
                     });
                 }
             }
+            return;
         }
+
+        if (n.kind === ts.SyntaxKind.EndOfFileToken) {
+            return;
+        }
+
+        if (n.kind === ts.SyntaxKind.ExpressionStatement) {
+            const t = n as ExpressionStatement;
+            parseExpression(builder, t.expression);
+            return;
+        }
+
+        const kindName = ts.SyntaxKind[n?.kind ?? 0];
+        if (kindName.includes(`Expression`)) {
+            parseExpression(builder, n as Expression);
+            return;
+        }
+
+        const hasBeenHandled = !unhandledAsDeclaration.includes(n);
+        if (hasBeenHandled) {
+            return;
+        }
+
+        console.log(`visitFile: UNKNOWN file statement`, {
+            kind: ts.SyntaxKind[n?.kind ?? 0],
+            kindRaw: n?.kind,
+        });
     });
 
     return builder.workflow;
@@ -382,7 +419,10 @@ const getType = (file: ts.SourceFile, type: undefined | ts.Type): PipescriptType
         };
     }
 
-    console.log(`getType - not handled`, { flags: type?.flags });
+    console.log(`getType: UNKNOWN type`, {
+        flags: ts.TypeFlags[type?.flags ?? 0],
+        flagsRaw: type?.flags,
+    });
 
     return {
         kind: `type`,
@@ -441,7 +481,6 @@ const parseExpression = (
 
     if (expression.kind === ts.SyntaxKind.BinaryExpression) {
         const t = expression as BinaryExpression;
-        const expressionTextSimple = expressionText;
         // const expressionTextSimple = expressionText.replace(/[^A-Za-z0-9]+/g, `_`);
 
         const { left, right, operatorToken } = t;
@@ -454,8 +493,71 @@ const parseExpression = (
             parseExpression(builder, right);
 
         const expressionNodeId = `${builder.nextNodeId++}`;
+
+        if (operatorText === `=` && expressionValue_left.kind === `node`) {
+            const assignmentVarName = expressionValue_left.sourceNodeOutputName;
+            const expressionOutputName = assignmentVarName;
+            const expressionWorkflowUri = `${assignmentVarName}${operatorText}`;
+
+            const expressionWorkflow: PipescriptWorkflow = {
+                workflowUri: expressionWorkflowUri,
+                name: expressionWorkflowUri,
+                inputs: [
+                    {
+                        name: `old`,
+                        type: expressionType_left,
+                        ignored: true,
+                    },
+                    {
+                        name: `value`,
+                        type: expressionType_right,
+                    },
+                ],
+                outputs: [
+                    {
+                        name: expressionOutputName,
+                        type: expressionType,
+                        pipe: {
+                            kind: `workflow-input`,
+                            workflowInputName: `value`,
+                        },
+                    },
+                ],
+                nodes: [],
+            };
+
+            const expressionNode: PipescriptNode = {
+                nodeId: expressionNodeId,
+                implementation: {
+                    kind: `workflow`,
+                    workflowUri: expressionWorkflowUri,
+                },
+                inputPipes: [
+                    {
+                        name: `old`,
+                        ...expressionValue_left,
+                    },
+                    {
+                        name: `value`,
+                        ...expressionValue_right,
+                    },
+                ],
+            };
+
+            builder.workflow.workflows.push(expressionWorkflow);
+            builder.workflow.nodes.push(expressionNode);
+
+            return {
+                expressionValue: {
+                    kind: `node`,
+                    sourceNodeId: expressionNodeId,
+                    sourceNodeOutputName: expressionOutputName,
+                },
+                expressionType,
+            };
+        }
+
         const expressionOutputName = `value`;
-        // const expressionWorkflowUri = `${expressionTextSimple}`;
         const expressionWorkflowUri = `${operatorText}`;
 
         const expressionWorkflow: PipescriptWorkflow = {

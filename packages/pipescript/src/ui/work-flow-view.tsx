@@ -18,6 +18,7 @@ import {
     PipescriptType,
     PipescriptVariable,
     PipescriptWorkflow,
+    PipescriptWorkflowInput,
 } from '../types';
 
 const getTypeName = (type: PipescriptType) => {
@@ -26,6 +27,14 @@ const getTypeName = (type: PipescriptType) => {
     }
 
     return JSON.stringify(type);
+};
+
+const WorkflowInputName = ({ input }: { input: PipescriptWorkflowInput }) => {
+    return (
+        <Text
+            className={`text-blue-300 ${input.ignored ? `line-through opacity-50` : ``}`}
+        >{`${input.name}`}</Text>
+    );
 };
 
 export const WorkFlowView = ({
@@ -52,7 +61,7 @@ export const WorkFlowView = ({
                     {workflow.inputs.map(input => (
                         <React.Fragment key={input.name}>
                             <View className='p-1 flex-row justify-start items-center'>
-                                <Text className='text-blue-300'>{`${input.name}`}</Text>
+                                <WorkflowInputName input={input} />
                                 <Text className='text-white'>:</Text>
                                 <Text className='pl-1 text-green-800'>{`${getTypeName(
                                     input.type,
@@ -234,7 +243,7 @@ const NodeView = ({ node, container }: { node: PipescriptNode; container: Pipesc
                                             />
                                         </View>
                                         <Text className='pl-1' />
-                                        <Text className='text-blue-300'>{`${input.name}`}</Text>
+                                        <WorkflowInputName input={input} />
                                         {/* <Text className='text-white'>:</Text>
                                         <Text className='pl-1 text-green-800'>{`${getTypeName(
                                             input.type,

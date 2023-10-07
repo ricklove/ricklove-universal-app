@@ -1,0 +1,50 @@
+{
+  "workflowUri": "file.ts",
+  "name": "file.ts",
+  "inputs": [],
+  "outputs": [
+    {
+      "name": "a",
+      "type": {
+        "kind": "simple",
+        "type": "int"
+      },
+      "pipe": {
+        "kind": "node",
+        "sourceNodeId": "1",
+        "sourceNodeOutputName": "a"
+      }
+    }
+  ],
+  "workflows": [
+    {
+      "workflowUri": "a-declaration",
+      "name": "a-declaration",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "a",
+          "type": {
+            "kind": "simple",
+            "type": "int"
+          },
+          "pipe": {
+            "kind": "data",
+            "json": "42"
+          }
+        }
+      ],
+      "nodes": []
+    }
+  ],
+  "nodes": [
+    {
+      "nodeId": "1",
+      "implementation": {
+        "kind": "workflow",
+        "workflowUri": "a-declaration"
+      },
+      "inputPipes": []
+    }
+  ]
+}
