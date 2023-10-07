@@ -1,0 +1,396 @@
+{
+  "workflowUri": "file.ts",
+  "name": "file.ts",
+  "inputs": [],
+  "outputs": [
+    {
+      "name": "a",
+      "type": {
+        "kind": "simple",
+        "type": "number"
+      },
+      "pipe": {
+        "kind": "node",
+        "sourceNodeId": "7",
+        "sourceNodeOutputName": "a"
+      }
+    }
+  ],
+  "workflows": [
+    {
+      "workflowUri": "a-declaration",
+      "name": "a-declaration",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "a",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          },
+          "pipe": {
+            "kind": "data",
+            "json": "42"
+          }
+        }
+      ],
+      "nodes": []
+    },
+    {
+      "workflowUri": "+",
+      "name": "+",
+      "inputs": [
+        {
+          "name": "left",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          }
+        },
+        {
+          "name": "right",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "value",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          },
+          "pipe": {
+            "kind": "workflow-input",
+            "workflowInputNames": [
+              "left",
+              "right"
+            ]
+          }
+        }
+      ],
+      "nodes": []
+    },
+    {
+      "workflowUri": "a=",
+      "name": "a=",
+      "inputs": [
+        {
+          "name": "old",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          },
+          "ignored": true
+        },
+        {
+          "name": "value",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "a",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          },
+          "pipe": {
+            "kind": "workflow-input",
+            "workflowInputNames": [
+              "value"
+            ]
+          }
+        }
+      ],
+      "nodes": []
+    },
+    {
+      "workflowUri": "+",
+      "name": "+",
+      "inputs": [
+        {
+          "name": "left",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          }
+        },
+        {
+          "name": "right",
+          "type": {
+            "kind": "simple",
+            "type": "int"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "value",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          },
+          "pipe": {
+            "kind": "workflow-input",
+            "workflowInputNames": [
+              "left",
+              "right"
+            ]
+          }
+        }
+      ],
+      "nodes": []
+    },
+    {
+      "workflowUri": "a=",
+      "name": "a=",
+      "inputs": [
+        {
+          "name": "old",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          },
+          "ignored": true
+        },
+        {
+          "name": "value",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "a",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          },
+          "pipe": {
+            "kind": "workflow-input",
+            "workflowInputNames": [
+              "value"
+            ]
+          }
+        }
+      ],
+      "nodes": []
+    },
+    {
+      "workflowUri": "-",
+      "name": "-",
+      "inputs": [
+        {
+          "name": "left",
+          "type": {
+            "kind": "simple",
+            "type": "int"
+          }
+        },
+        {
+          "name": "right",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "value",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          },
+          "pipe": {
+            "kind": "workflow-input",
+            "workflowInputNames": [
+              "left",
+              "right"
+            ]
+          }
+        }
+      ],
+      "nodes": []
+    },
+    {
+      "workflowUri": "a=",
+      "name": "a=",
+      "inputs": [
+        {
+          "name": "old",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          },
+          "ignored": true
+        },
+        {
+          "name": "value",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "a",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          },
+          "pipe": {
+            "kind": "workflow-input",
+            "workflowInputNames": [
+              "value"
+            ]
+          }
+        }
+      ],
+      "nodes": []
+    }
+  ],
+  "nodes": [
+    {
+      "nodeId": "1",
+      "implementation": {
+        "kind": "workflow",
+        "workflowUri": "a-declaration"
+      },
+      "inputPipes": []
+    },
+    {
+      "nodeId": "2",
+      "implementation": {
+        "kind": "workflow",
+        "workflowUri": "+"
+      },
+      "inputPipes": [
+        {
+          "name": "left",
+          "kind": "node",
+          "sourceNodeId": "1",
+          "sourceNodeOutputName": "a"
+        },
+        {
+          "name": "right",
+          "kind": "node",
+          "sourceNodeId": "1",
+          "sourceNodeOutputName": "a"
+        }
+      ]
+    },
+    {
+      "nodeId": "3",
+      "implementation": {
+        "kind": "workflow",
+        "workflowUri": "a="
+      },
+      "inputPipes": [
+        {
+          "name": "old",
+          "kind": "node",
+          "sourceNodeId": "1",
+          "sourceNodeOutputName": "a"
+        },
+        {
+          "name": "value",
+          "kind": "node",
+          "sourceNodeId": "2",
+          "sourceNodeOutputName": "value"
+        }
+      ]
+    },
+    {
+      "nodeId": "4",
+      "implementation": {
+        "kind": "workflow",
+        "workflowUri": "+"
+      },
+      "inputPipes": [
+        {
+          "name": "left",
+          "kind": "node",
+          "sourceNodeId": "3",
+          "sourceNodeOutputName": "a"
+        },
+        {
+          "name": "right",
+          "kind": "data",
+          "json": "2"
+        }
+      ]
+    },
+    {
+      "nodeId": "5",
+      "implementation": {
+        "kind": "workflow",
+        "workflowUri": "a="
+      },
+      "inputPipes": [
+        {
+          "name": "old",
+          "kind": "node",
+          "sourceNodeId": "3",
+          "sourceNodeOutputName": "a"
+        },
+        {
+          "name": "value",
+          "kind": "node",
+          "sourceNodeId": "4",
+          "sourceNodeOutputName": "value"
+        }
+      ]
+    },
+    {
+      "nodeId": "6",
+      "implementation": {
+        "kind": "workflow",
+        "workflowUri": "-"
+      },
+      "inputPipes": [
+        {
+          "name": "left",
+          "kind": "data",
+          "json": "42"
+        },
+        {
+          "name": "right",
+          "kind": "node",
+          "sourceNodeId": "5",
+          "sourceNodeOutputName": "a"
+        }
+      ]
+    },
+    {
+      "nodeId": "7",
+      "implementation": {
+        "kind": "workflow",
+        "workflowUri": "a="
+      },
+      "inputPipes": [
+        {
+          "name": "old",
+          "kind": "node",
+          "sourceNodeId": "5",
+          "sourceNodeOutputName": "a"
+        },
+        {
+          "name": "value",
+          "kind": "node",
+          "sourceNodeId": "6",
+          "sourceNodeOutputName": "value"
+        }
+      ]
+    }
+  ]
+}
