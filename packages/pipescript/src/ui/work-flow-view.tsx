@@ -8,7 +8,7 @@ import React, {
     useState,
 } from 'react';
 import { View, Text, Pressable, PointerEvent } from 'react-native';
-import { Subject, combineLatest, zip } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, combineLatest, zip } from 'rxjs';
 
 import { MouseButton, MoveableContext, MoveableView } from './moveable-view';
 import {
@@ -362,19 +362,27 @@ const calculatePipeEndpointIdForPipeSource = ({
     return [];
 };
 
-type PipeEndpointsRegistryType = {
-    hostRef: { current: null | View };
+export type PipeEndpointsRegistryType = {
+    hostObservable: Observable<View>;
+    hostView: null | View;
     endpoints: {
         [id: string]: undefined | Subject<{ x: number; y: number }>;
     };
 };
 export const PipeEndpointsRegistry = createContext<PipeEndpointsRegistryType>({
-    hostRef: { current: null },
+    hostObservable: new Subject(),
+    hostView: null,
     endpoints: {},
 });
 
 const getOrCreateEndpointSubject = (registry: PipeEndpointsRegistryType, id: string) => {
-    return registry.endpoints[id] ?? (registry.endpoints[id] = new Subject());
+    return (
+        registry.endpoints[id]
+        ?? (registry.endpoints[id] = new BehaviorSubject({
+            x: 0,
+            y: 0,
+        }))
+    );
 };
 
 const PipeView = ({
@@ -405,11 +413,17 @@ const PipeView = ({
             });
             return;
         }
+        const init = new Subject<void>();
+        combineLatest([sourceEndpoint, destinationEndpoint, init]).subscribe(
+            ([source, destination]) => {
+                console.log(`PipeView draw`, { source, destination });
+                setPosition({ source, destination });
+            },
+        );
 
-        combineLatest([sourceEndpoint, destinationEndpoint]).subscribe(([source, destination]) => {
-            console.log(`PipeView draw`, { source, destination });
-            setPosition({ source, destination });
-        });
+        // initial
+        console.log(`initial`);
+        init.next();
     }, [!destinationEndpoint, !sourceEndpoint]);
 
     const debug = false;
@@ -463,22 +477,45 @@ const PipeEndpointView = ({ id, container }: { id: string; container: Pipescript
     useLayoutEffect(() => {
         // console.log(`PipeEndpointView useLayoutEffect`, { registry });
 
-        targetRef.current?.measureLayout(registry.hostRef.current!, (left, top, width, height) => {
-            console.log(`PipeEndpointView useLayoutEffect measureLayout NEXT`, {
-                id,
-                left,
-                top,
-                width,
-                height,
-                registry,
+        const calculate = () => {
+            const h = registry.hostView;
+            if (!h) {
+                console.log(`PipeEndpointView useLayoutEffect - host NOT READY`, { registry });
+                return;
+            }
+            const t = targetRef.current;
+            if (!t) {
+                console.log(`PipeEndpointView useLayoutEffect - component NOT READY`, { registry });
+                return;
+            }
+
+            t.measureLayout(h, (left, top, width, height) => {
+                console.log(`PipeEndpointView useLayoutEffect measureLayout NEXT`, {
+                    id,
+                    left,
+                    top,
+                    width,
+                    height,
+                    registry,
+                });
+                const s = getOrCreateEndpointSubject(registry, id);
+                s.next({
+                    x: left + moveContext.position.x,
+                    y: top + moveContext.position.y,
+                });
             });
-            const s = getOrCreateEndpointSubject(registry, id);
-            s.next({
-                x: left + moveContext.position.x,
-                y: top + moveContext.position.y,
-            });
+        };
+
+        calculate();
+        registry.hostObservable.subscribe(h => {
+            calculate();
         });
-    }, [moveContext.position.x, moveContext.position.y, moveContext.position.scale]);
+    }, [
+        !!targetRef.current,
+        moveContext.position.x,
+        moveContext.position.y,
+        moveContext.position.scale,
+    ]);
 
     return (
         <View className='w-2 h-2 justify-center items-center'>
