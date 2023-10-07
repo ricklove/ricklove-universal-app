@@ -1,6 +1,8 @@
 import ts, {
+    BinaryExpression,
     CompilerHost,
     CompilerOptions,
+    Expression,
     Identifier,
     LiteralExpression,
     NumericLiteral,
@@ -90,17 +92,19 @@ const parseProgram = (fileCode: { filename: string; code: string }[]) => {
     return { sourceFiles, typeChecker, program };
 };
 
-const visitFile = (
-    filename: string,
-    file: ts.SourceFile,
-    typeChecker: ts.TypeChecker,
-): PipescriptWorkflow => {
-    // console.log(`visitFile`, { file });
-
+const createBuilder = (filename: string, file: ts.SourceFile, typeChecker: ts.TypeChecker) => {
     const outputs: PipescriptWorkflow[`outputs`] = [];
     const workflows: PipescriptWorkflow[`workflows`] = [];
     const nodes: PipescriptWorkflow[`nodes`] = [];
-    let nextNodeId = 1;
+
+    const result = {
+        workflowUri: filename,
+        name: filename,
+        inputs: [],
+        outputs,
+        workflows,
+        nodes,
+    };
 
     const findNodeSource = (varName: string) => {
         const node = nodes.findLast(x => {
@@ -116,6 +120,32 @@ const visitFile = (
         });
         return node;
     };
+
+    const builder = {
+        workflow: result,
+        nextNodeId: 1,
+        findNodeSource,
+        file,
+        typeChecker,
+    };
+
+    return builder;
+};
+
+type WorkflowBuilder = ReturnType<typeof createBuilder>;
+
+const visitFile = (
+    filename: string,
+    file: ts.SourceFile,
+    typeChecker: ts.TypeChecker,
+): PipescriptWorkflow => {
+    // console.log(`visitFile`, { file });
+
+    const builder = createBuilder(filename, file, typeChecker);
+    const {
+        findNodeSource,
+        workflow: { outputs, nodes, workflows },
+    } = builder;
 
     // order of declarations does not matter
     file.forEachChild(n => {
@@ -134,7 +164,7 @@ const visitFile = (
                 // TODO: these are workflow outputs
                 const varName = declarationName.getText(file);
                 const varType = getType(file, type);
-                const nodeId = !initializer ? `` : `${nextNodeId++}`;
+                const nodeId = !initializer ? `` : `${builder.nextNodeId++}`;
 
                 const initializerInfo = (() => {
                     if (
@@ -161,6 +191,31 @@ const visitFile = (
                             kind: `node`,
                             sourceNodeId: findNodeSource(initVarName)?.nodeId ?? ``,
                             sourceNodeOutputName: initVarName,
+                        };
+                        const outputPipe: PipescriptPipeValue = {
+                            kind: `workflow-input`,
+                            workflowInputName: varName,
+                        };
+
+                        return {
+                            inputPipe,
+                            outputPipe,
+                        };
+                    }
+
+                    if (initializer?.kind === ts.SyntaxKind.BinaryExpression) {
+                        const { expressionNodeId, expressionOutputName } = parseExpression(
+                            builder,
+                            initializer,
+                            // varName,
+                            // varType,
+                        );
+
+                        const inputPipe: PipescriptPipe = {
+                            name: varName,
+                            kind: `node`,
+                            sourceNodeId: expressionNodeId,
+                            sourceNodeOutputName: expressionOutputName,
                         };
                         const outputPipe: PipescriptPipeValue = {
                             kind: `workflow-input`,
@@ -266,14 +321,7 @@ const visitFile = (
         }
     });
 
-    return {
-        workflowUri: filename,
-        name: filename,
-        inputs: [],
-        outputs,
-        workflows,
-        nodes,
-    };
+    return builder.workflow;
 };
 
 const getType = (file: ts.SourceFile, type: undefined | ts.Type): PipescriptType => {
@@ -336,4 +384,93 @@ const getType = (file: ts.SourceFile, type: undefined | ts.Type): PipescriptType
         kind: `type`,
         name: type.pattern?.getText(file) ?? ``,
     };
+};
+
+const parseExpression = (
+    builder: WorkflowBuilder,
+    expression: Expression,
+    // varName: string,
+    // varType: PipescriptType,
+) => {
+    const expressionText = expression.getText(builder.file);
+    const expressionTypeRaw = builder.typeChecker.getTypeAtLocation(expression);
+    const expressionType = getType(builder.file, expressionTypeRaw);
+
+    if (expression.kind === ts.SyntaxKind.BinaryExpression) {
+        const t = expression as BinaryExpression;
+        const expressionTextSimple = expressionText.replace(/[^A-Za-z0-9]+/g, `_`);
+
+        const { left, right } = t;
+
+        const {
+            expressionNodeId: expressionNodeId_left,
+            expressionOutputName: expressionOutputName_left,
+            expressionType: expressionType_left,
+        } = parseExpression(builder, left);
+
+        const {
+            expressionNodeId: expressionNodeId_right,
+            expressionOutputName: expressionOutputName_right,
+            expressionType: expressionType_right,
+        } = parseExpression(builder, right);
+
+        const expressionNodeId = `${builder.nextNodeId++}`;
+        const expressionOutputName = `value`;
+
+        const expressionWorkflow: PipescriptWorkflow = {
+            workflowUri: `${expressionTextSimple}-expression`,
+            name: `${expressionTextSimple}-expression`,
+            inputs: [
+                {
+                    name: `left`,
+                    type: expressionType_left,
+                },
+                {
+                    name: `right`,
+                    type: expressionType_right,
+                },
+            ],
+            outputs: [
+                {
+                    name: expressionOutputName,
+                    type: expressionType,
+                    // pipe: initializerInfo?.outputPipe,
+                },
+            ],
+            nodes: [],
+        };
+
+        const expressionNode: PipescriptNode = {
+            nodeId: expressionNodeId,
+            implementation: {
+                kind: `workflow`,
+                workflowUri: `${expressionTextSimple}-expression`,
+            },
+            inputPipes: [
+                {
+                    kind: `node`,
+                    name: `left`,
+                    sourceNodeId: expressionNodeId_left,
+                    sourceNodeOutputName: expressionOutputName_left,
+                },
+                {
+                    kind: `node`,
+                    name: `right`,
+                    sourceNodeId: expressionNodeId_right,
+                    sourceNodeOutputName: expressionOutputName_right,
+                },
+            ],
+        };
+
+        builder.workflow.workflows.push(expressionWorkflow);
+        builder.workflow.nodes.push(expressionNode);
+
+        return {
+            expressionNodeId,
+            expressionOutputName,
+            expressionType,
+        };
+    }
+
+    throw new Error(`Not Implemented`);
 };

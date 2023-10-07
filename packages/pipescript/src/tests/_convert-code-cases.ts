@@ -20,7 +20,7 @@ async function getAllFiles(directoryPath: string): Promise<string[]> {
             }),
         )
     ).flatMap(x => x);
-    return filePaths;
+    return filePaths.sort();
 }
 
 export const run = async () => {
@@ -28,6 +28,8 @@ export const run = async () => {
     const tsFiles = allFiles.filter(x => x.endsWith(`.ts`));
 
     for (const filePath of tsFiles) {
+        console.log(`${filePath}`);
+
         const content = await Bun.file(filePath).text();
         const projectWorkflow = convertTypescriptToPipescript([
             {
