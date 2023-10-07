@@ -138,14 +138,14 @@
       },
       "inputPipes": [
         {
-          "kind": "node",
           "name": "left",
+          "kind": "node",
           "sourceNodeId": "1",
           "sourceNodeOutputName": "a"
         },
         {
-          "kind": "node",
           "name": "right",
+          "kind": "node",
           "sourceNodeId": "2",
           "sourceNodeOutputName": "b"
         }

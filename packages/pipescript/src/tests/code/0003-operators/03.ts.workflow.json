@@ -37,8 +37,8 @@
       "nodes": []
     },
     {
-      "workflowUri": "a + a",
-      "name": "a + a",
+      "workflowUri": "a * 2",
+      "name": "a * 2",
       "inputs": [
         {
           "name": "left",
@@ -107,7 +107,7 @@
       "nodeId": "3",
       "implementation": {
         "kind": "workflow",
-        "workflowUri": "a + a"
+        "workflowUri": "a * 2"
       },
       "inputPipes": [
         {
@@ -118,9 +118,8 @@
         },
         {
           "name": "right",
-          "kind": "node",
-          "sourceNodeId": "1",
-          "sourceNodeOutputName": "a"
+          "kind": "data",
+          "json": "2"
         }
       ]
     },

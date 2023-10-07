@@ -204,7 +204,7 @@ const visitFile = (
                     }
 
                     if (initializer?.kind === ts.SyntaxKind.BinaryExpression) {
-                        const { expressionNodeId, expressionOutputName } = parseExpression(
+                        const { expressionValue } = parseExpression(
                             builder,
                             initializer,
                             // varName,
@@ -213,9 +213,7 @@ const visitFile = (
 
                         const inputPipe: PipescriptPipe = {
                             name: varName,
-                            kind: `node`,
-                            sourceNodeId: expressionNodeId,
-                            sourceNodeOutputName: expressionOutputName,
+                            ...expressionValue,
                         };
                         const outputPipe: PipescriptPipeValue = {
                             kind: `workflow-input`,
@@ -396,7 +394,10 @@ const parseExpression = (
     expression: Expression,
     // varName: string,
     // varType: PipescriptType,
-) => {
+): {
+    expressionValue: PipescriptPipeValue;
+    expressionType: PipescriptType;
+} => {
     const expressionText = expression.getText(builder.file);
     const expressionTypeRaw = builder.typeChecker.getTypeAtLocation(expression);
     const expressionType = getType(builder.file, expressionTypeRaw);
@@ -405,10 +406,36 @@ const parseExpression = (
         const init = expression as Identifier;
         const initVarName = init.text;
         return {
-            expressionNodeId: builder.findNodeSource(initVarName)?.nodeId ?? ``,
-            expressionOutputName: initVarName,
+            expressionValue: {
+                kind: `node`,
+                sourceNodeId: builder.findNodeSource(initVarName)?.nodeId ?? ``,
+                sourceNodeOutputName: initVarName,
+            },
             expressionType,
         };
+    }
+
+    if (
+        expression.kind === ts.SyntaxKind.NumericLiteral
+        || expression.kind === ts.SyntaxKind.StringLiteral
+        || expression.kind === ts.SyntaxKind.ObjectLiteralExpression
+    ) {
+        const init = expression as LiteralExpression;
+        const outputPipe: PipescriptPipeValue = {
+            kind: `data`,
+            json: init.text,
+        };
+
+        return {
+            expressionValue: outputPipe,
+            expressionType,
+        };
+
+        // return {
+        //     expressionNodeId: builder.findNodeSource(initVarName)?.nodeId ?? ``,
+        //     expressionOutputName: initVarName,
+        //     expressionType,
+        // };
     }
 
     if (expression.kind === ts.SyntaxKind.BinaryExpression) {
@@ -418,17 +445,11 @@ const parseExpression = (
 
         const { left, right } = t;
 
-        const {
-            expressionNodeId: expressionNodeId_left,
-            expressionOutputName: expressionOutputName_left,
-            expressionType: expressionType_left,
-        } = parseExpression(builder, left);
+        const { expressionValue: expressionValue_left, expressionType: expressionType_left } =
+            parseExpression(builder, left);
 
-        const {
-            expressionNodeId: expressionNodeId_right,
-            expressionOutputName: expressionOutputName_right,
-            expressionType: expressionType_right,
-        } = parseExpression(builder, right);
+        const { expressionValue: expressionValue_right, expressionType: expressionType_right } =
+            parseExpression(builder, right);
 
         const expressionNodeId = `${builder.nextNodeId++}`;
         const expressionOutputName = `value`;
@@ -467,16 +488,12 @@ const parseExpression = (
             },
             inputPipes: [
                 {
-                    kind: `node`,
                     name: `left`,
-                    sourceNodeId: expressionNodeId_left,
-                    sourceNodeOutputName: expressionOutputName_left,
+                    ...expressionValue_left,
                 },
                 {
-                    kind: `node`,
                     name: `right`,
-                    sourceNodeId: expressionNodeId_right,
-                    sourceNodeOutputName: expressionOutputName_right,
+                    ...expressionValue_right,
                 },
             ],
         };
@@ -485,8 +502,11 @@ const parseExpression = (
         builder.workflow.nodes.push(expressionNode);
 
         return {
-            expressionNodeId,
-            expressionOutputName,
+            expressionValue: {
+                kind: `node`,
+                sourceNodeId: expressionNodeId,
+                sourceNodeOutputName: expressionOutputName,
+            },
             expressionType,
         };
     }

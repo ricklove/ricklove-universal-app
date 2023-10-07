@@ -7,7 +7,7 @@
       "name": "b",
       "type": {
         "kind": "simple",
-        "type": "number"
+        "type": "int"
       },
       "pipe": {
         "kind": "node",
@@ -37,36 +37,6 @@
       "nodes": []
     },
     {
-      "workflowUri": "a + a",
-      "name": "a + a",
-      "inputs": [
-        {
-          "name": "left",
-          "type": {
-            "kind": "simple",
-            "type": "int"
-          }
-        },
-        {
-          "name": "right",
-          "type": {
-            "kind": "simple",
-            "type": "int"
-          }
-        }
-      ],
-      "outputs": [
-        {
-          "name": "value",
-          "type": {
-            "kind": "simple",
-            "type": "number"
-          }
-        }
-      ],
-      "nodes": []
-    },
-    {
       "workflowUri": "b-declaration",
       "name": "b-declaration",
       "inputs": [
@@ -74,7 +44,7 @@
           "name": "b",
           "type": {
             "kind": "simple",
-            "type": "number"
+            "type": "int"
           }
         }
       ],
@@ -83,7 +53,7 @@
           "name": "b",
           "type": {
             "kind": "simple",
-            "type": "number"
+            "type": "int"
           },
           "pipe": {
             "kind": "workflow-input",
@@ -104,27 +74,6 @@
       "inputPipes": []
     },
     {
-      "nodeId": "3",
-      "implementation": {
-        "kind": "workflow",
-        "workflowUri": "a + a"
-      },
-      "inputPipes": [
-        {
-          "name": "left",
-          "kind": "node",
-          "sourceNodeId": "1",
-          "sourceNodeOutputName": "a"
-        },
-        {
-          "name": "right",
-          "kind": "node",
-          "sourceNodeId": "1",
-          "sourceNodeOutputName": "a"
-        }
-      ]
-    },
-    {
       "nodeId": "2",
       "implementation": {
         "kind": "workflow",
@@ -134,8 +83,8 @@
         {
           "name": "b",
           "kind": "node",
-          "sourceNodeId": "3",
-          "sourceNodeOutputName": "value"
+          "sourceNodeId": "1",
+          "sourceNodeOutputName": "a"
         }
       ]
     }

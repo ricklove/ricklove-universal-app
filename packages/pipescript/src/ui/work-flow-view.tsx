@@ -192,6 +192,24 @@ const NodeView = ({ node, container }: { node: PipescriptNode; container: Pipesc
                             {workflow.inputs.map(input => (
                                 <React.Fragment key={input.name}>
                                     <View className='p-1 flex-row justify-center items-center relative'>
+                                        {(() => {
+                                            const inputPipe = node.inputPipes.find(
+                                                p => p.name === input.name,
+                                            );
+                                            if (!inputPipe) {
+                                                return undefined;
+                                            }
+
+                                            return (
+                                                <>
+                                                    {inputPipe.kind === `data` && (
+                                                        <Text className='ml-[-16px] mr-[16px] text-purple-400'>
+                                                            {inputPipe.json}
+                                                        </Text>
+                                                    )}
+                                                </>
+                                            );
+                                        })()}
                                         <View className='ml-[-8px] mr-[0px]'>
                                             <PipeEndpointView
                                                 id={calculatePipeEndpointIdForNode({
