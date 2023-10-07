@@ -116,17 +116,20 @@ export const WorkFlowView = ({
                                         })}
                                         container={workflow}
                                     />
-                                    <PipeView
-                                        destinationId={calculatePipeEndpointIdForWorkflow({
-                                            workflowUri: workflow.workflowUri,
-                                            direction: `out`,
-                                            name: output.name,
-                                        })}
-                                        sourceId={calculatePipeEndpointIdForPipeSource({
-                                            workflow,
-                                            pipe: output.pipe,
-                                        })}
-                                    />
+                                    {calculatePipeEndpointIdForPipeSource({
+                                        workflow,
+                                        pipe: output.pipe,
+                                    })?.map(sourceId => (
+                                        <PipeView
+                                            key={sourceId}
+                                            destinationId={calculatePipeEndpointIdForWorkflow({
+                                                workflowUri: workflow.workflowUri,
+                                                direction: `out`,
+                                                name: output.name,
+                                            })}
+                                            sourceId={sourceId}
+                                        />
+                                    ))}
                                 </View>
                                 <Text className='pr-1' />
                                 <Text className='text-blue-300'>{`${output.name}`}</Text>
@@ -228,19 +231,22 @@ const NodeView = ({ node, container }: { node: PipescriptNode; container: Pipesc
                                                 })}
                                                 container={container}
                                             />
-                                            <PipeView
-                                                destinationId={calculatePipeEndpointIdForNode({
-                                                    nodeId: node.nodeId,
-                                                    direction: `in`,
-                                                    name: input.name,
-                                                })}
-                                                sourceId={calculatePipeEndpointIdForPipeSource({
-                                                    workflow,
-                                                    pipe: node.inputPipes.find(
-                                                        x => x.name === input.name,
-                                                    ),
-                                                })}
-                                            />
+                                            {calculatePipeEndpointIdForPipeSource({
+                                                workflow,
+                                                pipe: node.inputPipes.find(
+                                                    x => x.name === input.name,
+                                                ),
+                                            })?.map(sourceId => (
+                                                <PipeView
+                                                    key={sourceId}
+                                                    destinationId={calculatePipeEndpointIdForNode({
+                                                        nodeId: node.nodeId,
+                                                        direction: `in`,
+                                                        name: input.name,
+                                                    })}
+                                                    sourceId={sourceId}
+                                                />
+                                            ))}
                                         </View>
                                         <Text className='pl-1' />
                                         <WorkflowInputName input={input} />
@@ -323,26 +329,30 @@ const calculatePipeEndpointIdForPipeSource = ({
     }
 
     if (pipe.kind === `workflow-input`) {
-        return calculatePipeEndpointIdForWorkflow({
-            workflowUri: workflow.workflowUri,
-            direction: `in`,
-            name: pipe.workflowInputName,
-        });
+        return pipe.workflowInputNames.map(name =>
+            calculatePipeEndpointIdForWorkflow({
+                workflowUri: workflow.workflowUri,
+                direction: `in`,
+                name,
+            }),
+        );
     }
 
     if (pipe.kind === `node`) {
-        return calculatePipeEndpointIdForNode({
-            nodeId: pipe.sourceNodeId,
-            name: pipe.sourceNodeOutputName,
-            direction: `out`,
-        });
+        return [
+            calculatePipeEndpointIdForNode({
+                nodeId: pipe.sourceNodeId,
+                name: pipe.sourceNodeOutputName,
+                direction: `out`,
+            }),
+        ];
     }
 
     // if(pipe.kind === `data`){
 
     // }
 
-    return undefined;
+    return [];
 };
 
 type PipeEndpointsRegistryType = {

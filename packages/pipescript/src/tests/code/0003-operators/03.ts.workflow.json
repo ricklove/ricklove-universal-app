@@ -61,6 +61,13 @@
           "type": {
             "kind": "simple",
             "type": "number"
+          },
+          "pipe": {
+            "kind": "workflow-input",
+            "workflowInputNames": [
+              "left",
+              "right"
+            ]
           }
         }
       ],
@@ -87,7 +94,9 @@
           },
           "pipe": {
             "kind": "workflow-input",
-            "workflowInputName": "b"
+            "workflowInputNames": [
+              "b"
+            ]
           }
         }
       ],

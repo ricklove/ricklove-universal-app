@@ -201,7 +201,7 @@ const visitFile = (
                         };
                         const outputPipe: PipescriptPipeValue = {
                             kind: `workflow-input`,
-                            workflowInputName: varName,
+                            workflowInputNames: [varName],
                         };
 
                         return {
@@ -224,7 +224,7 @@ const visitFile = (
                         };
                         const outputPipe: PipescriptPipeValue = {
                             kind: `workflow-input`,
-                            workflowInputName: varName,
+                            workflowInputNames: [varName],
                         };
 
                         return {
@@ -519,7 +519,7 @@ const parseExpression = (
                         type: expressionType,
                         pipe: {
                             kind: `workflow-input`,
-                            workflowInputName: `value`,
+                            workflowInputNames: [`value`],
                         },
                     },
                 ],
@@ -577,9 +577,10 @@ const parseExpression = (
                 {
                     name: expressionOutputName,
                     type: expressionType,
-                    // pipe: {
-                    //     kind:``
-                    // }
+                    pipe: {
+                        kind: `workflow-input`,
+                        workflowInputNames: [`left`, `right`],
+                    },
                 },
             ],
             nodes: [],

@@ -65,7 +65,9 @@
           },
           "pipe": {
             "kind": "workflow-input",
-            "workflowInputName": "value"
+            "workflowInputNames": [
+              "value"
+            ]
           }
         }
       ],

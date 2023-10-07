@@ -137,7 +137,7 @@ export type PipescriptPipeValue =
     | {
           /** connected to input of parent workflow */
           kind: `workflow-input`;
-          workflowInputName: string;
+          workflowInputNames: string[];
       }
     | {
           /** json data

@@ -60,7 +60,7 @@ export const expectedDeclarationFromVariableWorkflow = (name: string): Pipescrip
                 },
                 pipe: {
                     kind: `workflow-input`,
-                    workflowInputName: name,
+                    workflowInputNames: [name],
                 },
             },
         ],
