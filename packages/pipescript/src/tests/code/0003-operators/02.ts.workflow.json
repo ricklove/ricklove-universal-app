@@ -56,8 +56,8 @@
       "nodes": []
     },
     {
-      "workflowUri": "a + b",
-      "name": "a + b",
+      "workflowUri": "+",
+      "name": "+",
       "inputs": [
         {
           "name": "left",
@@ -134,7 +134,7 @@
       "nodeId": "4",
       "implementation": {
         "kind": "workflow",
-        "workflowUri": "a + b"
+        "workflowUri": "+"
       },
       "inputPipes": [
         {

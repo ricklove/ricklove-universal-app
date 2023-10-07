@@ -37,8 +37,8 @@
       "nodes": []
     },
     {
-      "workflowUri": "a * 2",
-      "name": "a * 2",
+      "workflowUri": "*",
+      "name": "*",
       "inputs": [
         {
           "name": "left",
@@ -67,8 +67,8 @@
       "nodes": []
     },
     {
-      "workflowUri": "a + a * 2",
-      "name": "a + a * 2",
+      "workflowUri": "-",
+      "name": "-",
       "inputs": [
         {
           "name": "left",
@@ -97,44 +97,14 @@
       "nodes": []
     },
     {
-      "workflowUri": "a * 3",
-      "name": "a * 3",
+      "workflowUri": "*",
+      "name": "*",
       "inputs": [
         {
           "name": "left",
           "type": {
             "kind": "simple",
             "type": "int"
-          }
-        },
-        {
-          "name": "right",
-          "type": {
-            "kind": "simple",
-            "type": "int"
-          }
-        }
-      ],
-      "outputs": [
-        {
-          "name": "value",
-          "type": {
-            "kind": "simple",
-            "type": "number"
-          }
-        }
-      ],
-      "nodes": []
-    },
-    {
-      "workflowUri": "a + a * 2 - a * 3",
-      "name": "a + a * 2 - a * 3",
-      "inputs": [
-        {
-          "name": "left",
-          "type": {
-            "kind": "simple",
-            "type": "number"
           }
         },
         {
@@ -157,8 +127,38 @@
       "nodes": []
     },
     {
-      "workflowUri": "a + a * 2 - a * 3 + 7",
-      "name": "a + a * 2 - a * 3 + 7",
+      "workflowUri": "+",
+      "name": "+",
+      "inputs": [
+        {
+          "name": "left",
+          "type": {
+            "kind": "simple",
+            "type": "int"
+          }
+        },
+        {
+          "name": "right",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "value",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          }
+        }
+      ],
+      "nodes": []
+    },
+    {
+      "workflowUri": "+",
+      "name": "+",
       "inputs": [
         {
           "name": "left",
@@ -227,48 +227,7 @@
       "nodeId": "3",
       "implementation": {
         "kind": "workflow",
-        "workflowUri": "a * 2"
-      },
-      "inputPipes": [
-        {
-          "name": "left",
-          "kind": "node",
-          "sourceNodeId": "1",
-          "sourceNodeOutputName": "a"
-        },
-        {
-          "name": "right",
-          "kind": "data",
-          "json": "2"
-        }
-      ]
-    },
-    {
-      "nodeId": "4",
-      "implementation": {
-        "kind": "workflow",
-        "workflowUri": "a + a * 2"
-      },
-      "inputPipes": [
-        {
-          "name": "left",
-          "kind": "node",
-          "sourceNodeId": "1",
-          "sourceNodeOutputName": "a"
-        },
-        {
-          "name": "right",
-          "kind": "node",
-          "sourceNodeId": "3",
-          "sourceNodeOutputName": "value"
-        }
-      ]
-    },
-    {
-      "nodeId": "5",
-      "implementation": {
-        "kind": "workflow",
-        "workflowUri": "a * 3"
+        "workflowUri": "*"
       },
       "inputPipes": [
         {
@@ -285,17 +244,58 @@
       ]
     },
     {
-      "nodeId": "6",
+      "nodeId": "4",
       "implementation": {
         "kind": "workflow",
-        "workflowUri": "a + a * 2 - a * 3"
+        "workflowUri": "-"
+      },
+      "inputPipes": [
+        {
+          "name": "left",
+          "kind": "data",
+          "json": "2"
+        },
+        {
+          "name": "right",
+          "kind": "node",
+          "sourceNodeId": "3",
+          "sourceNodeOutputName": "value"
+        }
+      ]
+    },
+    {
+      "nodeId": "5",
+      "implementation": {
+        "kind": "workflow",
+        "workflowUri": "*"
       },
       "inputPipes": [
         {
           "name": "left",
           "kind": "node",
+          "sourceNodeId": "1",
+          "sourceNodeOutputName": "a"
+        },
+        {
+          "name": "right",
+          "kind": "node",
           "sourceNodeId": "4",
           "sourceNodeOutputName": "value"
+        }
+      ]
+    },
+    {
+      "nodeId": "6",
+      "implementation": {
+        "kind": "workflow",
+        "workflowUri": "+"
+      },
+      "inputPipes": [
+        {
+          "name": "left",
+          "kind": "node",
+          "sourceNodeId": "1",
+          "sourceNodeOutputName": "a"
         },
         {
           "name": "right",
@@ -309,7 +309,7 @@
       "nodeId": "7",
       "implementation": {
         "kind": "workflow",
-        "workflowUri": "a + a * 2 - a * 3 + 7"
+        "workflowUri": "+"
       },
       "inputPipes": [
         {

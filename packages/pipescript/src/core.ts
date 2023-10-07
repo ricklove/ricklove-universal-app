@@ -6,6 +6,7 @@ import ts, {
     Identifier,
     LiteralExpression,
     NumericLiteral,
+    ParenthesizedExpression,
     PseudoBigInt,
     ScriptTarget,
     SourceFile,
@@ -443,7 +444,8 @@ const parseExpression = (
         const expressionTextSimple = expressionText;
         // const expressionTextSimple = expressionText.replace(/[^A-Za-z0-9]+/g, `_`);
 
-        const { left, right } = t;
+        const { left, right, operatorToken } = t;
+        const operatorText = operatorToken.getText(builder.file);
 
         const { expressionValue: expressionValue_left, expressionType: expressionType_left } =
             parseExpression(builder, left);
@@ -453,7 +455,8 @@ const parseExpression = (
 
         const expressionNodeId = `${builder.nextNodeId++}`;
         const expressionOutputName = `value`;
-        const expressionWorkflowUri = `${expressionTextSimple}`;
+        // const expressionWorkflowUri = `${expressionTextSimple}`;
+        const expressionWorkflowUri = `${operatorText}`;
 
         const expressionWorkflow: PipescriptWorkflow = {
             workflowUri: expressionWorkflowUri,
@@ -509,6 +512,12 @@ const parseExpression = (
             },
             expressionType,
         };
+    }
+
+    if (expression.kind === ts.SyntaxKind.ParenthesizedExpression) {
+        const t = expression as ParenthesizedExpression;
+        const { expression: expressionInner } = t;
+        return parseExpression(builder, expressionInner);
     }
 
     console.log(`UNKNOWN expression`, {
