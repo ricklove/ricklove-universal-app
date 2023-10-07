@@ -32,7 +32,15 @@
     {
       "workflowUri": "answer-declaration",
       "name": "answer-declaration",
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "answer",
+          "type": {
+            "kind": "simple",
+            "type": "int"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "answer",
@@ -41,8 +49,10 @@
             "type": "int"
           },
           "pipe": {
-            "kind": "data",
-            "json": "42"
+            "kind": "workflow-input",
+            "workflowInputNames": [
+              "answer"
+            ]
           }
         }
       ],
@@ -51,7 +61,15 @@
     {
       "workflowUri": "notAnswer-declaration",
       "name": "notAnswer-declaration",
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "notAnswer",
+          "type": {
+            "kind": "simple",
+            "type": "int"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "notAnswer",
@@ -60,8 +78,10 @@
             "type": "int"
           },
           "pipe": {
-            "kind": "data",
-            "json": "43"
+            "kind": "workflow-input",
+            "workflowInputNames": [
+              "notAnswer"
+            ]
           }
         }
       ],
@@ -75,7 +95,13 @@
         "kind": "workflow",
         "workflowUri": "answer-declaration"
       },
-      "inputPipes": []
+      "inputPipes": [
+        {
+          "name": "answer",
+          "kind": "data",
+          "json": "42"
+        }
+      ]
     },
     {
       "nodeId": "2",
@@ -83,7 +109,13 @@
         "kind": "workflow",
         "workflowUri": "notAnswer-declaration"
       },
-      "inputPipes": []
+      "inputPipes": [
+        {
+          "name": "notAnswer",
+          "kind": "data",
+          "json": "43"
+        }
+      ]
     }
   ]
 }

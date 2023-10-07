@@ -20,7 +20,15 @@
     {
       "workflowUri": "answer-declaration",
       "name": "answer-declaration",
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "answer",
+          "type": {
+            "kind": "simple",
+            "type": "int"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "answer",
@@ -29,8 +37,10 @@
             "type": "int"
           },
           "pipe": {
-            "kind": "data",
-            "json": "42"
+            "kind": "workflow-input",
+            "workflowInputNames": [
+              "answer"
+            ]
           }
         }
       ],
@@ -44,7 +54,13 @@
         "kind": "workflow",
         "workflowUri": "answer-declaration"
       },
-      "inputPipes": []
+      "inputPipes": [
+        {
+          "name": "answer",
+          "kind": "data",
+          "json": "42"
+        }
+      ]
     }
   ]
 }

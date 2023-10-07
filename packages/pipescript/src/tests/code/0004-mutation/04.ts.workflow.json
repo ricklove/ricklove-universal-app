@@ -20,7 +20,15 @@
     {
       "workflowUri": "a-declaration",
       "name": "a-declaration",
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "a",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          }
+        }
+      ],
       "outputs": [
         {
           "name": "a",
@@ -29,8 +37,10 @@
             "type": "number"
           },
           "pipe": {
-            "kind": "data",
-            "json": "42"
+            "kind": "workflow-input",
+            "workflowInputNames": [
+              "a"
+            ]
           }
         }
       ],
@@ -86,7 +96,13 @@
         "kind": "workflow",
         "workflowUri": "a-declaration"
       },
-      "inputPipes": []
+      "inputPipes": [
+        {
+          "name": "a",
+          "kind": "data",
+          "json": "42"
+        }
+      ]
     },
     {
       "nodeId": "2",

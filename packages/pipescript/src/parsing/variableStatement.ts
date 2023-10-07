@@ -32,21 +32,21 @@ export const parseVariableStatement = (builder: WorkflowBuilder, t: ts.VariableS
                 return;
             }
 
-            if (
-                initializer?.kind === ts.SyntaxKind.NumericLiteral
-                || initializer?.kind === ts.SyntaxKind.StringLiteral
-                || initializer?.kind === ts.SyntaxKind.ObjectLiteralExpression
-            ) {
-                const init = initializer as LiteralExpression;
-                const outputPipe: PipescriptPipeValue = {
-                    kind: `data`,
-                    json: init.text,
-                };
+            // if (
+            //     initializer?.kind === ts.SyntaxKind.NumericLiteral
+            //     || initializer?.kind === ts.SyntaxKind.StringLiteral
+            //     || initializer?.kind === ts.SyntaxKind.ObjectLiteralExpression
+            // ) {
+            //     const init = initializer as LiteralExpression;
+            //     const outputPipe: PipescriptPipeValue = {
+            //         kind: `data`,
+            //         json: init.text,
+            //     };
 
-                return {
-                    outputPipe,
-                };
-            }
+            //     return {
+            //         outputPipe,
+            //     };
+            // }
 
             const { expressionValue } = parseExpression(
                 builder,
