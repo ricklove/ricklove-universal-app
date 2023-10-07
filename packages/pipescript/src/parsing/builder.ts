@@ -1,26 +1,27 @@
 import ts from 'typescript';
 
-import { PipescriptWorkflow } from '../types';
+import { PipescriptType, PipescriptWorkflow } from '../types';
 
-export const createBuilder = (
-    filename: string,
+export const createWorkflowBuilder = (
+    workflowUri: string,
     file: ts.SourceFile,
     typeChecker: ts.TypeChecker,
+    autoCapture: boolean,
 ) => {
     const outputs: PipescriptWorkflow[`outputs`] = [];
     const workflows: PipescriptWorkflow[`workflows`] = [];
     const nodes: PipescriptWorkflow[`nodes`] = [];
 
-    const result = {
-        workflowUri: filename,
-        name: filename,
+    const workflow: Required<PipescriptWorkflow> = {
+        workflowUri,
+        name: workflowUri,
         inputs: [],
         outputs,
         workflows,
         nodes,
     };
 
-    const findNodeSource = (varName: string) => {
+    const findNodeSource = (varName: string, varType: PipescriptType) => {
         const node = nodes.findLast(x => {
             const implementation = x.implementation;
             if (implementation.kind !== `workflow`) {
@@ -32,11 +33,23 @@ export const createBuilder = (
 
             return !!workflowOutput;
         });
+
+        if (!node && autoCapture) {
+            workflow.inputs.push({
+                name: varName,
+                type: varType,
+            });
+            workflow.outputs.push({
+                name: varName,
+                type: varType,
+            });
+        }
+
         return node;
     };
 
     const builder = {
-        workflow: result,
+        workflow,
         nextNodeId: 1,
         findNodeSource,
         file,
@@ -45,4 +58,4 @@ export const createBuilder = (
 
     return builder;
 };
-export type WorkflowBuilder = ReturnType<typeof createBuilder>;
+export type WorkflowBuilder = ReturnType<typeof createWorkflowBuilder>;

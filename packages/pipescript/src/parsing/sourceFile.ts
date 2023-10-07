@@ -1,7 +1,7 @@
 import ts, { Expression, ExpressionStatement } from 'typescript';
 
 import { parseBody } from './body';
-import { createBuilder } from './builder';
+import { createWorkflowBuilder } from './builder';
 import { PipescriptWorkflow } from '../types';
 
 export const parseSourceFile = (
@@ -10,7 +10,7 @@ export const parseSourceFile = (
     typeChecker: ts.TypeChecker,
 ): PipescriptWorkflow => {
     // console.log(`visitFile`, { file });
-    const builder = createBuilder(filename, file, typeChecker);
+    const builder = createWorkflowBuilder(filename, file, typeChecker, false);
     parseBody(builder, file);
     return builder.workflow;
 };

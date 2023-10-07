@@ -1,7 +1,8 @@
-let a = 42;
+const a = 42;
+let b: number;
 
 if (a > 40) {
-    a = 43;
+    b = 43;
 }
 
-export { a };
+export { b };

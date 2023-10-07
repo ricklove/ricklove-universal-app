@@ -1,15 +1,16 @@
 import ts, { Expression, ExpressionStatement } from 'typescript';
 
-import { WorkflowBuilder, createBuilder } from './builder';
+import { WorkflowBuilder, createWorkflowBuilder } from './builder';
 import { parseExpression } from './expressions/expression';
 import { getPipescriptType } from './pipescriptType';
-import { parseVariableStatement } from './variableStatement';
+import { parseIfStatement } from './statements/ifStatement';
+import { parseVariableStatement } from './statements/variableStatement';
 import { PipescriptWorkflow } from '../types';
 
 export const parseBody = (builder: WorkflowBuilder, body: ts.Node): PipescriptWorkflow => {
     const {
         findNodeSource,
-        workflow: { outputs, nodes, workflows },
+        workflow: { outputs },
         typeChecker,
         file,
     } = builder;
@@ -17,9 +18,30 @@ export const parseBody = (builder: WorkflowBuilder, body: ts.Node): PipescriptWo
     const statements = [] as ts.Node[];
     body.forEachChild(x => statements.push(x));
 
-    const unhandledAsDeclaration = [] as ts.Node[];
+    const unhandledAsOrdered = [] as ts.Node[];
 
-    // order of declarations does not matter
+    // TODO: hoisted:
+    // - function declarations
+    body.forEachChild(n => {
+        // if (n.kind === ts.SyntaxKind.VariableStatement) {
+        //     const t = n as ts.VariableStatement;
+        //     parseVariableStatement(builder, t);
+        //     return;
+        // }
+        // if (n.kind === ts.SyntaxKind.ExpressionStatement) {
+        //     const t = n as ExpressionStatement;
+        //     parseExpression(builder, t.expression);
+        //     return;
+        // }
+        // const kindName = ts.SyntaxKind[n?.kind ?? 0];
+        // if (kindName.includes(`Expression`)) {
+        //     parseExpression(builder, n as Expression);
+        //     return;
+        // }
+        // unhandledAsOrdered.push(n);
+    });
+
+    // ordered
     body.forEachChild(n => {
         if (n.kind === ts.SyntaxKind.VariableStatement) {
             const t = n as ts.VariableStatement;
@@ -27,10 +49,28 @@ export const parseBody = (builder: WorkflowBuilder, body: ts.Node): PipescriptWo
             return;
         }
 
-        unhandledAsDeclaration.push(n);
+        if (n.kind === ts.SyntaxKind.IfStatement) {
+            const t = n as ts.IfStatement;
+            parseIfStatement(builder, t);
+            return;
+        }
+
+        if (n.kind === ts.SyntaxKind.ExpressionStatement) {
+            const t = n as ExpressionStatement;
+            parseExpression(builder, t.expression);
+            return;
+        }
+
+        const kindName = ts.SyntaxKind[n?.kind ?? 0];
+        if (kindName.includes(`Expression`)) {
+            parseExpression(builder, n as Expression);
+            return;
+        }
+
+        unhandledAsOrdered.push(n);
     });
 
-    // non declarations
+    // non ordered
     body.forEachChild(n => {
         if (n.kind === ts.SyntaxKind.ExportDeclaration) {
             const t = n as ts.ExportDeclaration;
@@ -49,7 +89,7 @@ export const parseBody = (builder: WorkflowBuilder, body: ts.Node): PipescriptWo
                         type: varType,
                         pipe: {
                             kind: `node`,
-                            sourceNodeId: findNodeSource(varName)?.nodeId ?? ``,
+                            sourceNodeId: findNodeSource(varName, varType)?.nodeId ?? ``,
                             sourceNodeOutputName: varName,
                         },
                     });
@@ -62,24 +102,12 @@ export const parseBody = (builder: WorkflowBuilder, body: ts.Node): PipescriptWo
             return;
         }
 
-        if (n.kind === ts.SyntaxKind.ExpressionStatement) {
-            const t = n as ExpressionStatement;
-            parseExpression(builder, t.expression);
-            return;
-        }
-
-        const kindName = ts.SyntaxKind[n?.kind ?? 0];
-        if (kindName.includes(`Expression`)) {
-            parseExpression(builder, n as Expression);
-            return;
-        }
-
-        const hasBeenHandled = !unhandledAsDeclaration.includes(n);
+        const hasBeenHandled = !unhandledAsOrdered.includes(n);
         if (hasBeenHandled) {
             return;
         }
 
-        console.log(`visitFile: UNKNOWN file statement`, {
+        console.log(`visitFile: UNKNOWN body statement`, {
             kind: ts.SyntaxKind[n?.kind ?? 0],
             kindRaw: n?.kind,
         });

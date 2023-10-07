@@ -1,9 +1,14 @@
 import ts, { Identifier, LiteralExpression } from 'typescript';
 
-import { WorkflowBuilder } from './builder';
-import { parseExpression } from './expressions/expression';
-import { getPipescriptType } from './pipescriptType';
-import { PipescriptNode, PipescriptPipe, PipescriptPipeValue, PipescriptWorkflow } from '../types';
+import {
+    PipescriptNode,
+    PipescriptPipe,
+    PipescriptPipeValue,
+    PipescriptWorkflow,
+} from '../../types';
+import { WorkflowBuilder } from '../builder';
+import { parseExpression } from '../expressions/expression';
+import { getPipescriptType } from '../pipescriptType';
 
 export const parseVariableStatement = (builder: WorkflowBuilder, t: ts.VariableStatement) => {
     const {

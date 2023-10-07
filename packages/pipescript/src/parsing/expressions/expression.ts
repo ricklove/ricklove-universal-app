@@ -32,7 +32,7 @@ export const parseExpression = (
         return {
             expressionValue: {
                 kind: `node`,
-                sourceNodeId: builder.findNodeSource(initVarName)?.nodeId ?? ``,
+                sourceNodeId: builder.findNodeSource(initVarName, expressionType)?.nodeId ?? ``,
                 sourceNodeOutputName: initVarName,
             },
             expressionType,
