@@ -49,7 +49,7 @@ export const WorkFlowView = ({
     // ${full ? `min-w-[20vw] min-h-[20vh]` : `min-w-[20px] min-h-[10px]`}
     return (
         <View
-            className={`flex-column relative border-blue-100 border-solid border-[1px] m-[-1px] rounded
+            className={`flex-column relative bg-slate-950/75 border-blue-100 border-solid border-[1px] m-[-1px] rounded
             `}
         >
             {!hideTitles && (
@@ -83,14 +83,21 @@ export const WorkFlowView = ({
                     ))}
                 </View>
                 <View className='flex-1'>
-                    <View className='flex-row'>
-                        {workflow.nodes.map(n => (
-                            <React.Fragment key={n.nodeId}>
-                                <View className='p-2'>
-                                    <NodeView node={n} container={workflow} />
-                                </View>
-                            </React.Fragment>
-                        ))}
+                    <View className='flex-col justify-center items-center'>
+                        <View className='justify-center items-center'>
+                            <Text className='text-white animate-bounce text-[8px] absolute top-2'>
+                                ⛏
+                            </Text>
+                        </View>
+                        <View className='flex-row'>
+                            {workflow.nodes.map(n => (
+                                <React.Fragment key={n.nodeId}>
+                                    <View className='p-2'>
+                                        <NodeView node={n} container={workflow} />
+                                    </View>
+                                </React.Fragment>
+                            ))}
+                        </View>
                     </View>
                 </View>
                 <View className='flex-col justify-end items-end'>
@@ -185,7 +192,7 @@ const NodeView = ({ node, container }: { node: PipescriptNode; container: Pipesc
             mouseButton={MouseButton.Left}
         >
             <View
-                className='flex-column border-blue-100 border-solid border-[1px] m-[-1px] rounded'
+                className='flex-column bg-zinc-950/75 border-blue-100 border-solid border-[1px] m-[-1px] rounded'
                 style={{
                     left: position.x,
                     top: position.y,

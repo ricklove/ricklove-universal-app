@@ -111,16 +111,14 @@ export const parseVariableStatement = (builder: WorkflowBuilder, t: ts.VariableS
             nodes: [],
         };
 
-        const node: undefined | PipescriptNode = !initializer
-            ? undefined
-            : {
-                  nodeId,
-                  implementation: {
-                      kind: `workflow`,
-                      workflowUri,
-                  },
-                  inputPipes: [...(!initializerInfo?.inputPipe ? [] : [initializerInfo.inputPipe])],
-              };
+        const node: undefined | PipescriptNode = {
+            nodeId,
+            implementation: {
+                kind: `workflow`,
+                workflowUri,
+            },
+            inputPipes: [...(!initializerInfo?.inputPipe ? [] : [initializerInfo.inputPipe])],
+        };
 
         return { outputVar, workflow, node };
     });

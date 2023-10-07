@@ -205,6 +205,14 @@
       ]
     },
     {
+      "nodeId": "",
+      "implementation": {
+        "kind": "workflow",
+        "workflowUri": "b-declaration"
+      },
+      "inputPipes": []
+    },
+    {
       "nodeId": "2",
       "implementation": {
         "kind": "workflow",
