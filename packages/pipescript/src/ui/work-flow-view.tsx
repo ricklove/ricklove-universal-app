@@ -426,7 +426,7 @@ const PipeView = ({
         init.next();
     }, [!destinationEndpoint, !sourceEndpoint]);
 
-    const debug = true;
+    const debug = false;
     const xDelta = position.destination.x - position.source.x;
     const yDelta = position.destination.y - position.source.y;
     const length = Math.sqrt(xDelta * xDelta + yDelta * yDelta);

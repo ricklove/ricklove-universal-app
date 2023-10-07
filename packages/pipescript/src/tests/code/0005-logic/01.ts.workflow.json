@@ -123,6 +123,11 @@
           "type": {
             "kind": "simple",
             "type": "number"
+          },
+          "pipe": {
+            "kind": "node",
+            "sourceNodeId": "file.ts/if-body:1",
+            "sourceNodeOutputName": "b"
           }
         }
       ],

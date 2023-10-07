@@ -31,6 +31,14 @@ export const parseIfStatement = (builder: WorkflowBuilder, t: ts.IfStatement) =>
         type: expressionType_condition,
     });
 
+    expressionWorkflow.outputs.forEach(output => {
+        if (output.pipe) {
+            return;
+        }
+
+        output.pipe = ifBodyBuilder.findPipeSource(output.name, output.type);
+    });
+
     const expressionNode: PipescriptNode = {
         nodeId: expressionNodeId,
         implementation: {
@@ -51,7 +59,7 @@ export const parseIfStatement = (builder: WorkflowBuilder, t: ts.IfStatement) =>
         ],
     };
 
-    console.log(`expressionNode`, { expressionNode, expressionWorkflow });
+    // console.log(`expressionNode`, { expressionNode, expressionWorkflow });
 
     builder.workflow.workflows.push(expressionWorkflow);
     builder.workflow.nodes.push(expressionNode);
