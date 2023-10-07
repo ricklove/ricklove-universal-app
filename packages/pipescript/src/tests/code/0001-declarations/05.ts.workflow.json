@@ -30,8 +30,8 @@
   ],
   "workflows": [
     {
-      "workflowUri": "answer-declaration",
-      "name": "answer-declaration",
+      "workflowUri": "file.ts/answer-declaration",
+      "name": "file.ts/answer-declaration",
       "inputs": [
         {
           "name": "answer",
@@ -59,8 +59,8 @@
       "nodes": []
     },
     {
-      "workflowUri": "notAnswer-declaration",
-      "name": "notAnswer-declaration",
+      "workflowUri": "file.ts/notAnswer-declaration",
+      "name": "file.ts/notAnswer-declaration",
       "inputs": [
         {
           "name": "notAnswer",
@@ -93,7 +93,7 @@
       "nodeId": "file.ts:1",
       "implementation": {
         "kind": "workflow",
-        "workflowUri": "answer-declaration"
+        "workflowUri": "file.ts/answer-declaration"
       },
       "inputPipes": [
         {
@@ -107,7 +107,7 @@
       "nodeId": "file.ts:2",
       "implementation": {
         "kind": "workflow",
-        "workflowUri": "notAnswer-declaration"
+        "workflowUri": "file.ts/notAnswer-declaration"
       },
       "inputPipes": [
         {

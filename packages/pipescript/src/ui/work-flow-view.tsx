@@ -239,7 +239,7 @@ const NodeView = ({ node, container }: { node: PipescriptNode; container: Pipesc
                                                 container={container}
                                             />
                                             {calculatePipeEndpointIdForPipeSource({
-                                                workflow,
+                                                workflow: container,
                                                 pipe: node.inputPipes.find(
                                                     x => x.name === input.name,
                                                 ),
@@ -426,7 +426,7 @@ const PipeView = ({
         init.next();
     }, [!destinationEndpoint, !sourceEndpoint]);
 
-    const debug = false;
+    const debug = true;
     const xDelta = position.destination.x - position.source.x;
     const yDelta = position.destination.y - position.source.y;
     const length = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
@@ -456,7 +456,7 @@ const PipeView = ({
 
                 {debug && (
                     <>
-                        <View className='w-[300px]'>
+                        <View className='w-[1000px] text-[4px]'>
                             <Text className='text-white'>{`(${sourceId})=>(${destinationId})`}</Text>
                             <Text className='text-white'>{`(${position.source.x},${position.source.y})=>(${position.destination.x},${position.destination.y})`}</Text>
                         </View>

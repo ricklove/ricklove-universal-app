@@ -1,12 +1,11 @@
 import ts from 'typescript';
 
-import { PipescriptType, PipescriptWorkflow } from '../types';
+import { PipescriptPipeValue, PipescriptType, PipescriptWorkflow } from '../types';
 
 export const createWorkflowBuilder = (
     workflowUri: string,
     file: ts.SourceFile,
     typeChecker: ts.TypeChecker,
-    autoCapture: boolean,
 ) => {
     let nextNodeId = 1;
     const getNextNodeId = () => {
@@ -39,24 +38,40 @@ export const createWorkflowBuilder = (
             return !!workflowOutput;
         });
 
-        if (!node && autoCapture) {
-            workflow.inputs.push({
-                name: varName,
-                type: varType,
-            });
-            workflow.outputs.push({
-                name: varName,
-                type: varType,
-            });
+        return node;
+    };
+
+    const findPipeSource = (varName: string, varType: PipescriptType): PipescriptPipeValue => {
+        const nodeSource = findNodeSource(varName, varType);
+
+        if (nodeSource) {
+            return {
+                kind: `node`,
+                sourceNodeId: nodeSource.nodeId,
+                sourceNodeOutputName: varName,
+            };
         }
 
-        return node;
+        workflow.inputs.push({
+            name: varName,
+            type: varType,
+        });
+        workflow.outputs.push({
+            name: varName,
+            type: varType,
+        });
+
+        return {
+            kind: `workflow-input`,
+            workflowInputNames: [varName],
+        };
     };
 
     const builder = {
         workflow,
         getNextNodeId,
         findNodeSource,
+        findPipeSource,
         file,
         typeChecker,
     };

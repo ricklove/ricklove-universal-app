@@ -18,8 +18,8 @@
   ],
   "workflows": [
     {
-      "workflowUri": "a-declaration",
-      "name": "a-declaration",
+      "workflowUri": "file.ts/a-declaration",
+      "name": "file.ts/a-declaration",
       "inputs": [
         {
           "name": "a",
@@ -47,8 +47,8 @@
       "nodes": []
     },
     {
-      "workflowUri": "*",
-      "name": "*",
+      "workflowUri": "file.ts/*",
+      "name": "file.ts/*",
       "inputs": [
         {
           "name": "left",
@@ -84,8 +84,8 @@
       "nodes": []
     },
     {
-      "workflowUri": "a=",
-      "name": "a=",
+      "workflowUri": "file.ts/a=",
+      "name": "file.ts/a=",
       "inputs": [
         {
           "name": "old",
@@ -126,7 +126,7 @@
       "nodeId": "file.ts:1",
       "implementation": {
         "kind": "workflow",
-        "workflowUri": "a-declaration"
+        "workflowUri": "file.ts/a-declaration"
       },
       "inputPipes": [
         {
@@ -140,7 +140,7 @@
       "nodeId": "file.ts:2",
       "implementation": {
         "kind": "workflow",
-        "workflowUri": "*"
+        "workflowUri": "file.ts/*"
       },
       "inputPipes": [
         {
@@ -160,7 +160,7 @@
       "nodeId": "file.ts:3",
       "implementation": {
         "kind": "workflow",
-        "workflowUri": "a="
+        "workflowUri": "file.ts/a="
       },
       "inputPipes": [
         {

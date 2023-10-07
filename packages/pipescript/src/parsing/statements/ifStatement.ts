@@ -6,57 +6,30 @@ import { WorkflowBuilder, createWorkflowBuilder } from '../builder';
 import { parseExpression } from '../expressions/expression';
 
 export const parseIfStatement = (builder: WorkflowBuilder, t: ts.IfStatement) => {
-    const {
-        workflow: { outputs, nodes, workflows },
-        typeChecker,
-        file,
-    } = builder;
+    const { typeChecker, file } = builder;
 
     const { expressionValue: expressionValue_condition, expressionType: expressionType_condition } =
         parseExpression(builder, t.expression);
 
-    const ifBodyBuilder = createWorkflowBuilder(`if-body`, file, typeChecker, true);
+    const ifBodyBuilder = createWorkflowBuilder(
+        `${builder.workflow.workflowUri}/if-body`,
+        file,
+        typeChecker,
+    );
     parseBody(ifBodyBuilder, t.thenStatement);
 
     const expressionNodeId = builder.getNextNodeId();
     const expressionWorkflow = ifBodyBuilder.workflow;
     const expressionWorkflowUri = expressionWorkflow.workflowUri;
+
+    // expressionWorkflow.inputs.forEach(input=>{
+    //     expressionWorkflow.
+    // });
+
     expressionWorkflow.inputs.unshift({
         name: `condition`,
         type: expressionType_condition,
     });
-
-    // const expressionWorkflowUri = `if`;
-
-    // const expressionWorkflow: PipescriptWorkflow = {
-    //     workflowUri: expressionWorkflowUri,
-    //     name: expressionWorkflowUri,
-    //     inputs: [
-    //         {
-    //             name: `condition`,
-    //             type: expressionType_condition,
-    //         },
-    //     ],
-    //     outputs: [
-    //         // {
-    //         //     name: expressionOutputName,
-    //         //     type: expressionType,
-    //         //     pipe: {
-    //         //         kind: `workflow-input`,
-    //         //         workflowInputNames: [`old`],
-    //         //     },
-    //         // },
-    //         // {
-    //         //     name: assignmentVarName,
-    //         //     type: expressionType,
-    //         //     pipe: {
-    //         //         kind: `workflow-input`,
-    //         //         workflowInputNames: [`old`],
-    //         //     },
-    //         // },
-    //     ],
-    //     nodes: [],
-    // };
 
     const expressionNode: PipescriptNode = {
         nodeId: expressionNodeId,
@@ -69,8 +42,16 @@ export const parseIfStatement = (builder: WorkflowBuilder, t: ts.IfStatement) =>
                 name: `condition`,
                 ...expressionValue_condition,
             },
+            ...expressionWorkflow.inputs
+                .filter(x => x.name !== `condition`)
+                .map(x => ({
+                    name: x.name,
+                    ...builder.findPipeSource(x.name, x.type),
+                })),
         ],
     };
+
+    console.log(`expressionNode`, { expressionNode, expressionWorkflow });
 
     builder.workflow.workflows.push(expressionWorkflow);
     builder.workflow.nodes.push(expressionNode);

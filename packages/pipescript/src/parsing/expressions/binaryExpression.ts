@@ -23,10 +23,28 @@ export const parseBinaryExpression = (
 
     const expressionNodeId = builder.getNextNodeId();
 
-    if (operatorText === `=` && expressionValue_left.kind === `node`) {
-        const assignmentVarName = expressionValue_left.sourceNodeOutputName;
+    console.log(`parseBinaryExpression`, {
+        operatorText,
+        expressionValue_left,
+        expressionType_left,
+        expressionValue_right,
+        expressionType_right,
+    });
+
+    if (operatorText === `=`) {
+        const assignmentVarName =
+            expressionValue_left.kind === `node`
+                ? expressionValue_left.sourceNodeOutputName
+                : expressionValue_left.kind === `workflow-input`
+                ? expressionValue_left.workflowInputNames[0]
+                : undefined;
+
+        if (!assignmentVarName) {
+            throw new Error(`Missing ${assignmentVarName}`);
+        }
+
         const expressionOutputName = assignmentVarName;
-        const expressionWorkflowUri = `${assignmentVarName}${operatorText}`;
+        const expressionWorkflowUri = `${builder.workflow.workflowUri}/${assignmentVarName}${operatorText}`;
 
         const expressionWorkflow: PipescriptWorkflow = {
             workflowUri: expressionWorkflowUri,
@@ -87,7 +105,7 @@ export const parseBinaryExpression = (
     }
 
     const expressionOutputName = `value`;
-    const expressionWorkflowUri = `${operatorText}`;
+    const expressionWorkflowUri = `${builder.workflow.workflowUri}/${operatorText}`;
 
     const expressionWorkflow: PipescriptWorkflow = {
         workflowUri: expressionWorkflowUri,

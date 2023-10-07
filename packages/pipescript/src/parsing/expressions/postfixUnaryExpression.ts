@@ -26,7 +26,7 @@ export const parsePostfixUnaryExpression = (
 
     const assignmentVarName = expressionValue_left.sourceNodeOutputName;
     const expressionOutputName = `old`;
-    const expressionWorkflowUri = `${assignmentVarName}${operatorText}`;
+    const expressionWorkflowUri = `${builder.workflow.workflowUri}/${assignmentVarName}${operatorText}`;
 
     const expressionWorkflow: PipescriptWorkflow = {
         workflowUri: expressionWorkflowUri,

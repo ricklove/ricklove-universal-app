@@ -9,7 +9,7 @@ import { PipescriptWorkflow } from '../types';
 
 export const parseBody = (builder: WorkflowBuilder, body: ts.Node): PipescriptWorkflow => {
     const {
-        findNodeSource,
+        findPipeSource,
         workflow: { outputs },
         typeChecker,
         file,
@@ -43,6 +43,11 @@ export const parseBody = (builder: WorkflowBuilder, body: ts.Node): PipescriptWo
 
     // ordered
     body.forEachChild(n => {
+        // console.log(`visitFile: body statement`, {
+        //     kind: ts.SyntaxKind[n?.kind ?? 0],
+        //     kindRaw: n?.kind,
+        // });
+
         if (n.kind === ts.SyntaxKind.VariableStatement) {
             const t = n as ts.VariableStatement;
             parseVariableStatement(builder, t);
@@ -57,6 +62,11 @@ export const parseBody = (builder: WorkflowBuilder, body: ts.Node): PipescriptWo
 
         if (n.kind === ts.SyntaxKind.ExpressionStatement) {
             const t = n as ExpressionStatement;
+            // console.log(`visitFile: body expression statement`, {
+            //     kind: ts.SyntaxKind[n?.kind ?? 0],
+            //     kindRaw: n?.kind,
+            //     expressionKind: ts.SyntaxKind[t.expression.kind],
+            // });
             parseExpression(builder, t.expression);
             return;
         }
@@ -87,12 +97,7 @@ export const parseBody = (builder: WorkflowBuilder, body: ts.Node): PipescriptWo
                     outputs.push({
                         name: exportedName,
                         type: varType,
-                        pipe: {
-                            kind: `node`,
-                            sourceNodeId:
-                                findNodeSource(varName, varType)?.nodeId ?? `unknown-${varName}`,
-                            sourceNodeOutputName: varName,
-                        },
+                        pipe: findPipeSource(varName, varType),
                     });
                 }
             }

@@ -87,7 +87,7 @@ export const parseVariableStatement = (builder: WorkflowBuilder, t: ts.VariableS
                   },
         };
 
-        const workflowUri = `${varName}-declaration`;
+        const workflowUri = `${builder.workflow.workflowUri}/${varName}-declaration`;
         const workflow: PipescriptWorkflow = {
             workflowUri,
             name: workflowUri,

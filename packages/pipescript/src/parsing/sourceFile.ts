@@ -10,7 +10,7 @@ export const parseSourceFile = (
     typeChecker: ts.TypeChecker,
 ): PipescriptWorkflow => {
     // console.log(`visitFile`, { file });
-    const builder = createWorkflowBuilder(filename, file, typeChecker, false);
+    const builder = createWorkflowBuilder(filename, file, typeChecker);
     parseBody(builder, file);
     return builder.workflow;
 };

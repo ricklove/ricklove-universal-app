@@ -18,8 +18,8 @@
   ],
   "workflows": [
     {
-      "workflowUri": "a-declaration",
-      "name": "a-declaration",
+      "workflowUri": "file.ts/a-declaration",
+      "name": "file.ts/a-declaration",
       "inputs": [
         {
           "name": "a",
@@ -47,8 +47,8 @@
       "nodes": []
     },
     {
-      "workflowUri": "b-declaration",
-      "name": "b-declaration",
+      "workflowUri": "file.ts/b-declaration",
+      "name": "file.ts/b-declaration",
       "inputs": [],
       "outputs": [
         {
@@ -62,8 +62,8 @@
       "nodes": []
     },
     {
-      "workflowUri": ">",
-      "name": ">",
+      "workflowUri": "file.ts/>",
+      "name": "file.ts/>",
       "inputs": [
         {
           "name": "left",
@@ -99,8 +99,8 @@
       "nodes": []
     },
     {
-      "workflowUri": "if-body",
-      "name": "if-body",
+      "workflowUri": "file.ts/if-body",
+      "name": "file.ts/if-body",
       "inputs": [
         {
           "name": "condition",
@@ -128,8 +128,8 @@
       ],
       "workflows": [
         {
-          "workflowUri": "b=",
-          "name": "b=",
+          "workflowUri": "file.ts/if-body/b=",
+          "name": "file.ts/if-body/b=",
           "inputs": [
             {
               "name": "old",
@@ -167,17 +167,18 @@
       ],
       "nodes": [
         {
-          "nodeId": "if-body:1",
+          "nodeId": "file.ts/if-body:1",
           "implementation": {
             "kind": "workflow",
-            "workflowUri": "b="
+            "workflowUri": "file.ts/if-body/b="
           },
           "inputPipes": [
             {
               "name": "old",
-              "kind": "node",
-              "sourceNodeId": "unknown-b",
-              "sourceNodeOutputName": "b"
+              "kind": "workflow-input",
+              "workflowInputNames": [
+                "b"
+              ]
             },
             {
               "name": "value",
@@ -194,7 +195,7 @@
       "nodeId": "file.ts:1",
       "implementation": {
         "kind": "workflow",
-        "workflowUri": "a-declaration"
+        "workflowUri": "file.ts/a-declaration"
       },
       "inputPipes": [
         {
@@ -208,7 +209,7 @@
       "nodeId": "file.ts:2",
       "implementation": {
         "kind": "workflow",
-        "workflowUri": "b-declaration"
+        "workflowUri": "file.ts/b-declaration"
       },
       "inputPipes": []
     },
@@ -216,7 +217,7 @@
       "nodeId": "file.ts:3",
       "implementation": {
         "kind": "workflow",
-        "workflowUri": ">"
+        "workflowUri": "file.ts/>"
       },
       "inputPipes": [
         {
@@ -236,7 +237,7 @@
       "nodeId": "file.ts:4",
       "implementation": {
         "kind": "workflow",
-        "workflowUri": "if-body"
+        "workflowUri": "file.ts/if-body"
       },
       "inputPipes": [
         {
@@ -244,6 +245,12 @@
           "kind": "node",
           "sourceNodeId": "file.ts:3",
           "sourceNodeOutputName": "value"
+        },
+        {
+          "name": "b",
+          "kind": "node",
+          "sourceNodeId": "file.ts:2",
+          "sourceNodeOutputName": "b"
         }
       ]
     }

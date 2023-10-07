@@ -30,13 +30,7 @@ export const parseExpression = (
         const init = expression as Identifier;
         const initVarName = init.text;
         return {
-            expressionValue: {
-                kind: `node`,
-                sourceNodeId:
-                    builder.findNodeSource(initVarName, expressionType)?.nodeId
-                    ?? `unknown-${initVarName}`,
-                sourceNodeOutputName: initVarName,
-            },
+            expressionValue: builder.findPipeSource(initVarName, expressionType),
             expressionType,
         };
     }

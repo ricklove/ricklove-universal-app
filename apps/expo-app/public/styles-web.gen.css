@@ -668,6 +668,10 @@ video {
   width: 300px;
 }
 
+.w-\[1000px\] {
+  width: 1000px;
+}
+
 .flex-1 {
   flex: 1 1 0%;
 }
@@ -874,6 +878,10 @@ video {
 
 .text-\[8px\] {
   font-size: 8px;
+}
+
+.text-\[4px\] {
+  font-size: 4px;
 }
 
 .text-blue-300 {

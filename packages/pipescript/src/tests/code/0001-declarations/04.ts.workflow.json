@@ -18,8 +18,8 @@
   ],
   "workflows": [
     {
-      "workflowUri": "answer-declaration",
-      "name": "answer-declaration",
+      "workflowUri": "file.ts/answer-declaration",
+      "name": "file.ts/answer-declaration",
       "inputs": [
         {
           "name": "answer",
@@ -52,7 +52,7 @@
       "nodeId": "file.ts:1",
       "implementation": {
         "kind": "workflow",
-        "workflowUri": "answer-declaration"
+        "workflowUri": "file.ts/answer-declaration"
       },
       "inputPipes": [
         {
