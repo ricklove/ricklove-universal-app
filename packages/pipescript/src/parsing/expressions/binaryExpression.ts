@@ -21,7 +21,7 @@ export const parseBinaryExpression = (
     const { expressionValue: expressionValue_right, expressionType: expressionType_right } =
         parseExpression(builder, right);
 
-    const expressionNodeId = `${builder.nextNodeId++}`;
+    const expressionNodeId = builder.getNextNodeId();
 
     if (operatorText === `=` && expressionValue_left.kind === `node`) {
         const assignmentVarName = expressionValue_left.sourceNodeOutputName;

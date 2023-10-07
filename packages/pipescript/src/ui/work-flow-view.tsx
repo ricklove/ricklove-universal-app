@@ -456,7 +456,8 @@ const PipeView = ({
 
                 {debug && (
                     <>
-                        <View className='w-20'>
+                        <View className='w-[300px]'>
+                            <Text className='text-white'>{`(${sourceId})=>(${destinationId})`}</Text>
                             <Text className='text-white'>{`(${position.source.x},${position.source.y})=>(${position.destination.x},${position.destination.y})`}</Text>
                         </View>
                     </>

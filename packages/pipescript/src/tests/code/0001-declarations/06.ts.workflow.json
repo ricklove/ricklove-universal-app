@@ -11,7 +11,7 @@
       },
       "pipe": {
         "kind": "node",
-        "sourceNodeId": "1",
+        "sourceNodeId": "file.ts:1",
         "sourceNodeOutputName": "answer"
       }
     }
@@ -49,7 +49,7 @@
   ],
   "nodes": [
     {
-      "nodeId": "1",
+      "nodeId": "file.ts:1",
       "implementation": {
         "kind": "workflow",
         "workflowUri": "answer-declaration"

@@ -1,15 +1,9 @@
-import ts, { Identifier, LiteralExpression } from 'typescript';
+import ts from 'typescript';
 
-import {
-    PipescriptNode,
-    PipescriptPipe,
-    PipescriptPipeValue,
-    PipescriptWorkflow,
-} from '../../types';
+import { PipescriptNode } from '../../types';
 import { parseBody } from '../body';
 import { WorkflowBuilder, createWorkflowBuilder } from '../builder';
 import { parseExpression } from '../expressions/expression';
-import { getPipescriptType } from '../pipescriptType';
 
 export const parseIfStatement = (builder: WorkflowBuilder, t: ts.IfStatement) => {
     const {
@@ -24,7 +18,7 @@ export const parseIfStatement = (builder: WorkflowBuilder, t: ts.IfStatement) =>
     const ifBodyBuilder = createWorkflowBuilder(`if-body`, file, typeChecker, true);
     parseBody(ifBodyBuilder, t.thenStatement);
 
-    const expressionNodeId = `${builder.nextNodeId++}`;
+    const expressionNodeId = builder.getNextNodeId();
     const expressionWorkflow = ifBodyBuilder.workflow;
     const expressionWorkflowUri = expressionWorkflow.workflowUri;
     expressionWorkflow.inputs.unshift({

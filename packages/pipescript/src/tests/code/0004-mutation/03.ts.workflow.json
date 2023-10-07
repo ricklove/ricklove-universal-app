@@ -11,7 +11,7 @@
       },
       "pipe": {
         "kind": "node",
-        "sourceNodeId": "7",
+        "sourceNodeId": "file.ts:7",
         "sourceNodeOutputName": "a"
       }
     }
@@ -271,7 +271,7 @@
   ],
   "nodes": [
     {
-      "nodeId": "1",
+      "nodeId": "file.ts:1",
       "implementation": {
         "kind": "workflow",
         "workflowUri": "a-declaration"
@@ -285,7 +285,7 @@
       ]
     },
     {
-      "nodeId": "2",
+      "nodeId": "file.ts:2",
       "implementation": {
         "kind": "workflow",
         "workflowUri": "+"
@@ -294,19 +294,19 @@
         {
           "name": "left",
           "kind": "node",
-          "sourceNodeId": "1",
+          "sourceNodeId": "file.ts:1",
           "sourceNodeOutputName": "a"
         },
         {
           "name": "right",
           "kind": "node",
-          "sourceNodeId": "1",
+          "sourceNodeId": "file.ts:1",
           "sourceNodeOutputName": "a"
         }
       ]
     },
     {
-      "nodeId": "3",
+      "nodeId": "file.ts:3",
       "implementation": {
         "kind": "workflow",
         "workflowUri": "a="
@@ -315,19 +315,19 @@
         {
           "name": "old",
           "kind": "node",
-          "sourceNodeId": "1",
+          "sourceNodeId": "file.ts:1",
           "sourceNodeOutputName": "a"
         },
         {
           "name": "value",
           "kind": "node",
-          "sourceNodeId": "2",
+          "sourceNodeId": "file.ts:2",
           "sourceNodeOutputName": "value"
         }
       ]
     },
     {
-      "nodeId": "4",
+      "nodeId": "file.ts:4",
       "implementation": {
         "kind": "workflow",
         "workflowUri": "+"
@@ -336,7 +336,7 @@
         {
           "name": "left",
           "kind": "node",
-          "sourceNodeId": "3",
+          "sourceNodeId": "file.ts:3",
           "sourceNodeOutputName": "a"
         },
         {
@@ -347,7 +347,7 @@
       ]
     },
     {
-      "nodeId": "5",
+      "nodeId": "file.ts:5",
       "implementation": {
         "kind": "workflow",
         "workflowUri": "a="
@@ -356,19 +356,19 @@
         {
           "name": "old",
           "kind": "node",
-          "sourceNodeId": "3",
+          "sourceNodeId": "file.ts:3",
           "sourceNodeOutputName": "a"
         },
         {
           "name": "value",
           "kind": "node",
-          "sourceNodeId": "4",
+          "sourceNodeId": "file.ts:4",
           "sourceNodeOutputName": "value"
         }
       ]
     },
     {
-      "nodeId": "6",
+      "nodeId": "file.ts:6",
       "implementation": {
         "kind": "workflow",
         "workflowUri": "-"
@@ -382,13 +382,13 @@
         {
           "name": "right",
           "kind": "node",
-          "sourceNodeId": "5",
+          "sourceNodeId": "file.ts:5",
           "sourceNodeOutputName": "a"
         }
       ]
     },
     {
-      "nodeId": "7",
+      "nodeId": "file.ts:7",
       "implementation": {
         "kind": "workflow",
         "workflowUri": "a="
@@ -397,13 +397,13 @@
         {
           "name": "old",
           "kind": "node",
-          "sourceNodeId": "5",
+          "sourceNodeId": "file.ts:5",
           "sourceNodeOutputName": "a"
         },
         {
           "name": "value",
           "kind": "node",
-          "sourceNodeId": "6",
+          "sourceNodeId": "file.ts:6",
           "sourceNodeOutputName": "value"
         }
       ]

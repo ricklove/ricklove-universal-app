@@ -1,6 +1,6 @@
 import ts, { Expression, ExpressionStatement } from 'typescript';
 
-import { WorkflowBuilder, createWorkflowBuilder } from './builder';
+import { WorkflowBuilder } from './builder';
 import { parseExpression } from './expressions/expression';
 import { getPipescriptType } from './pipescriptType';
 import { parseIfStatement } from './statements/ifStatement';
@@ -89,7 +89,8 @@ export const parseBody = (builder: WorkflowBuilder, body: ts.Node): PipescriptWo
                         type: varType,
                         pipe: {
                             kind: `node`,
-                            sourceNodeId: findNodeSource(varName, varType)?.nodeId ?? ``,
+                            sourceNodeId:
+                                findNodeSource(varName, varType)?.nodeId ?? `unknown-${varName}`,
                             sourceNodeOutputName: varName,
                         },
                     });

@@ -18,7 +18,7 @@ export const parsePostfixUnaryExpression = (
     const { expressionValue: expressionValue_left, expressionType: expressionType_left } =
         parseExpression(builder, operand);
 
-    const expressionNodeId = `${builder.nextNodeId++}`;
+    const expressionNodeId = builder.getNextNodeId();
 
     if (expressionValue_left.kind !== `node`) {
         throw new Error(`parsePostfixUnaryExpression: only identified postfix is implemented`);

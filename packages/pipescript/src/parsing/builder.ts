@@ -8,6 +8,11 @@ export const createWorkflowBuilder = (
     typeChecker: ts.TypeChecker,
     autoCapture: boolean,
 ) => {
+    let nextNodeId = 1;
+    const getNextNodeId = () => {
+        return `${workflowUri}:${nextNodeId++}`;
+    };
+
     const outputs: PipescriptWorkflow[`outputs`] = [];
     const workflows: PipescriptWorkflow[`workflows`] = [];
     const nodes: PipescriptWorkflow[`nodes`] = [];
@@ -50,7 +55,7 @@ export const createWorkflowBuilder = (
 
     const builder = {
         workflow,
-        nextNodeId: 1,
+        getNextNodeId,
         findNodeSource,
         file,
         typeChecker,

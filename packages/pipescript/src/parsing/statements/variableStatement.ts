@@ -1,4 +1,4 @@
-import ts, { Identifier, LiteralExpression } from 'typescript';
+import ts from 'typescript';
 
 import {
     PipescriptNode,
@@ -30,7 +30,7 @@ export const parseVariableStatement = (builder: WorkflowBuilder, t: ts.VariableS
         // TODO: these are workflow outputs
         const varName = declarationName.getText(file);
         const varType = getPipescriptType(file, type);
-        const nodeId = !initializer ? `` : `${builder.nextNodeId++}`;
+        const nodeId = builder.getNextNodeId();
 
         const initializerInfo = (() => {
             if (!initializer) {

@@ -32,7 +32,9 @@ export const parseExpression = (
         return {
             expressionValue: {
                 kind: `node`,
-                sourceNodeId: builder.findNodeSource(initVarName, expressionType)?.nodeId ?? ``,
+                sourceNodeId:
+                    builder.findNodeSource(initVarName, expressionType)?.nodeId
+                    ?? `unknown-${initVarName}`,
                 sourceNodeOutputName: initVarName,
             },
             expressionType,
@@ -56,7 +58,7 @@ export const parseExpression = (
         };
 
         // return {
-        //     expressionNodeId: builder.findNodeSource(initVarName)?.nodeId ?? ``,
+        //     expressionNodeId: builder.findNodeSource(initVarName)?.nodeId ?? `unknown-${initVarName}`,
         //     expressionOutputName: initVarName,
         //     expressionType,
         // };
