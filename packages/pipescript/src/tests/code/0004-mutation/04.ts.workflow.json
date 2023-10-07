@@ -1,0 +1,107 @@
+{
+  "workflowUri": "file.ts",
+  "name": "file.ts",
+  "inputs": [],
+  "outputs": [
+    {
+      "name": "a",
+      "type": {
+        "kind": "simple",
+        "type": "number"
+      },
+      "pipe": {
+        "kind": "node",
+        "sourceNodeId": "2",
+        "sourceNodeOutputName": "a"
+      }
+    }
+  ],
+  "workflows": [
+    {
+      "workflowUri": "a-declaration",
+      "name": "a-declaration",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "a",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          },
+          "pipe": {
+            "kind": "data",
+            "json": "42"
+          }
+        }
+      ],
+      "nodes": []
+    },
+    {
+      "workflowUri": "a++",
+      "name": "a++",
+      "inputs": [
+        {
+          "name": "old",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "old",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          },
+          "pipe": {
+            "kind": "workflow-input",
+            "workflowInputNames": [
+              "old"
+            ]
+          }
+        },
+        {
+          "name": "a",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          },
+          "pipe": {
+            "kind": "workflow-input",
+            "workflowInputNames": [
+              "old"
+            ]
+          }
+        }
+      ],
+      "nodes": []
+    }
+  ],
+  "nodes": [
+    {
+      "nodeId": "1",
+      "implementation": {
+        "kind": "workflow",
+        "workflowUri": "a-declaration"
+      },
+      "inputPipes": []
+    },
+    {
+      "nodeId": "2",
+      "implementation": {
+        "kind": "workflow",
+        "workflowUri": "a++"
+      },
+      "inputPipes": [
+        {
+          "name": "old",
+          "kind": "node",
+          "sourceNodeId": "1",
+          "sourceNodeOutputName": "a"
+        }
+      ]
+    }
+  ]
+}

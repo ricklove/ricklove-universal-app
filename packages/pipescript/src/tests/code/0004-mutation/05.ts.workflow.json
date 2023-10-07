@@ -4,6 +4,18 @@
   "inputs": [],
   "outputs": [
     {
+      "name": "b",
+      "type": {
+        "kind": "simple",
+        "type": "number"
+      },
+      "pipe": {
+        "kind": "node",
+        "sourceNodeId": "2",
+        "sourceNodeOutputName": "b"
+      }
+    },
+    {
       "name": "a",
       "type": {
         "kind": "simple",
@@ -35,6 +47,21 @@
         }
       ],
       "nodes": []
+    },
+    {
+      "workflowUri": "b-declaration",
+      "name": "b-declaration",
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "b",
+          "type": {
+            "kind": "simple",
+            "type": "number"
+          }
+        }
+      ],
+      "nodes": []
     }
   ],
   "nodes": [
@@ -43,6 +70,14 @@
       "implementation": {
         "kind": "workflow",
         "workflowUri": "a-declaration"
+      },
+      "inputPipes": []
+    },
+    {
+      "nodeId": "2",
+      "implementation": {
+        "kind": "workflow",
+        "workflowUri": "b-declaration"
       },
       "inputPipes": []
     }
