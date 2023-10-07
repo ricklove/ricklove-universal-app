@@ -52,14 +52,16 @@ export const createWorkflowBuilder = (
             };
         }
 
-        workflow.inputs.push({
-            name: varName,
-            type: varType,
-        });
-        workflow.outputs.push({
-            name: varName,
-            type: varType,
-        });
+        if (!workflow.inputs.find(x => x.name === varName)) {
+            workflow.inputs.push({
+                name: varName,
+                type: varType,
+            });
+            workflow.outputs.push({
+                name: varName,
+                type: varType,
+            });
+        }
 
         return {
             kind: `workflow-input`,
