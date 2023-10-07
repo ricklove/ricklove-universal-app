@@ -54,7 +54,7 @@ export type PipescriptType = {
       }
     | {
           kind: `simple`;
-          type: `int` | `float` | `string` | `bool`;
+          type: `int` | `float` | `number` | `string` | `bool`;
       }
     | {
           kind: `object`;

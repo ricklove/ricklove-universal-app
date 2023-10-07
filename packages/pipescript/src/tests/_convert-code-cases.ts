@@ -28,18 +28,22 @@ export const run = async () => {
     const tsFiles = allFiles.filter(x => x.endsWith(`.ts`));
 
     for (const filePath of tsFiles) {
-        console.log(`${filePath}`);
+        try {
+            console.log(`${filePath}`);
 
-        const content = await Bun.file(filePath).text();
-        const projectWorkflow = convertTypescriptToPipescript([
-            {
-                filename: `file.ts`,
-                code: content,
-            },
-        ]);
-        const workflow = projectWorkflow.workflows?.[0]!;
+            const content = await Bun.file(filePath).text();
+            const projectWorkflow = convertTypescriptToPipescript([
+                {
+                    filename: `file.ts`,
+                    code: content,
+                },
+            ]);
+            const workflow = projectWorkflow.workflows?.[0]!;
 
-        Bun.write(`${filePath}.workflow.json`, JSON.stringify(workflow, null, 2));
+            Bun.write(`${filePath}.workflow.json`, JSON.stringify(workflow, null, 2));
+        } catch (err) {
+            console.error(err);
+        }
     }
 };
 

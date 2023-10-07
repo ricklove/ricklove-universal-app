@@ -189,7 +189,7 @@ const visitFile = (
                         const inputPipe: PipescriptPipe = {
                             name: varName,
                             kind: `node`,
-                            sourceNodeId: findNodeSource(initVarName)?.nodeId ?? ``,
+                            sourceNodeId: builder.findNodeSource(initVarName)?.nodeId ?? ``,
                             sourceNodeOutputName: initVarName,
                         };
                         const outputPipe: PipescriptPipeValue = {
@@ -246,9 +246,10 @@ const visitFile = (
                           },
                 };
 
+                const workflowUri = `${varName}-declaration`;
                 const workflow: PipescriptWorkflow = {
-                    workflowUri: `${varName}-declaration`,
-                    name: `${varName}-declaration`,
+                    workflowUri,
+                    name: workflowUri,
                     inputs: [
                         ...(!initializerInfo?.inputPipe
                             ? []
@@ -275,7 +276,7 @@ const visitFile = (
                           nodeId,
                           implementation: {
                               kind: `workflow`,
-                              workflowUri: `${varName}-declaration`,
+                              workflowUri,
                           },
                           inputPipes: [
                               ...(!initializerInfo?.inputPipe ? [] : [initializerInfo.inputPipe]),
@@ -333,6 +334,7 @@ const getType = (file: ts.SourceFile, type: undefined | ts.Type): PipescriptType
 
     if (type.isLiteral()) {
         const getValueType = (value: string | number | PseudoBigInt) => {
+            // console.log(`getValueType`, { value });
             if (typeof value === `object`) {
                 // BigInt
                 return `int`;
@@ -357,7 +359,10 @@ const getType = (file: ts.SourceFile, type: undefined | ts.Type): PipescriptType
         // };
     }
 
-    console.log(`getType`, { flags: type?.flags });
+    // console.log(`getType`, {
+    //     flagsRaw: type?.flags,
+    //     flags: ts.TypeFlags[type.flags],
+    // });
 
     if (type.flags & ts.TypeFlags.String) {
         return {
@@ -368,7 +373,7 @@ const getType = (file: ts.SourceFile, type: undefined | ts.Type): PipescriptType
     if (type.flags & ts.TypeFlags.Number) {
         return {
             kind: `simple`,
-            type: `float`,
+            type: `number`,
         };
     }
     if (type.flags & ts.TypeFlags.Boolean) {
@@ -396,9 +401,20 @@ const parseExpression = (
     const expressionTypeRaw = builder.typeChecker.getTypeAtLocation(expression);
     const expressionType = getType(builder.file, expressionTypeRaw);
 
+    if (expression.kind === ts.SyntaxKind.Identifier) {
+        const init = expression as Identifier;
+        const initVarName = init.text;
+        return {
+            expressionNodeId: builder.findNodeSource(initVarName)?.nodeId ?? ``,
+            expressionOutputName: initVarName,
+            expressionType,
+        };
+    }
+
     if (expression.kind === ts.SyntaxKind.BinaryExpression) {
         const t = expression as BinaryExpression;
-        const expressionTextSimple = expressionText.replace(/[^A-Za-z0-9]+/g, `_`);
+        const expressionTextSimple = expressionText;
+        // const expressionTextSimple = expressionText.replace(/[^A-Za-z0-9]+/g, `_`);
 
         const { left, right } = t;
 
@@ -416,10 +432,11 @@ const parseExpression = (
 
         const expressionNodeId = `${builder.nextNodeId++}`;
         const expressionOutputName = `value`;
+        const expressionWorkflowUri = `${expressionTextSimple}`;
 
         const expressionWorkflow: PipescriptWorkflow = {
-            workflowUri: `${expressionTextSimple}-expression`,
-            name: `${expressionTextSimple}-expression`,
+            workflowUri: expressionWorkflowUri,
+            name: expressionWorkflowUri,
             inputs: [
                 {
                     name: `left`,
@@ -434,7 +451,9 @@ const parseExpression = (
                 {
                     name: expressionOutputName,
                     type: expressionType,
-                    // pipe: initializerInfo?.outputPipe,
+                    // pipe: {
+                    //     kind:``
+                    // }
                 },
             ],
             nodes: [],
@@ -444,7 +463,7 @@ const parseExpression = (
             nodeId: expressionNodeId,
             implementation: {
                 kind: `workflow`,
-                workflowUri: `${expressionTextSimple}-expression`,
+                workflowUri: expressionWorkflowUri,
             },
             inputPipes: [
                 {
@@ -472,5 +491,9 @@ const parseExpression = (
         };
     }
 
+    console.log(`UNKNOWN expression`, {
+        kind: ts.SyntaxKind[expression?.kind ?? 0],
+        kindRaw: expression?.kind,
+    });
     throw new Error(`Not Implemented`);
 };
