@@ -1,5 +1,5 @@
-import { parseProgram } from './parsing/program';
-import { parseSourceFile } from './parsing/source-file';
+import { parseProgram } from './code-parsing/program';
+import { parseSourceFile } from './code-parsing/source-file';
 import { PipescriptWorkflow } from './types';
 
 export const convertTypescriptToPipescript = (
