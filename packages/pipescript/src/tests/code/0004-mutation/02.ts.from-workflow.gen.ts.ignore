@@ -1,5 +1,5 @@
 export const a = 42;
 
-const file_ts_2_value = a * 2;
+const value = a * 2;
 
 export const a = a;

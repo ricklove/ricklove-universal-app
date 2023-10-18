@@ -49,10 +49,31 @@ export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) =>
         return !!workflow.outputs.find(x => x.name === name);
     };
 
+    const getWorkflow = (
+        workflowUri: string,
+        context: PipescriptWorkflow,
+    ): undefined | PipescriptWorkflow => {
+        return context.workflows?.find(w => w.workflowUri === workflowUri);
+    };
+
+    const allNodeOutputNames = workflow.nodes.flatMap(n =>
+        n.implementation.kind === `workflow`
+            ? getWorkflow(n.implementation.workflowUri, workflow)?.outputs.map(x => x.name) ?? []
+            : [],
+    );
+
+    // console.log(`allNodeOutputNames`, { allNodeOutputNames });
+
     const getNodeOutputName = (nodeId: string, outputName: string) => {
         if (isExportedName(outputName)) {
             return outputName;
         }
+
+        if (allNodeOutputNames.filter(x => x === outputName).length === 1) {
+            // use simple name if unique
+            return outputName;
+        }
+
         return `${nodeId.replace(/[^\w]+/g, `_`)}_${outputName}`;
     };
 
@@ -79,13 +100,6 @@ export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) =>
         }
         exportedNames.push(name);
         return true;
-    };
-
-    const getWorkflow = (
-        workflowUri: string,
-        context: PipescriptWorkflow,
-    ): undefined | PipescriptWorkflow => {
-        return context.workflows?.find(w => w.workflowUri === workflowUri);
     };
 
     const nodes = workflow.nodes.map(node => {

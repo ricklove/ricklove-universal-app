@@ -1,3 +1,3 @@
 export const a = 42;
 
-const { file_ts_2_old, a } = a + undefined;
+const { old, a } = a + undefined;

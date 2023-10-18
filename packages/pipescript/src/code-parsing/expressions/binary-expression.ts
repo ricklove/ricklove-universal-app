@@ -23,13 +23,13 @@ export const parseBinaryExpression = (
 
     const expressionNodeId = builder.getNextNodeId();
 
-    console.log(`parseBinaryExpression`, {
-        operatorText,
-        expressionValue_left,
-        expressionType_left,
-        expressionValue_right,
-        expressionType_right,
-    });
+    // console.log(`parseBinaryExpression`, {
+    //     operatorText,
+    //     expressionValue_left,
+    //     expressionType_left,
+    //     expressionValue_right,
+    //     expressionType_right,
+    // });
 
     if (operatorText === `=`) {
         const assignmentVarName =
