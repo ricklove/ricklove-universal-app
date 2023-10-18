@@ -1,0 +1,16 @@
+
+
+const file.ts/a= = (old: number, value: number) => {
+
+},const file.ts/a= = (old: number, value: number) => {
+
+}
+
+const file.ts:1 = file.ts/a-declaration()
+
+const file.ts:2 = file.ts/a=(old, value)
+
+const file.ts:3 = file.ts/a=(old, value)
+export a = a;
+
+    

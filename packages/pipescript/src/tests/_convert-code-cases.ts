@@ -1,6 +1,7 @@
 import { readdir, stat } from 'fs/promises';
 import { join } from 'path';
 
+import { convertWorkflowToTypescriptFile } from '../code-generation/file';
 import { convertTypescriptToPipescript } from '../core';
 
 async function getAllFiles(directoryPath: string): Promise<string[]> {
@@ -41,6 +42,9 @@ export const run = async () => {
             const workflow = projectWorkflow.workflows?.[0]!;
 
             Bun.write(`${filePath}.workflow.json`, JSON.stringify(workflow, null, 2));
+
+            const generatedCode = convertWorkflowToTypescriptFile(workflow);
+            Bun.write(`${filePath}.from-workflow.gen.ts.ignore`, generatedCode.content);
         } catch (err) {
             console.error(err);
         }

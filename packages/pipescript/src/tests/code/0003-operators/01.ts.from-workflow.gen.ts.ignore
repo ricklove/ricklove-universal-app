@@ -1,0 +1,8 @@
+const file.ts/+ = (left: number, right: number) => {
+
+}
+const a = 42;
+
+const file.ts:3 = file.ts/+(left, right);
+
+export const b = value;

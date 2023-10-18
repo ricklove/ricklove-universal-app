@@ -1,0 +1,12 @@
+const file.ts/* = (left: number, right: number) => {
+
+}
+
+const file.ts/a= = (old: number, value: number) => {
+
+}
+export const a = 42;
+
+const file.ts:2 = file.ts/*(left, right);
+
+const file.ts:3 = file.ts/a=(old, value);

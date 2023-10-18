@@ -1,0 +1,6 @@
+const file.ts/a++ = (old: number) => {
+
+}
+export const a = 42;
+
+const file.ts:2 = file.ts/a++(old);
