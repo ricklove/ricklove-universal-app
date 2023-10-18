@@ -7,11 +7,11 @@ import ts, {
     PostfixUnaryExpression,
 } from 'typescript';
 
-import { parseBinaryExpression } from './binaryExpression';
-import { parsePostfixUnaryExpression } from './postfixUnaryExpression';
+import { parseBinaryExpression } from './binary-expression';
+import { parsePostfixUnaryExpression } from './postfix-unary-expression';
 import { PipescriptPipeValue, PipescriptType } from '../../types';
 import { WorkflowBuilder } from '../builder';
-import { getPipescriptType } from '../pipescriptType';
+import { getPipescriptType } from '../pipescript-type';
 
 export type ExpressionParseResult = {
     expressionValue: PipescriptPipeValue;

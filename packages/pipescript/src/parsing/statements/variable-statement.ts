@@ -8,7 +8,7 @@ import {
 } from '../../types';
 import { WorkflowBuilder } from '../builder';
 import { parseExpression } from '../expressions/expression';
-import { getPipescriptType } from '../pipescriptType';
+import { getPipescriptType } from '../pipescript-type';
 
 export const parseVariableStatement = (builder: WorkflowBuilder, t: ts.VariableStatement) => {
     const {

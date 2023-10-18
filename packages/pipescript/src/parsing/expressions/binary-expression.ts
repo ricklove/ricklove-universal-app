@@ -3,7 +3,7 @@ import { BinaryExpression } from 'typescript';
 import { ExpressionParseResult, parseExpression } from './expression';
 import { PipescriptNode, PipescriptWorkflow } from '../../types';
 import { WorkflowBuilder } from '../builder';
-import { getPipescriptType } from '../pipescriptType';
+import { getPipescriptType } from '../pipescript-type';
 
 export const parseBinaryExpression = (
     builder: WorkflowBuilder,

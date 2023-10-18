@@ -2,9 +2,9 @@ import ts, { Expression, ExpressionStatement } from 'typescript';
 
 import { WorkflowBuilder } from './builder';
 import { parseExpression } from './expressions/expression';
-import { getPipescriptType } from './pipescriptType';
-import { parseIfStatement } from './statements/ifStatement';
-import { parseVariableStatement } from './statements/variableStatement';
+import { getPipescriptType } from './pipescript-type';
+import { parseIfStatement } from './statements/if-statement';
+import { parseVariableStatement } from './statements/variable-statement';
 import { PipescriptWorkflow } from '../types';
 
 export const parseBody = (builder: WorkflowBuilder, body: ts.Node): PipescriptWorkflow => {
