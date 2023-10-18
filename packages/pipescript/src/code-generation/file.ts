@@ -6,17 +6,72 @@ import {
     PipescriptWorkflowInput,
 } from '../types';
 
+const functionBuiltins = [
+    {
+        suffix: `declaration`,
+        template: (argNames: string[]) => `${argNames[0]}`,
+    },
+    {
+        suffix: `=`,
+        template: (argNames: string[]) => `${argNames[0]}`,
+    },
+    {
+        suffix: `+`,
+        template: (argNames: string[]) => `${argNames[0]} + ${argNames[1]}`,
+    },
+    {
+        suffix: `-`,
+        template: (argNames: string[]) => `${argNames[0]} - ${argNames[1]}`,
+    },
+    {
+        suffix: `*`,
+        template: (argNames: string[]) => `${argNames[0]} * ${argNames[1]}`,
+    },
+    {
+        suffix: `/`,
+        template: (argNames: string[]) => `${argNames[0]} / ${argNames[1]}`,
+    },
+    {
+        suffix: `%`,
+        template: (argNames: string[]) => `${argNames[0]} % ${argNames[1]}`,
+    },
+];
+
 export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) => {
     // TODO: a file with imports is actually a node, not a workflow, since only a node has specific inputs
     const imports = workflow.inputs.map(x => `import ${x.name} from '${x.name}'`);
 
     const functions = workflow.workflows
-        ?.filter(x => !x.name.endsWith(`declaration`))
+        ?.filter(x => !functionBuiltins.find(f => x.name.endsWith(f.suffix)))
         .map(x => generateFunction(x));
 
     const isExportedName = (name: string) => {
         return !!workflow.outputs.find(x => x.name === name);
     };
+
+    const getNodeOutputName = (nodeId: string, outputName: string) => {
+        if (isExportedName(outputName)) {
+            return outputName;
+        }
+        return `${nodeId.replace(/[^\w]+/g, `_`)}_${outputName}`;
+    };
+
+    const generatePipeValue = (x: PipescriptPipeValue): string => {
+        if (x.kind === `data`) {
+            return x.json;
+        }
+
+        if (x.kind === `workflow-input`) {
+            return x.workflowInputNames.join(`,`);
+        }
+
+        if (x.kind === `node`) {
+            return getNodeOutputName(x.sourceNodeId, x.sourceNodeOutputName);
+        }
+
+        return `/* unknown pipe value */`;
+    };
+
     const exportedNames = [] as string[];
     const markExportedName = (name: string) => {
         if (!isExportedName(name)) {
@@ -26,20 +81,47 @@ export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) =>
         return true;
     };
 
-    const nodes = workflow.nodes.map(x => {
-        const { implementation, inputPipes } = x;
+    const getWorkflow = (
+        workflowUri: string,
+        context: PipescriptWorkflow,
+    ): undefined | PipescriptWorkflow => {
+        return context.workflows?.find(w => w.workflowUri === workflowUri);
+    };
+
+    const nodes = workflow.nodes.map(node => {
+        const { implementation, inputPipes } = node;
         if (implementation.kind === `data`) {
-            return `const ${x.nodeId} = ${implementation.json};`;
+            return `const ${getNodeOutputName(node.nodeId, `data`)} = ${implementation.json};`;
         }
         if (implementation.kind === `workflow`) {
-            if (implementation.workflowUri.endsWith(`declaration`)) {
-                const name = inputPipes[0].name;
-                return `${
-                    markExportedName(name) ? `export ` : ``
-                }const ${name} = ${generatePipeValue(inputPipes[0])};`;
+            const nodeWorkflow = getWorkflow(implementation.workflowUri, workflow);
+            if (!nodeWorkflow) {
+                return `/* missing workflowUri ${implementation.workflowUri} */`;
+            }
+            const outputs = nodeWorkflow.outputs;
+            const outputNames =
+                outputs.length <= 1
+                    ? `${getNodeOutputName(node.nodeId, outputs[0].name)}`
+                    : `{ ${outputs.map(o => getNodeOutputName(node.nodeId, o.name)).join(`, `)} }`;
+            const areAllExported = outputs.every(o =>
+                isExportedName(getNodeOutputName(node.nodeId, o.name)),
+            );
+            if (areAllExported) {
+                outputs.forEach(o => markExportedName(o.name));
+            }
+            const constLeft = `${areAllExported ? `export ` : ``}const ${outputNames}`;
+
+            const fun = functionBuiltins.find(f => implementation.workflowUri.endsWith(f.suffix));
+            if (fun && fun.suffix === `declaration`) {
+                return `${constLeft} = ${generatePipeValue(inputPipes[0])};`;
+            }
+            if (fun) {
+                return `${constLeft} = ${fun.template(
+                    node.inputPipes.map(x => generatePipeValue(x)),
+                )};`;
             }
 
-            return `const ${x.nodeId} = ${implementation.workflowUri}(${inputPipes
+            return `${constLeft} = ${implementation.workflowUri}(${inputPipes
                 .map(p => p.name)
                 .join(`, `)});`;
         }
@@ -71,7 +153,7 @@ export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) =>
                     name: x.name,
                     nameSource:
                         pipe.sourceNodeOutputName !== x.name
-                            ? pipe.sourceNodeOutputName
+                            ? getNodeOutputName(pipe.sourceNodeId, pipe.sourceNodeOutputName)
                             : undefined,
                 });
                 exportedNames.push(x.name);
@@ -119,22 +201,6 @@ ${innerFunctions.join(`\n\n`)}
 }
     `.trim();
     return content;
-};
-
-const generatePipeValue = (x: PipescriptPipeValue): string => {
-    if (x.kind === `data`) {
-        return x.json;
-    }
-
-    if (x.kind === `workflow-input`) {
-        return x.workflowInputNames.join(`,`);
-    }
-
-    if (x.kind === `node`) {
-        return x.sourceNodeOutputName;
-    }
-
-    return `/* unknown pipe value */`;
 };
 
 const generateDeclaration = (x: PipescriptVariable): string => {

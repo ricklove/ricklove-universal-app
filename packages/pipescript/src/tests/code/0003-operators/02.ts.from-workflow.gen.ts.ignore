@@ -1,10 +1,7 @@
-const file.ts/+ = (left: number, right: number) => {
+const file_ts_1_a = 42;
 
-}
-const a = 42;
+const file_ts_2_b = 43;
 
-const b = 43;
+const file_ts_4_value = file_ts_1_a + file_ts_2_b;
 
-const file.ts:4 = file.ts/+(left, right);
-
-export const c = value;
+export const c = file_ts_4_value;

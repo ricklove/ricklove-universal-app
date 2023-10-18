@@ -1,8 +1,5 @@
-const file.ts/a++ = (old: number) => {
-
-}
 export const a = 42;
 
-const file.ts:3 = file.ts/a++(old);
+const { file_ts_3_old, a } = a + undefined;
 
-export const b = old;
+export const b = file_ts_3_old;

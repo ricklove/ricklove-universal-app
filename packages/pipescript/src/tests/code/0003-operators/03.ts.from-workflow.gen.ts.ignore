@@ -1,8 +1,5 @@
-const file.ts/* = (left: number, right: number) => {
+const file_ts_1_a = 42;
 
-}
-const a = 42;
+const file_ts_3_value = file_ts_1_a * 2;
 
-const file.ts:3 = file.ts/*(left, right);
-
-export const b = value;
+export const b = file_ts_3_value;

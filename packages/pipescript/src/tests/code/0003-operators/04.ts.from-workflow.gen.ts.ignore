@@ -1,32 +1,13 @@
-const file.ts/* = (left: number, right: number) => {
+const file_ts_1_a = 42;
 
-}
+const file_ts_3_value = file_ts_1_a * 3;
 
-const file.ts/- = (left: number, right: number) => {
+const file_ts_4_value = 2 - file_ts_3_value;
 
-}
+const file_ts_5_value = file_ts_1_a * file_ts_4_value;
 
-const file.ts/* = (left: number, right: number) => {
+const file_ts_6_value = file_ts_1_a + file_ts_5_value;
 
-}
+const file_ts_7_value = file_ts_6_value + 7;
 
-const file.ts/+ = (left: number, right: number) => {
-
-}
-
-const file.ts/+ = (left: number, right: number) => {
-
-}
-const a = 42;
-
-const file.ts:3 = file.ts/*(left, right);
-
-const file.ts:4 = file.ts/-(left, right);
-
-const file.ts:5 = file.ts/*(left, right);
-
-const file.ts:6 = file.ts/+(left, right);
-
-const file.ts:7 = file.ts/+(left, right);
-
-export const b = value;
+export const b = file_ts_7_value;
