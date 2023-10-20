@@ -63,10 +63,7 @@
             "type": "int"
           },
           "pipe": {
-            "kind": "workflow-input",
-            "workflowInputNames": [
-              "value"
-            ]
+            "kind": "workflow-operator"
           }
         }
       ],
@@ -103,10 +100,7 @@
             "type": "int"
           },
           "pipe": {
-            "kind": "workflow-input",
-            "workflowInputNames": [
-              "value"
-            ]
+            "kind": "workflow-operator"
           }
         }
       ],

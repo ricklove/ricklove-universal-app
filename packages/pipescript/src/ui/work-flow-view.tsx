@@ -99,10 +99,36 @@ export const WorkFlowView = ({
                             ))}
                             {workflow.body.kind === `operator` && (
                                 <React.Fragment>
-                                    <View className='p-2'>
-                                        <div>
-                                            {workflow.body.operator}
-                                        </div>
+                                    <View className='p-2 flex-row items-center'>
+                                        <Text className='pl-1 text-blue-400'>{workflow.body.operator}</Text>
+                                        <Text className='pl-1' />
+                                        <View className=''>
+                                            {[calculatePipeEndpointIdForWorkflow({
+                                                workflowUri: workflow.workflowUri,
+                                                direction: `out`,
+                                                name: `operator`,
+                                            })].map(operatorEndpointId => (
+                                                <React.Fragment key={operatorEndpointId}>
+                                                    <PipeEndpointView
+                                                        id={operatorEndpointId}
+                                                        container={workflow}
+                                                    />
+                                                    {workflow.inputs.map(inPipe => (
+                                                        <React.Fragment key={inPipe.name}>
+                                                            <PipeView
+                                                                destinationId={operatorEndpointId}
+                                                                sourceId={calculatePipeEndpointIdForWorkflow({
+                                                                    workflowUri: workflow.workflowUri,
+                                                                    direction: `in`,
+                                                                    name: inPipe.name,
+                                                                })}
+                                                            />
+                                                        </React.Fragment>
+                                                    ))
+                                                    }
+                                                </React.Fragment>
+                                            ))}
+                                        </View>
                                     </View>
                                 </React.Fragment>
                             )}
@@ -342,8 +368,18 @@ const calculatePipeEndpointIdForPipeSource = ({
         return undefined;
     }
 
+    if (pipe.kind === `workflow-operator`) {
+        return [`operator`].map(name =>
+            calculatePipeEndpointIdForWorkflow({
+                workflowUri: workflow.workflowUri,
+                direction: `out`,
+                name,
+            }),
+        );
+    }
+
     if (pipe.kind === `workflow-input`) {
-        return pipe.workflowInputNames.map(name =>
+        return [pipe.workflowInputName].map(name =>
             calculatePipeEndpointIdForWorkflow({
                 workflowUri: workflow.workflowUri,
                 direction: `in`,
@@ -463,9 +499,11 @@ const PipeView = ({
 
                 {debug && (
                     <>
-                        <View className='w-[1000px] text-[4px]'>
-                            <Text className='text-white'>{`(${sourceId})=>(${destinationId})`}</Text>
-                            <Text className='text-white'>{`(${position.source.x},${position.source.y})=>(${position.destination.x},${position.destination.y})`}</Text>
+                        <View className='absolute'>
+                            <View className='w-[1000px] text-[4px] rotate-45'>
+                                <Text className='text-white'>{`(${sourceId})=>(${destinationId})`}</Text>
+                                {/* <Text className='text-white'>{`(${position.source.x},${position.source.y})=>(${position.destination.x},${position.destination.y})`}</Text> */}
+                            </View>
                         </View>
                     </>
                 )}
@@ -525,6 +563,7 @@ const PipeEndpointView = ({ id, container }: { id: string; container: Pipescript
         moveContext.position.scale,
     ]);
 
+    const debug = false;
     return (
         <View className='w-2 h-2 justify-center items-center'>
             <View ref={targetRef} className='w-0 h-0 absolute pt-1'>
@@ -537,6 +576,13 @@ const PipeEndpointView = ({ id, container }: { id: string; container: Pipescript
                         marginTop: -size / 2,
                     }}
                 />
+                {debug && (
+                    <View className='absolute pt-1 rotate-90'>
+                        <Text
+                            className='text-blue-400'
+                        >{id}</Text>
+                    </View>
+                )}
             </View>
         </View>
     );

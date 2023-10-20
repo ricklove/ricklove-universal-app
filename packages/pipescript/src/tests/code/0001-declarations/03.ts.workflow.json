@@ -37,10 +37,7 @@
             "type": "int"
           },
           "pipe": {
-            "kind": "workflow-input",
-            "workflowInputNames": [
-              "answer"
-            ]
+            "kind": "workflow-operator"
           }
         }
       ],

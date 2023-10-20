@@ -172,8 +172,8 @@ export type PipescriptPipeValue = {
                   nodeWorkflowOutput: PipescriptWorkflowOutput;
               }
             | {
-                  kind: `workflow-inputs`;
-                  workflowInputs: PipescriptWorkflowInput[];
+                  kind: `workflow-input`;
+                  workflowInput: PipescriptWorkflowInput;
               }
             | {
                   kind: `data`;
@@ -203,7 +203,11 @@ export type PipescriptPipeValue = {
     | {
           /** connected to input of parent workflow */
           kind: `workflow-input`;
-          workflowInputNames: string[];
+          workflowInputName: string;
+      }
+    | {
+          /** connected to output of workflow operator */
+          kind: `workflow-operator`;
       }
     | {
           /** json data

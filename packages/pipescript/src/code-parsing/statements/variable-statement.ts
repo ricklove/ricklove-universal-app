@@ -65,8 +65,7 @@ export const parseVariableStatement = (builder: WorkflowBuilder, t: ts.VariableS
                 ...expressionValue,
             };
             const outputPipe: PipescriptPipeValue = {
-                kind: `workflow-input`,
-                workflowInputNames: [varName],
+                kind: `workflow-operator`,
             };
 
             return {

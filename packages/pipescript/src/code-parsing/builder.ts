@@ -61,7 +61,7 @@ export const createWorkflowBuilder = (
 
         return {
             kind: `workflow-input`,
-            workflowInputNames: [varName],
+            workflowInputName: varName,
         };
     };
 

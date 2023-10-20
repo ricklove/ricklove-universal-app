@@ -42,16 +42,14 @@ export const parsePostfixUnaryExpression = (
                 name: expressionOutputName,
                 type: expressionType,
                 pipe: {
-                    kind: `workflow-input`,
-                    workflowInputNames: [`old`],
+                    kind: `workflow-operator`,
                 },
             },
             {
                 name: assignmentVarName,
                 type: expressionType,
                 pipe: {
-                    kind: `workflow-input`,
-                    workflowInputNames: [`old`],
+                    kind: `workflow-operator`,
                 },
             },
         ],

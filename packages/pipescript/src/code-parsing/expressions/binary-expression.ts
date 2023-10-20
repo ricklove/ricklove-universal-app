@@ -36,7 +36,7 @@ export const parseBinaryExpression = (
             expressionValue_left.kind === `node`
                 ? expressionValue_left.sourceNodeOutputName
                 : expressionValue_left.kind === `workflow-input`
-                ? expressionValue_left.workflowInputNames[0]
+                ? expressionValue_left.workflowInputName
                 : undefined;
 
         if (!assignmentVarName) {
@@ -65,8 +65,7 @@ export const parseBinaryExpression = (
                     name: expressionOutputName,
                     type: expressionType,
                     pipe: {
-                        kind: `workflow-input`,
-                        workflowInputNames: [`value`],
+                        kind: `workflow-operator`,
                     },
                 },
             ],
@@ -127,8 +126,7 @@ export const parseBinaryExpression = (
                 name: expressionOutputName,
                 type: expressionType,
                 pipe: {
-                    kind: `workflow-input`,
-                    workflowInputNames: [`left`, `right`],
+                    kind: `workflow-operator`,
                 },
             },
         ],

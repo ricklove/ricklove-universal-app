@@ -37,10 +37,7 @@
             "type": "int"
           },
           "pipe": {
-            "kind": "workflow-input",
-            "workflowInputNames": [
-              "a"
-            ]
+            "kind": "workflow-operator"
           }
         }
       ],
@@ -76,11 +73,7 @@
             "type": "number"
           },
           "pipe": {
-            "kind": "workflow-input",
-            "workflowInputNames": [
-              "left",
-              "right"
-            ]
+            "kind": "workflow-operator"
           }
         }
       ],
@@ -116,11 +109,7 @@
             "type": "number"
           },
           "pipe": {
-            "kind": "workflow-input",
-            "workflowInputNames": [
-              "left",
-              "right"
-            ]
+            "kind": "workflow-operator"
           }
         }
       ],
@@ -156,11 +145,7 @@
             "type": "number"
           },
           "pipe": {
-            "kind": "workflow-input",
-            "workflowInputNames": [
-              "left",
-              "right"
-            ]
+            "kind": "workflow-operator"
           }
         }
       ],
@@ -196,11 +181,7 @@
             "type": "number"
           },
           "pipe": {
-            "kind": "workflow-input",
-            "workflowInputNames": [
-              "left",
-              "right"
-            ]
+            "kind": "workflow-operator"
           }
         }
       ],
@@ -236,11 +217,7 @@
             "type": "number"
           },
           "pipe": {
-            "kind": "workflow-input",
-            "workflowInputNames": [
-              "left",
-              "right"
-            ]
+            "kind": "workflow-operator"
           }
         }
       ],
@@ -269,10 +246,7 @@
             "type": "number"
           },
           "pipe": {
-            "kind": "workflow-input",
-            "workflowInputNames": [
-              "b"
-            ]
+            "kind": "workflow-operator"
           }
         }
       ],
