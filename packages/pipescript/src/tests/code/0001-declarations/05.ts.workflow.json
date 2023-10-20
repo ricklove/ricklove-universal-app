@@ -56,7 +56,10 @@
           }
         }
       ],
-      "nodes": []
+      "body": {
+        "kind": "operator",
+        "operator": "declaration"
+      }
     },
     {
       "workflowUri": "file.ts/notAnswer-declaration",
@@ -85,37 +88,41 @@
           }
         }
       ],
-      "nodes": []
+      "body": {
+        "kind": "operator",
+        "operator": "declaration"
+      }
     }
   ],
-  "nodes": [
-    {
-      "nodeId": "file.ts:1",
-      "implementation": {
-        "kind": "workflow",
-        "workflowUri": "file.ts/answer-declaration"
+  "body": {
+    "kind": "nodes",
+    "nodes": [
+      {
+        "nodeId": "file.ts:1",
+        "implementation": {
+          "workflowUri": "file.ts/answer-declaration"
+        },
+        "inputPipes": [
+          {
+            "name": "answer",
+            "kind": "data",
+            "json": "42"
+          }
+        ]
       },
-      "inputPipes": [
-        {
-          "name": "answer",
-          "kind": "data",
-          "json": "42"
-        }
-      ]
-    },
-    {
-      "nodeId": "file.ts:2",
-      "implementation": {
-        "kind": "workflow",
-        "workflowUri": "file.ts/notAnswer-declaration"
-      },
-      "inputPipes": [
-        {
-          "name": "notAnswer",
-          "kind": "data",
-          "json": "43"
-        }
-      ]
-    }
-  ]
+      {
+        "nodeId": "file.ts:2",
+        "implementation": {
+          "workflowUri": "file.ts/notAnswer-declaration"
+        },
+        "inputPipes": [
+          {
+            "name": "notAnswer",
+            "kind": "data",
+            "json": "43"
+          }
+        ]
+      }
+    ]
+  }
 }

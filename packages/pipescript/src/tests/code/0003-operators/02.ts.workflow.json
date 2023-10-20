@@ -44,7 +44,10 @@
           }
         }
       ],
-      "nodes": []
+      "body": {
+        "kind": "operator",
+        "operator": "declaration"
+      }
     },
     {
       "workflowUri": "file.ts/b-declaration",
@@ -73,7 +76,10 @@
           }
         }
       ],
-      "nodes": []
+      "body": {
+        "kind": "operator",
+        "operator": "declaration"
+      }
     },
     {
       "workflowUri": "file.ts/+",
@@ -110,7 +116,10 @@
           }
         }
       ],
-      "nodes": []
+      "body": {
+        "kind": "operator",
+        "operator": "+"
+      }
     },
     {
       "workflowUri": "file.ts/c-declaration",
@@ -139,73 +148,75 @@
           }
         }
       ],
-      "nodes": []
+      "body": {
+        "kind": "operator",
+        "operator": "declaration"
+      }
     }
   ],
-  "nodes": [
-    {
-      "nodeId": "file.ts:1",
-      "implementation": {
-        "kind": "workflow",
-        "workflowUri": "file.ts/a-declaration"
-      },
-      "inputPipes": [
-        {
-          "name": "a",
-          "kind": "data",
-          "json": "42"
-        }
-      ]
-    },
-    {
-      "nodeId": "file.ts:2",
-      "implementation": {
-        "kind": "workflow",
-        "workflowUri": "file.ts/b-declaration"
-      },
-      "inputPipes": [
-        {
-          "name": "b",
-          "kind": "data",
-          "json": "43"
-        }
-      ]
-    },
-    {
-      "nodeId": "file.ts:4",
-      "implementation": {
-        "kind": "workflow",
-        "workflowUri": "file.ts/+"
-      },
-      "inputPipes": [
-        {
-          "name": "left",
-          "kind": "node",
-          "sourceNodeId": "file.ts:1",
-          "sourceNodeOutputName": "a"
+  "body": {
+    "kind": "nodes",
+    "nodes": [
+      {
+        "nodeId": "file.ts:1",
+        "implementation": {
+          "workflowUri": "file.ts/a-declaration"
         },
-        {
-          "name": "right",
-          "kind": "node",
-          "sourceNodeId": "file.ts:2",
-          "sourceNodeOutputName": "b"
-        }
-      ]
-    },
-    {
-      "nodeId": "file.ts:3",
-      "implementation": {
-        "kind": "workflow",
-        "workflowUri": "file.ts/c-declaration"
+        "inputPipes": [
+          {
+            "name": "a",
+            "kind": "data",
+            "json": "42"
+          }
+        ]
       },
-      "inputPipes": [
-        {
-          "name": "c",
-          "kind": "node",
-          "sourceNodeId": "file.ts:4",
-          "sourceNodeOutputName": "value"
-        }
-      ]
-    }
-  ]
+      {
+        "nodeId": "file.ts:2",
+        "implementation": {
+          "workflowUri": "file.ts/b-declaration"
+        },
+        "inputPipes": [
+          {
+            "name": "b",
+            "kind": "data",
+            "json": "43"
+          }
+        ]
+      },
+      {
+        "nodeId": "file.ts:4",
+        "implementation": {
+          "workflowUri": "file.ts/+"
+        },
+        "inputPipes": [
+          {
+            "name": "left",
+            "kind": "node",
+            "sourceNodeId": "file.ts:1",
+            "sourceNodeOutputName": "a"
+          },
+          {
+            "name": "right",
+            "kind": "node",
+            "sourceNodeId": "file.ts:2",
+            "sourceNodeOutputName": "b"
+          }
+        ]
+      },
+      {
+        "nodeId": "file.ts:3",
+        "implementation": {
+          "workflowUri": "file.ts/c-declaration"
+        },
+        "inputPipes": [
+          {
+            "name": "c",
+            "kind": "node",
+            "sourceNodeId": "file.ts:4",
+            "sourceNodeOutputName": "value"
+          }
+        ]
+      }
+    ]
+  }
 }

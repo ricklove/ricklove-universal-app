@@ -31,23 +31,28 @@
           }
         }
       ],
-      "nodes": []
+      "body": {
+        "kind": "operator",
+        "operator": "declaration"
+      }
     }
   ],
-  "nodes": [
-    {
-      "nodeId": "file.ts:1",
-      "implementation": {
-        "kind": "workflow",
-        "workflowUri": "file.ts/answer-declaration"
-      },
-      "inputPipes": [
-        {
-          "name": "answer",
-          "kind": "data",
-          "json": "42"
-        }
-      ]
-    }
-  ]
+  "body": {
+    "kind": "nodes",
+    "nodes": [
+      {
+        "nodeId": "file.ts:1",
+        "implementation": {
+          "workflowUri": "file.ts/answer-declaration"
+        },
+        "inputPipes": [
+          {
+            "name": "answer",
+            "kind": "data",
+            "json": "42"
+          }
+        ]
+      }
+    ]
+  }
 }
