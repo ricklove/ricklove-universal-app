@@ -1,8 +1,8 @@
-
-
 const file.ts/> = (left: number, right: number) => {
 
-},const file.ts/if-body = (condition: bool, b: number, a: number) => {
+}
+
+const file.ts/if-body = (condition: bool, b: number, a: number) => {
 const file.ts/if-body/b= = (old: number, value: number) => {
 
 }
@@ -17,14 +17,10 @@ const file.ts/if-body/if-body/b= = (old: number, value: number) => {
 }
 }
 }
+const file_ts_1_a = 42;
 
-const file.ts:1 = file.ts/a-declaration(a)
+export const b = undefined;
 
-const file.ts:2 = file.ts/b-declaration()
+const value = file.ts/>(left, right);
 
-const file.ts:3 = file.ts/>(left, right)
-
-const file.ts:4 = file.ts/if-body(condition, b, a)
-export b = b;
-
-    
+const { b, file_ts_4_a } = file.ts/if-body(condition, b, a);

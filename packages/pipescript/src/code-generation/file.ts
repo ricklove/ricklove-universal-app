@@ -38,7 +38,7 @@ const functionBuiltins = [
 ];
 
 export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) => {
-    // TODO: a file with imports is actually a node, not a workflow, since only a node has specific inputs
+    // TODO: a file is actually a node, not a workflow, since it is executed at first import (and has specific input values)
     const imports = workflow.inputs.map(x => `import ${x.name} from '${x.name}'`);
 
     const functions = workflow.workflows
@@ -56,20 +56,52 @@ export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) =>
         return context.workflows?.find(w => w.workflowUri === workflowUri);
     };
 
-    const allNodeOutputNames = workflow.nodes.flatMap(n =>
+    const allNodeOutputs = workflow.nodes.flatMap(n =>
         n.implementation.kind === `workflow`
-            ? getWorkflow(n.implementation.workflowUri, workflow)?.outputs.map(x => x.name) ?? []
+            ? getWorkflow(n.implementation.workflowUri, workflow)?.outputs.map(x => ({
+                  ...x,
+                  nodeId: n.nodeId,
+              })) ?? []
             : [],
     );
 
     // console.log(`allNodeOutputNames`, { allNodeOutputNames });
 
-    const getNodeOutputName = (nodeId: string, outputName: string) => {
+    const getNodeValue = (nodeId: string): string => {
+        const node = workflow.nodes.find(x => x.nodeId === nodeId);
+        if (!node) {
+            return `/* getNodeValue: missing node */`;
+        }
+
+        const { implementation, inputPipes } = node;
+        if (implementation.kind === `data`) {
+            return `${implementation.json}`;
+        }
+        if (implementation.kind === `workflow`) {
+            const nodeWorkflow = getWorkflow(implementation.workflowUri, workflow);
+            if (!nodeWorkflow) {
+                return `/* getNodeValue: missing workflowUri ${implementation.workflowUri} */`;
+            }
+            const fun = functionBuiltins.find(f => implementation.workflowUri.endsWith(f.suffix));
+
+            if (fun) {
+                return `${fun.template(node.inputPipes.map(x => generatePipeValue(x)))}`;
+            }
+
+            return `${implementation.workflowUri}(${inputPipes.map(p => p.name).join(`, `)})`;
+        }
+
+        return `/* getNodeValue: unknown node */`;
+    };
+
+    const getNodeOutputName = (nodeId: string, outputName: string): string => {
         if (isExportedName(outputName)) {
             return outputName;
         }
 
-        if (allNodeOutputNames.filter(x => x === outputName).length === 1) {
+        const allMatchingOutputNames = allNodeOutputs.filter(x => x.name === outputName);
+
+        if (allMatchingOutputNames.length === 1) {
             // use simple name if unique
             return outputName;
         }
@@ -77,40 +109,45 @@ export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) =>
         return `${nodeId.replace(/[^\w]+/g, `_`)}_${outputName}`;
     };
 
-    const generatePipeValue = (x: PipescriptPipeValue): string => {
-        if (x.kind === `data`) {
-            return x.json;
-        }
-
-        if (x.kind === `workflow-input`) {
-            return x.workflowInputNames.join(`,`);
-        }
-
-        if (x.kind === `node`) {
-            return getNodeOutputName(x.sourceNodeId, x.sourceNodeOutputName);
-        }
-
-        return `/* unknown pipe value */`;
-    };
-
-    const exportedNames = [] as string[];
-    const markExportedName = (name: string) => {
-        if (!isExportedName(name)) {
+    const isNodeOutputInline = (nodeId: string, outputName: string): boolean => {
+        if (isExportedName(outputName)) {
             return false;
         }
-        exportedNames.push(name);
-        return true;
+
+        // inline if node has single output and single usage
+        const nodeOutputs = allNodeOutputs.filter(x => x.nodeId === nodeId);
+        return nodeOutputs.length === 1;
     };
 
-    const nodes = workflow.nodes.map(node => {
+    const getNodeOutputNameOrInlineValue = (nodeId: string, outputName: string): string => {
+        // if (isExportedName(outputName)) {
+        //     return outputName;
+        // }
+
+        // // inline if node has single output and single usage
+        // const nodeOutputs = allNodeOutputs.filter(x => x.nodeId === nodeId);
+        // if (nodeOutputs.length === 1) {
+        //     // inline if only one matching output
+        //     return getNodeValue(nodeId);
+        // }
+
+        return getNodeOutputName(nodeId, outputName);
+    };
+
+    const getNodeName = (nodeId: string): string => {
+        const node = workflow.nodes.find(x => x.nodeId === nodeId);
+        if (!node) {
+            return `/* getNodeName: missing node */`;
+        }
+
         const { implementation, inputPipes } = node;
         if (implementation.kind === `data`) {
-            return `const ${getNodeOutputName(node.nodeId, `data`)} = ${implementation.json};`;
+            return `const ${getNodeOutputName(node.nodeId, `data`)}`;
         }
         if (implementation.kind === `workflow`) {
             const nodeWorkflow = getWorkflow(implementation.workflowUri, workflow);
             if (!nodeWorkflow) {
-                return `/* missing workflowUri ${implementation.workflowUri} */`;
+                return `/* getNodeName: missing workflowUri ${implementation.workflowUri} */`;
             }
             const outputs = nodeWorkflow.outputs;
             const outputNames =
@@ -126,21 +163,85 @@ export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) =>
             const constLeft = `${areAllExported ? `export ` : ``}const ${outputNames}`;
 
             const fun = functionBuiltins.find(f => implementation.workflowUri.endsWith(f.suffix));
-            if (fun && fun.suffix === `declaration`) {
-                return `${constLeft} = ${generatePipeValue(inputPipes[0])};`;
-            }
+
             if (fun) {
-                return `${constLeft} = ${fun.template(
-                    node.inputPipes.map(x => generatePipeValue(x)),
-                )};`;
+                return `${constLeft}`;
             }
 
-            return `${constLeft} = ${implementation.workflowUri}(${inputPipes
-                .map(p => p.name)
-                .join(`, `)});`;
+            return `${constLeft}`;
         }
 
-        return `/* unknown node */`;
+        return `/* getNodeName: unknown node */`;
+    };
+
+    const generatePipeValue = (x: PipescriptPipeValue): string => {
+        if (x.kind === `data`) {
+            return x.json;
+        }
+
+        if (x.kind === `workflow-input`) {
+            return x.workflowInputNames.join(`,`);
+        }
+
+        if (x.kind === `node`) {
+            return getNodeOutputNameOrInlineValue(x.sourceNodeId, x.sourceNodeOutputName);
+        }
+
+        return `/* unknown pipe value */`;
+    };
+
+    const exportedNames = [] as string[];
+    const markExportedName = (name: string) => {
+        if (!isExportedName(name)) {
+            return false;
+        }
+        exportedNames.push(name);
+        return true;
+    };
+
+    const nodes = workflow.nodes.map(node => {
+        return `${getNodeName(node.nodeId)} = ${getNodeValue(node.nodeId)};`;
+
+        // const { implementation, inputPipes } = node;
+        // if (implementation.kind === `data`) {
+        //     return `const ${getNodeOutputNameOrInlineValue(node.nodeId, `data`)} = ${
+        //         implementation.json
+        //     };`;
+        // }
+        // if (implementation.kind === `workflow`) {
+        //     const nodeWorkflow = getWorkflow(implementation.workflowUri, workflow);
+        //     if (!nodeWorkflow) {
+        //         return `/* missing workflowUri ${implementation.workflowUri} */`;
+        //     }
+        //     const outputs = nodeWorkflow.outputs;
+        //     const outputNames =
+        //         outputs.length <= 1
+        //             ? `${getNodeOutputNameOrInlineValue(node.nodeId, outputs[0].name)}`
+        //             : `{ ${outputs
+        //                   .map(o => getNodeOutputNameOrInlineValue(node.nodeId, o.name))
+        //                   .join(`, `)} }`;
+        //     const areAllExported = outputs.every(o =>
+        //         isExportedName(getNodeOutputNameOrInlineValue(node.nodeId, o.name)),
+        //     );
+        //     if (areAllExported) {
+        //         outputs.forEach(o => markExportedName(o.name));
+        //     }
+        //     const constLeft = `${areAllExported ? `export ` : ``}const ${outputNames}`;
+
+        //     const fun = functionBuiltins.find(f => implementation.workflowUri.endsWith(f.suffix));
+
+        //     if (fun) {
+        //         return `${constLeft} = ${fun.template(
+        //             node.inputPipes.map(x => generatePipeValue(x)),
+        //         )};`;
+        //     }
+
+        //     return `${constLeft} = ${implementation.workflowUri}(${inputPipes
+        //         .map(p => p.name)
+        //         .join(`, `)});`;
+        // }
+
+        // return `/* unknown node */`;
     });
 
     const exportNames = workflow.outputs

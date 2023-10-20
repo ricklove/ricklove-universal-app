@@ -28,15 +28,27 @@ export type PipescriptWorkflow = {
 
     /** nested workflows */
     workflows?: PipescriptWorkflow[];
+
+    runtime?: {
+        container: undefined | PipescriptWorkflow;
+        usages: PipescriptNode[];
+    };
 };
 
 export type PipescriptWorkflowInput = PipescriptVariable & {
     ignored?: boolean;
+    runtime?: {
+        workflow: PipescriptWorkflow;
+    };
 };
 
 export type PipescriptWorkflowOutput = PipescriptVariable & {
     /** connections to output */
     pipe?: PipescriptPipeValue;
+
+    runtime?: {
+        workflow: PipescriptWorkflow;
+    };
 };
 
 /** variable */
@@ -106,6 +118,10 @@ export type PipescriptNodeImplementation =
     | {
           kind: `workflow`;
           workflowUri: string;
+
+          runtime?: {
+              workflow: PipescriptWorkflow;
+          };
       }
     // | {
     //       kind: `code`;
@@ -133,11 +149,20 @@ export type PipescriptPipeValue =
           kind: `node`;
           sourceNodeId: string;
           sourceNodeOutputName: string;
+
+          runtime?: {
+              node: PipescriptNode;
+              workflowOutput?: PipescriptWorkflowOutput;
+          };
       }
     | {
           /** connected to input of parent workflow */
           kind: `workflow-input`;
           workflowInputNames: string[];
+
+          runtime?: {
+              workflowInputs: PipescriptWorkflowInput[];
+          };
       }
     | {
           /** json data

@@ -1,20 +1,16 @@
-
-
 const file.ts/> = (left: number, right: number) => {
 
-},const file.ts/if-body = (condition: bool, b: number) => {
+}
+
+const file.ts/if-body = (condition: bool, b: number) => {
 const file.ts/if-body/b= = (old: number, value: number) => {
 
 }
 }
+const a = 42;
 
-const file.ts:1 = file.ts/a-declaration(a)
+export const b = undefined;
 
-const file.ts:2 = file.ts/b-declaration()
+const value = file.ts/>(left, right);
 
-const file.ts:3 = file.ts/>(left, right)
-
-const file.ts:4 = file.ts/if-body(condition, b)
-export b = b;
-
-    
+export const b = file.ts/if-body(condition, b);
