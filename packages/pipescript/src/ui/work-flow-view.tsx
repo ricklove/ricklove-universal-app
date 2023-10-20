@@ -90,13 +90,22 @@ export const WorkFlowView = ({
                             </Text>
                         </View>
                         <View className='flex-row'>
-                            {workflow.nodes.map(n => (
+                            {workflow.body.nodes?.map(n => (
                                 <React.Fragment key={n.nodeId}>
                                     <View className='p-2'>
                                         <NodeView node={n} container={workflow} />
                                     </View>
                                 </React.Fragment>
                             ))}
+                            {workflow.body.kind === `operator` && (
+                                <React.Fragment>
+                                    <View className='p-2'>
+                                        <div>
+                                            {workflow.body.operator}
+                                        </div>
+                                    </View>
+                                </React.Fragment>
+                            )}
                         </View>
                     </View>
                 </View>
@@ -176,10 +185,8 @@ const NodeView = ({ node, container }: { node: PipescriptNode; container: Pipesc
     });
 
     const workflow = (() => {
-        if (node.implementation.kind === `workflow`) {
-            const imp = node.implementation;
-            return container.workflows?.find(w => w.workflowUri === imp.workflowUri);
-        }
+        const imp = node.implementation;
+        return container.workflows?.find(w => w.workflowUri === imp.workflowUri);
     })();
     return (
         <MoveableView

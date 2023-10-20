@@ -31,6 +31,7 @@ export type PipescriptWorkflow = {
           }
         | {
               kind: `operator`;
+              nodes?: undefined;
               operator: PipescriptBuiltinOperator;
           };
 
