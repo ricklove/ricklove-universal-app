@@ -55,13 +55,15 @@ export const parsePostfixUnaryExpression = (
                 },
             },
         ],
-        nodes: [],
+        body: {
+            kind: `operator`,
+            operator: operatorText,
+        },
     };
 
     const expressionNode: PipescriptNode = {
         nodeId: expressionNodeId,
         implementation: {
-            kind: `workflow`,
             workflowUri: expressionWorkflowUri,
         },
         inputPipes: [
@@ -73,7 +75,7 @@ export const parsePostfixUnaryExpression = (
     };
 
     builder.workflow.workflows.push(expressionWorkflow);
-    builder.workflow.nodes.push(expressionNode);
+    builder.workflow.body.nodes.push(expressionNode);
 
     return {
         expressionValue: {

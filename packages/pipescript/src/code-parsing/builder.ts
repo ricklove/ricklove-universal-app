@@ -1,6 +1,6 @@
 import ts from 'typescript';
 
-import { PipescriptPipeValue, PipescriptType, PipescriptWorkflow } from '../types';
+import { PipescriptNode, PipescriptPipeValue, PipescriptType, PipescriptWorkflow } from '../types';
 
 export const createWorkflowBuilder = (
     workflowUri: string,
@@ -14,24 +14,20 @@ export const createWorkflowBuilder = (
 
     const outputs: PipescriptWorkflow[`outputs`] = [];
     const workflows: PipescriptWorkflow[`workflows`] = [];
-    const nodes: PipescriptWorkflow[`nodes`] = [];
+    const nodes: PipescriptNode[] = [];
 
-    const workflow: Required<PipescriptWorkflow> = {
+    const workflow = {
         workflowUri,
         name: workflowUri,
-        inputs: [],
+        inputs: [] as PipescriptWorkflow[`inputs`],
         outputs,
         workflows,
-        nodes,
-    };
+        body: { kind: `nodes`, nodes },
+    } satisfies Omit<Required<PipescriptWorkflow>, `runtime`>;
 
     const findNodeSource = (varName: string, varType: PipescriptType) => {
         const node = nodes.findLast(x => {
             const implementation = x.implementation;
-            if (implementation.kind !== `workflow`) {
-                return false;
-            }
-
             const workflow = workflows.find(w => w.workflowUri === implementation.workflowUri);
             const workflowOutput = workflow?.outputs.find(o => o.name === varName);
 

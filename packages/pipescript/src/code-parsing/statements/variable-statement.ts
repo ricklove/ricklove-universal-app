@@ -12,7 +12,7 @@ import { getPipescriptType } from '../pipescript-type';
 
 export const parseVariableStatement = (builder: WorkflowBuilder, t: ts.VariableStatement) => {
     const {
-        workflow: { outputs, nodes, workflows },
+        workflow: { outputs, body, workflows },
         typeChecker,
         file,
     } = builder;
@@ -108,13 +108,15 @@ export const parseVariableStatement = (builder: WorkflowBuilder, t: ts.VariableS
                     pipe: initializerInfo?.outputPipe,
                 },
             ],
-            nodes: [],
+            body: {
+                kind: `operator`,
+                operator: `declaration`,
+            },
         };
 
         const node: undefined | PipescriptNode = {
             nodeId,
             implementation: {
-                kind: `workflow`,
                 workflowUri,
             },
             inputPipes: [...(!initializerInfo?.inputPipe ? [] : [initializerInfo.inputPipe])],
@@ -124,7 +126,7 @@ export const parseVariableStatement = (builder: WorkflowBuilder, t: ts.VariableS
     });
 
     workflows.push(...declarations.map(x => x.workflow!).filter(x => x));
-    nodes.push(...declarations.map(x => x.node!).filter(x => x));
+    body.nodes.push(...declarations.map(x => x.node!).filter(x => x));
     if (isExport) {
         outputs.push(...declarations.map(x => x.outputVar));
     }

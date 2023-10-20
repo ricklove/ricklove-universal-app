@@ -1,7 +1,7 @@
 import { BinaryExpression } from 'typescript';
 
 import { ExpressionParseResult, parseExpression } from './expression';
-import { PipescriptNode, PipescriptWorkflow } from '../../types';
+import { PipescriptBuiltinOperator, PipescriptNode, PipescriptWorkflow } from '../../types';
 import { WorkflowBuilder } from '../builder';
 import { getPipescriptType } from '../pipescript-type';
 
@@ -13,7 +13,7 @@ export const parseBinaryExpression = (
     const expressionType = getPipescriptType(builder.file, expressionTypeRaw);
     // const expressionTextSimple = expressionText.replace(/[^A-Za-z0-9]+/g, `_`);
     const { left, right, operatorToken } = t;
-    const operatorText = operatorToken.getText(builder.file);
+    const operatorText = operatorToken.getText(builder.file) as PipescriptBuiltinOperator;
 
     const { expressionValue: expressionValue_left, expressionType: expressionType_left } =
         parseExpression(builder, left);
@@ -70,13 +70,15 @@ export const parseBinaryExpression = (
                     },
                 },
             ],
-            nodes: [],
+            body: {
+                kind: `operator`,
+                operator: operatorText,
+            },
         };
 
         const expressionNode: PipescriptNode = {
             nodeId: expressionNodeId,
             implementation: {
-                kind: `workflow`,
                 workflowUri: expressionWorkflowUri,
             },
             inputPipes: [
@@ -92,7 +94,7 @@ export const parseBinaryExpression = (
         };
 
         builder.workflow.workflows.push(expressionWorkflow);
-        builder.workflow.nodes.push(expressionNode);
+        builder.workflow.body.nodes.push(expressionNode);
 
         return {
             expressionValue: {
@@ -130,13 +132,15 @@ export const parseBinaryExpression = (
                 },
             },
         ],
-        nodes: [],
+        body: {
+            kind: `operator`,
+            operator: operatorText,
+        },
     };
 
     const expressionNode: PipescriptNode = {
         nodeId: expressionNodeId,
         implementation: {
-            kind: `workflow`,
             workflowUri: expressionWorkflowUri,
         },
         inputPipes: [
@@ -152,7 +156,7 @@ export const parseBinaryExpression = (
     };
 
     builder.workflow.workflows.push(expressionWorkflow);
-    builder.workflow.nodes.push(expressionNode);
+    builder.workflow.body.nodes.push(expressionNode);
 
     return {
         expressionValue: {

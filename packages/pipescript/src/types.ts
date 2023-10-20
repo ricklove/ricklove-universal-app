@@ -24,7 +24,15 @@ export type PipescriptWorkflow = {
     // outputPipes?: PipescriptPipe[];
 
     /** body = function calls, assignments */
-    nodes: PipescriptNode[];
+    body:
+        | {
+              kind: `nodes`;
+              nodes: PipescriptNode[];
+          }
+        | {
+              kind: `operator`;
+              operator: PipescriptBuiltinOperator;
+          };
 
     /** nested workflows */
     workflows?: PipescriptWorkflow[];
@@ -35,10 +43,36 @@ export type PipescriptWorkflow = {
     };
 };
 
+export type PipescriptBuiltinOperator =
+    // assignment
+    | `declaration`
+    | `=`
+    // unary
+    | '!'
+    | '++'
+    | '--'
+    // binary
+    | `+`
+    | `-`
+    | `*`
+    | `/`
+    | `%`
+    // ternary
+    | `conditional-ternary`
+    // comparisons
+    | '=='
+    | '!='
+    | '<'
+    | '>'
+    | '<='
+    | '>=';
+
 export type PipescriptWorkflowInput = PipescriptVariable & {
     ignored?: boolean;
+
     runtime?: {
         workflow: PipescriptWorkflow;
+        pipes: PipescriptPipeValue[];
     };
 };
 
@@ -114,55 +148,61 @@ export type PipescriptNode = {
     };
 };
 
-export type PipescriptNodeImplementation =
-    | {
-          kind: `workflow`;
-          workflowUri: string;
+export type PipescriptNodeImplementation = {
+    workflowUri: string;
 
-          runtime?: {
-              workflow: PipescriptWorkflow;
-          };
-      }
-    // | {
-    //       kind: `code`;
-    //       code: string;
-    //   }
-    | {
-          /** json is mapped to single output
-           *
-           * serialized data, user input, constants, literals */
-          kind: `data`;
-          /** single output type */
-          output: PipescriptVariable;
-          /** json must fulfill output type */
-          json: string;
-      };
+    runtime?: {
+        workflow: PipescriptWorkflow;
+    };
+};
 
 /** passed arguments */
 export type PipescriptPipe = {
     name: string;
 } & PipescriptPipeValue;
 
-export type PipescriptPipeValue =
+export type PipescriptPipeValue = {
+    runtime?: {
+        source:
+            | {
+                  kind: `node-output`;
+                  name: string;
+                  node: PipescriptNode;
+                  nodeWorkflowOutput: PipescriptWorkflowOutput;
+              }
+            | {
+                  kind: `workflow-inputs`;
+                  workflowInputs: PipescriptWorkflowInput[];
+              }
+            | {
+                  kind: `data`;
+                  name: `data`;
+                  json: string;
+              };
+        destination:
+            | {
+                  kind: `node-input`;
+                  name: string;
+                  node: PipescriptNode;
+                  nodeWorkflowInput: PipescriptWorkflowInput;
+              }
+            | {
+                  kind: `workflow-output`;
+                  name: string;
+                  workflowOutput: PipescriptWorkflowOutput;
+              };
+    };
+} & (
     | {
           /** connected to peer node */
           kind: `node`;
           sourceNodeId: string;
           sourceNodeOutputName: string;
-
-          runtime?: {
-              node: PipescriptNode;
-              workflowOutput?: PipescriptWorkflowOutput;
-          };
       }
     | {
           /** connected to input of parent workflow */
           kind: `workflow-input`;
           workflowInputNames: string[];
-
-          runtime?: {
-              workflowInputs: PipescriptWorkflowInput[];
-          };
       }
     | {
           /** json data
@@ -171,7 +211,8 @@ export type PipescriptPipeValue =
           kind: `data`;
           /** json must fulfill output type */
           json: string;
-      };
+      }
+);
 
 // /** arguments, imports */
 // export type PipescriptNodeInputConnection = {
