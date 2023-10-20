@@ -21,7 +21,10 @@ export const expectedDeclarationFromLiteralWorkflow = (
                 },
             },
         ],
-        nodes: [],
+        body: {
+            kind: `nodes`,
+            nodes: [],
+        },
     };
 };
 export const expectedDeclarationFromLiteralNode = (
@@ -31,7 +34,6 @@ export const expectedDeclarationFromLiteralNode = (
     return {
         nodeId: `${nodeId}`,
         implementation: {
-            kind: `workflow`,
             workflowUri: expectedDeclarationFromLiteralWorkflow(name, 42).workflowUri,
         },
         inputPipes: [],
@@ -64,7 +66,10 @@ export const expectedDeclarationFromVariableWorkflow = (name: string): Pipescrip
                 },
             },
         ],
-        nodes: [],
+        body: {
+            kind: `nodes`,
+            nodes: [],
+        },
     };
 };
 export const expectedDeclarationFromVariableNode = (
@@ -76,7 +81,6 @@ export const expectedDeclarationFromVariableNode = (
     return {
         nodeId: `${nodeId}`,
         implementation: {
-            kind: `workflow`,
             workflowUri: expectedDeclarationFromVariableWorkflow(name).workflowUri,
         },
         inputPipes: [

@@ -40,8 +40,11 @@ export const exampleDeclarationWorkflow: PipescriptWorkflow = {
         expectedDeclarationFromLiteralWorkflow(`a`, 42),
         expectedDeclarationFromVariableWorkflow(`b`),
     ],
-    nodes: [
-        expectedDeclarationFromLiteralNode(`a`, 1),
-        expectedDeclarationFromVariableNode(`b`, 2, `a`, 1),
-    ],
+    body: {
+        kind: `nodes`,
+        nodes: [
+            expectedDeclarationFromLiteralNode(`a`, 1),
+            expectedDeclarationFromVariableNode(`b`, 2, `a`, 1),
+        ],
+    },
 };

@@ -42,17 +42,22 @@ export const exampleDeclarationWorkflow: PipescriptWorkflow = {
                     },
                 },
             ],
-            nodes: [],
-        },
-    ],
-    nodes: [
-        {
-            nodeId: `${nodeId}`,
-            implementation: {
-                kind: `workflow`,
-                workflowUri: `${name}-declaration`,
+            body: {
+                kind: `nodes`,
+                nodes: [],
             },
-            inputPipes: [],
         },
     ],
+    body: {
+        kind: `nodes`,
+        nodes: [
+            {
+                nodeId: `${nodeId}`,
+                implementation: {
+                    workflowUri: `${name}-declaration`,
+                },
+                inputPipes: [],
+            },
+        ],
+    },
 };
