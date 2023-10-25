@@ -1,7 +1,3 @@
-const file.ts/> = (left: number, right: number) => {
-
-}
-
 const file.ts/if-body = (condition: bool, b: number, a: number) => {
 const file.ts/if-body/b= = (old: number, value: number) => {
 

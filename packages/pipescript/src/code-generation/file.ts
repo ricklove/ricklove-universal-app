@@ -1,3 +1,4 @@
+import { loadRuntime } from '../analysis/load-data';
 import {
     PipescriptPipeValue,
     PipescriptType,
@@ -38,11 +39,13 @@ const functionBuiltins = [
 ];
 
 export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) => {
+    loadRuntime(workflow);
+
     // TODO: a file is actually a node, not a workflow, since it is executed at first import (and has specific input values)
     const imports = workflow.inputs.map(x => `import ${x.name} from '${x.name}'`);
 
     const functions = workflow.workflows
-        ?.filter(x => !functionBuiltins.find(f => x.name.endsWith(f.suffix)))
+        ?.filter(x => x.body.kind === `nodes`)
         .map(x => generateFunction(x));
 
     const isExportedName = (name: string) => {
@@ -165,8 +168,12 @@ export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) =>
             return x.json;
         }
 
+        if (x.kind === `workflow-operator`) {
+            return `/* TODO: operator */`;
+        }
+
         if (x.kind === `workflow-input`) {
-            return x.workflowInputNames.join(`,`);
+            return x.workflowInputName;
         }
 
         if (x.kind === `node`) {
@@ -262,7 +269,11 @@ export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) =>
             }
 
             if (pipe.kind === `workflow-input`) {
-                return `export ${x.name} = ${pipe.workflowInputNames.join(`, `)};`;
+                return `export ${x.name} = ${pipe.workflowInputName};`;
+            }
+
+            if (pipe.kind === `workflow-operator`) {
+                return `export ${x.name} = /* TODO: operator 2 */;`;
             }
 
             return `export unknown;`;

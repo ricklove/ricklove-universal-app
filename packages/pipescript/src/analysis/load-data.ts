@@ -1,6 +1,9 @@
 import { PipescriptNode, PipescriptPipe, PipescriptPipeValue, PipescriptWorkflow } from '../types';
 
-export const loadRuntime = (workflow: PipescriptWorkflow) => {
+export const loadRuntime = (
+    workflowRaw: PipescriptWorkflow,
+): { workflow: PipescriptWorkflow; context: PipescriptRuntimeContext } => {
+    const workflow = workflowRaw as PipescriptWorkflow;
     workflow.runtime = {
         container: undefined,
         usages: [],
@@ -22,7 +25,7 @@ export const loadRuntime = (workflow: PipescriptWorkflow) => {
         .map(x => x!);
     const allPipes = [...allPipes_workflowOutputs, ...allPipes_nodeInputs];
 
-    const context: LoaderContext = {
+    const context: PipescriptRuntimeContext = {
         allWorkflows,
         allWorkflowsMap: new Map(allWorkflows.map(x => [x.workflowUri, x])),
         allNodes,
@@ -33,9 +36,14 @@ export const loadRuntime = (workflow: PipescriptWorkflow) => {
     workflow.workflows?.forEach(w => {
         loadRuntime_workflow(w, workflow, context);
     });
+
+    return {
+        workflow,
+        context,
+    };
 };
 
-type LoaderContext = {
+export type PipescriptRuntimeContext = {
     allWorkflows: PipescriptWorkflow[];
     allWorkflowsMap: Map<string, PipescriptWorkflow>;
     allNodes: PipescriptNode[];
@@ -46,7 +54,7 @@ type LoaderContext = {
 const loadRuntime_workflow = (
     workflow: PipescriptWorkflow,
     container: PipescriptWorkflow,
-    context: LoaderContext,
+    context: PipescriptRuntimeContext,
 ) => {
     workflow.runtime = {
         container,
@@ -85,10 +93,10 @@ const loadRuntime_workflow = (
     workflow.inputs.forEach(x => {
         x.runtime = {
             workflow,
-            pipes: context.allPipes.filter(
+            outflowPipes: context.allPipes.filter(
                 p =>
-                    p.runtime?.source.kind === `workflow-inputs`
-                    && p.runtime.source.workflowInputs.find(y => y === x),
+                    p.runtime?.source.kind === `workflow-input`
+                    && p.runtime.source.workflowInput === x,
             ),
         };
     });
@@ -97,7 +105,7 @@ const loadRuntime_workflow = (
 const loadRuntime_node = (
     node: PipescriptNode,
     container: PipescriptWorkflow,
-    context: LoaderContext,
+    context: PipescriptRuntimeContext,
 ) => {
     const workflow = context.allWorkflowsMap.get(node.implementation.workflowUri);
     if (!workflow) {
@@ -105,6 +113,15 @@ const loadRuntime_node = (
     }
     node.implementation.runtime = {
         workflow,
+        output:
+            node.implementation.runtime?.workflow.outputs.map(output => ({
+                output,
+                outflowPipes: context.allPipes.filter(
+                    p =>
+                        p.runtime?.source.kind === `node-output`
+                        && p.runtime.source.nodeWorkflowOutput === output,
+                ),
+            })) ?? [],
     };
 
     node.inputPipes.forEach(p =>
@@ -130,7 +147,7 @@ const loadRuntime_pipe = (
     pipe: PipescriptPipeValue,
     destination: Required<PipescriptPipeValue>[`runtime`][`destination`],
     container: PipescriptWorkflow,
-    context: LoaderContext,
+    context: PipescriptRuntimeContext,
 ) => {
     if (pipe.kind === `node`) {
         const sourceNode = context.allNodesMap.get(pipe.sourceNodeId);
@@ -155,18 +172,24 @@ const loadRuntime_pipe = (
         return;
     }
     if (pipe.kind === `workflow-input`) {
-        const workflowInputs = pipe.workflowInputNames
-            .map(x => container.inputs.find(y => y.name === x))
-            .filter(x => x)
-            .map(x => x!);
+        const workflowInput = container.inputs.find(y => y.name === pipe.workflowInputName);
+
+        if (!workflowInput) {
+            throw Error(`missing workflow input ${pipe.workflowInputName}`);
+        }
 
         pipe.runtime = {
             destination,
             source: {
-                kind: `workflow-inputs`,
-                workflowInputs,
+                kind: `workflow-input`,
+                workflowInput,
             },
         };
+        return;
+    }
+
+    if (pipe.kind === `workflow-operator`) {
+        // No runtime
         return;
     }
 

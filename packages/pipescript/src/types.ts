@@ -73,7 +73,7 @@ export type PipescriptWorkflowInput = PipescriptVariable & {
 
     runtime?: {
         workflow: PipescriptWorkflow;
-        pipes: PipescriptPipeValue[];
+        outflowPipes: PipescriptPipeValue[];
     };
 };
 
@@ -154,6 +154,10 @@ export type PipescriptNodeImplementation = {
 
     runtime?: {
         workflow: PipescriptWorkflow;
+        output: {
+            output: PipescriptWorkflowOutput;
+            outflowPipes: PipescriptPipeValue[];
+        }[];
     };
 };
 
@@ -174,6 +178,9 @@ export type PipescriptPipeValue = {
             | {
                   kind: `workflow-input`;
                   workflowInput: PipescriptWorkflowInput;
+              }
+            | {
+                  kind: `workflow-operator`;
               }
             | {
                   kind: `data`;
@@ -218,23 +225,3 @@ export type PipescriptPipeValue = {
           json: string;
       }
 );
-
-// /** arguments, imports */
-// export type PipescriptNodeInputConnection = {
-//     node: PipescriptNode;
-//     value: PipescriptValue;
-//     pipe?: PipescriptValuePipe;
-// };
-
-// /** arguments */
-// export type PipescriptNodeOutputConnection = {
-//     node: PipescriptNode;
-//     value: PipescriptValue;
-//     pipes: PipescriptValuePipe[];
-// };
-
-// /** using a variable */
-// export type PipescriptValuePipe = {
-//     source: PipescriptNodeOutputConnection;
-//     destination: PipescriptNodeInputConnection;
-// };
