@@ -1,5 +1,1 @@
-export const a = undefined;
-
-export const a = a;
-
-export const a = a;
+[object Object]

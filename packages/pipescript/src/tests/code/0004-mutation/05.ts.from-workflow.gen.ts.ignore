@@ -1,5 +1,2 @@
-export const a = 42;
-
-const { old, a } = a + undefined;
-
-export const b = old;
+[object Object]
+[object Object]

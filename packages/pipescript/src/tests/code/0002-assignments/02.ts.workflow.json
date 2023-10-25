@@ -93,9 +93,7 @@
     "nodes": [
       {
         "nodeId": "file.ts:1",
-        "implementation": {
-          "workflowUri": "file.ts/a-declaration"
-        },
+        "workflowUri": "file.ts/a-declaration",
         "inputPipes": [
           {
             "name": "a",
@@ -106,9 +104,7 @@
       },
       {
         "nodeId": "file.ts:2",
-        "implementation": {
-          "workflowUri": "file.ts/b-declaration"
-        },
+        "workflowUri": "file.ts/b-declaration",
         "inputPipes": [
           {
             "name": "b",

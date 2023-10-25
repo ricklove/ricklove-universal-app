@@ -1,3 +1,1 @@
-const answer = 42;
-
-export { answer as answerExport };
+[object Object]

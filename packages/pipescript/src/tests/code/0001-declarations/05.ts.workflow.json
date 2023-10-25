@@ -93,9 +93,7 @@
     "nodes": [
       {
         "nodeId": "file.ts:1",
-        "implementation": {
-          "workflowUri": "file.ts/answer-declaration"
-        },
+        "workflowUri": "file.ts/answer-declaration",
         "inputPipes": [
           {
             "name": "answer",
@@ -106,9 +104,7 @@
       },
       {
         "nodeId": "file.ts:2",
-        "implementation": {
-          "workflowUri": "file.ts/notAnswer-declaration"
-        },
+        "workflowUri": "file.ts/notAnswer-declaration",
         "inputPipes": [
           {
             "name": "notAnswer",

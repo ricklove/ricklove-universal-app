@@ -177,9 +177,7 @@
         "nodes": [
           {
             "nodeId": "file.ts/if-body:1",
-            "implementation": {
-              "workflowUri": "file.ts/if-body/b="
-            },
+            "workflowUri": "file.ts/if-body/b=",
             "inputPipes": [
               {
                 "name": "old",
@@ -202,9 +200,7 @@
     "nodes": [
       {
         "nodeId": "file.ts:1",
-        "implementation": {
-          "workflowUri": "file.ts/a-declaration"
-        },
+        "workflowUri": "file.ts/a-declaration",
         "inputPipes": [
           {
             "name": "a",
@@ -215,16 +211,12 @@
       },
       {
         "nodeId": "file.ts:2",
-        "implementation": {
-          "workflowUri": "file.ts/b-declaration"
-        },
+        "workflowUri": "file.ts/b-declaration",
         "inputPipes": []
       },
       {
         "nodeId": "file.ts:3",
-        "implementation": {
-          "workflowUri": "file.ts/>"
-        },
+        "workflowUri": "file.ts/>",
         "inputPipes": [
           {
             "name": "left",
@@ -241,9 +233,7 @@
       },
       {
         "nodeId": "file.ts:4",
-        "implementation": {
-          "workflowUri": "file.ts/if-body"
-        },
+        "workflowUri": "file.ts/if-body",
         "inputPipes": [
           {
             "name": "condition",

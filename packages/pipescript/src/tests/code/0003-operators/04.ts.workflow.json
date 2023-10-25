@@ -261,9 +261,7 @@
     "nodes": [
       {
         "nodeId": "file.ts:1",
-        "implementation": {
-          "workflowUri": "file.ts/a-declaration"
-        },
+        "workflowUri": "file.ts/a-declaration",
         "inputPipes": [
           {
             "name": "a",
@@ -274,9 +272,7 @@
       },
       {
         "nodeId": "file.ts:3",
-        "implementation": {
-          "workflowUri": "file.ts/*"
-        },
+        "workflowUri": "file.ts/*",
         "inputPipes": [
           {
             "name": "left",
@@ -293,9 +289,7 @@
       },
       {
         "nodeId": "file.ts:4",
-        "implementation": {
-          "workflowUri": "file.ts/-"
-        },
+        "workflowUri": "file.ts/-",
         "inputPipes": [
           {
             "name": "left",
@@ -312,9 +306,7 @@
       },
       {
         "nodeId": "file.ts:5",
-        "implementation": {
-          "workflowUri": "file.ts/*"
-        },
+        "workflowUri": "file.ts/*",
         "inputPipes": [
           {
             "name": "left",
@@ -332,9 +324,7 @@
       },
       {
         "nodeId": "file.ts:6",
-        "implementation": {
-          "workflowUri": "file.ts/+"
-        },
+        "workflowUri": "file.ts/+",
         "inputPipes": [
           {
             "name": "left",
@@ -352,9 +342,7 @@
       },
       {
         "nodeId": "file.ts:7",
-        "implementation": {
-          "workflowUri": "file.ts/+"
-        },
+        "workflowUri": "file.ts/+",
         "inputPipes": [
           {
             "name": "left",
@@ -371,9 +359,7 @@
       },
       {
         "nodeId": "file.ts:2",
-        "implementation": {
-          "workflowUri": "file.ts/b-declaration"
-        },
+        "workflowUri": "file.ts/b-declaration",
         "inputPipes": [
           {
             "name": "b",

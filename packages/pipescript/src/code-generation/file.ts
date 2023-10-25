@@ -1,10 +1,13 @@
 import { loadRuntime } from '../analysis/load-data';
 import {
+    PipescriptNode,
+    PipescriptPipe,
     PipescriptPipeValue,
     PipescriptType,
     PipescriptVariable,
     PipescriptWorkflow,
     PipescriptWorkflowInput,
+    PipescriptWorkflowOutput,
 } from '../types';
 
 const functionBuiltins = [
@@ -39,6 +42,98 @@ const functionBuiltins = [
 ];
 
 export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) => {
+    loadRuntime(workflow);
+
+    // just in time (reverse dependency order)
+
+    // TODO: a file is actually a node, not a workflow, since it is executed at first import (and has specific input values)
+    // const imports = workflow.inputs.map(x => `import ${x.name} from '${x.name}'`);
+
+    const generateExportStatements = (output: PipescriptWorkflowOutput) => {
+        const exportName = output.name;
+        const sourceStatements = generateSourceStatements(
+            output.pipe?.runtime?.source,
+            {
+                nodeId: ``,
+                implementation: {
+                    workflowUri: workflow.workflowUri,
+                },
+                inputPipes: [],
+            },
+            {
+                statementsMap: new Map(),
+            },
+        );
+        return `${sourceStatements}`;
+    };
+
+    const content = `${workflow.outputs.map(o => generateExportStatements(o)).join(`\n`)}`;
+    return { fileName: workflow.name, content };
+};
+
+type SourceStatement = {
+    key: string;
+    expression: string;
+    statements: string[];
+    requirements: { statementKey: string }[];
+};
+type SourceContext = {
+    statementsMap: Map<string, SourceStatement>;
+};
+
+const generateSourceStatements = (
+    pipeSource: undefined | Required<PipescriptPipeValue>[`runtime`][`source`],
+    nodeContainer: PipescriptNode,
+    context: SourceContext,
+): SourceStatement => {
+    const returnStatement = (key: string, createStatement: () => Omit<SourceStatement, `key`>) => {
+        const existing = context.statementsMap.get(key);
+        if (existing) {
+            return existing;
+        }
+        return context.statementsMap.set(key, { ...createStatement(), key }).get(key)!;
+    };
+
+    if (!pipeSource) {
+        return returnStatement(`undefined`, () => ({
+            expression: `undefined /* pipeSource undefined */`,
+            statements: [],
+            requirements: [],
+        }));
+    }
+
+    if (pipeSource.kind === `data`) {
+        return returnStatement(pipeSource.json, () => ({
+            expression: pipeSource.json,
+            statements: [],
+            requirements: [],
+        }));
+    }
+
+    if (pipeSource.kind === `workflow-operator`) {
+        if (pipeSource.workflow.body.kind !== `operator`) {
+            throw new Error(`Invalid workflow body: ${pipeSource.workflow.body.kind}`);
+        }
+        const operator = pipeSource.workflow.body.operator;
+        const inputStatements = pipeSource.workflow.inputs.map(input => {
+            const nodeInput = nodeContainer.inputPipes.find(p => p.name === input.name);
+
+            if (!nodeInput) {
+                throw new Error(`Missing node input: ${input.name}`);
+            }
+            // TODO: input value
+
+            // TODO: how to get node container ancestor?
+            return generateSourceStatements();
+        });
+
+        // TODO: operator
+    }
+
+    return { expression: ``, statements: [] };
+};
+
+const convertWorkflowToTypescriptFile_old = (workflow: PipescriptWorkflow) => {
     loadRuntime(workflow);
 
     // TODO: a file is actually a node, not a workflow, since it is executed at first import (and has specific input values)

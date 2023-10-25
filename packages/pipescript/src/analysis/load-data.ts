@@ -4,10 +4,10 @@ export const loadRuntime = (
     workflowRaw: PipescriptWorkflow,
 ): { workflow: PipescriptWorkflow; context: PipescriptRuntimeContext } => {
     const workflow = workflowRaw as PipescriptWorkflow;
-    workflow.runtime = {
-        container: undefined,
-        usages: [],
-    };
+    // workflow.runtime = {
+    //     container: undefined,
+    //     usages: [],
+    // };
 
     const getWorkflowsRecursive = (w: PipescriptWorkflow): PipescriptWorkflow[] => {
         return [w, ...(w.workflows?.flatMap(w2 => getWorkflowsRecursive(w2)) ?? [])];
@@ -56,15 +56,15 @@ const loadRuntime_workflow = (
     container: PipescriptWorkflow,
     context: PipescriptRuntimeContext,
 ) => {
-    workflow.runtime = {
-        container,
-        usages: context.allNodes.filter(n => n.implementation.workflowUri === workflow.workflowUri),
-    };
+    // workflow.runtime = {
+    //     container,
+    //     usages: context.allNodes.filter(n => n.implementation.workflowUri === workflow.workflowUri),
+    // };
 
     workflow.outputs.forEach(x => {
-        x.runtime = {
-            workflow,
-        };
+        // x.runtime = {
+        //     workflow,
+        // };
 
         if (x.pipe) {
             loadRuntime_pipe(
@@ -91,14 +91,14 @@ const loadRuntime_workflow = (
     });
 
     workflow.inputs.forEach(x => {
-        x.runtime = {
-            workflow,
-            outflowPipes: context.allPipes.filter(
-                p =>
-                    p.runtime?.source.kind === `workflow-input`
-                    && p.runtime.source.workflowInput === x,
-            ),
-        };
+        // x.runtime = {
+        //     workflow,
+        //     outflowPipes: context.allPipes.filter(
+        //         p =>
+        //             p.runtime?.source.kind === `workflow-input`
+        //             && p.runtime.source.workflowInput === x,
+        //     ),
+        // };
     });
 };
 
@@ -107,12 +107,13 @@ const loadRuntime_node = (
     container: PipescriptWorkflow,
     context: PipescriptRuntimeContext,
 ) => {
-    const workflow = context.allWorkflowsMap.get(node.implementation.workflowUri);
+    const workflow = context.allWorkflowsMap.get(node.workflowUri);
     if (!workflow) {
-        throw Error(`missing workflow ${node.implementation.workflowUri}`);
+        throw Error(`missing workflow ${node.workflowUri}`);
     }
-    node.implementation.runtime = {
+    node.instance = {
         workflow,
+        input: {},
         output:
             node.implementation.runtime?.workflow.outputs.map(output => ({
                 output,
@@ -153,7 +154,7 @@ const loadRuntime_pipe = (
         const sourceNode = context.allNodesMap.get(pipe.sourceNodeId);
         const sourceNodeWorkflowOutput =
             context.allWorkflowsMap
-                .get(sourceNode?.implementation.workflowUri ?? ``)
+                .get(sourceNode?.workflowUri ?? ``)
                 ?.outputs.find(o => o.name === pipe.sourceNodeOutputName) || undefined;
 
         if (!sourceNode || !sourceNodeWorkflowOutput) {
@@ -189,12 +190,25 @@ const loadRuntime_pipe = (
     }
 
     if (pipe.kind === `workflow-operator`) {
-        // No runtime
+        pipe.runtime = {
+            destination,
+            source: {
+                kind: `workflow-operator`,
+                workflow: container,
+            },
+        };
         return;
     }
 
     if (pipe.kind === `data`) {
-        // No runtime
+        pipe.runtime = {
+            destination,
+            source: {
+                kind: `data`,
+                json: pipe.json,
+                name: `data`,
+            },
+        };
         return;
     }
     return;

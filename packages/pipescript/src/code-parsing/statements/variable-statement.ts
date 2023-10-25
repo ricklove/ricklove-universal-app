@@ -115,9 +115,7 @@ export const parseVariableStatement = (builder: WorkflowBuilder, t: ts.VariableS
 
         const node: undefined | PipescriptNode = {
             nodeId,
-            implementation: {
-                workflowUri,
-            },
+            workflowUri,
             inputPipes: [...(!initializerInfo?.inputPipe ? [] : [initializerInfo.inputPipe])],
         };
 

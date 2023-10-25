@@ -16,7 +16,10 @@ export const convertTypescriptToPipescript = (
         workflowUri: ``,
         inputs: [],
         outputs: [],
-        nodes: [],
+        body: {
+            kind: `nodes`,
+            nodes: [],
+        },
         workflows,
     };
 };

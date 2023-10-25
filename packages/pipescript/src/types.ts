@@ -37,11 +37,6 @@ export type PipescriptWorkflow = {
 
     /** nested workflows */
     workflows?: PipescriptWorkflow[];
-
-    runtime?: {
-        container: undefined | PipescriptWorkflow;
-        usages: PipescriptNode[];
-    };
 };
 
 export type PipescriptBuiltinOperator =
@@ -70,20 +65,11 @@ export type PipescriptBuiltinOperator =
 
 export type PipescriptWorkflowInput = PipescriptVariable & {
     ignored?: boolean;
-
-    runtime?: {
-        workflow: PipescriptWorkflow;
-        outflowPipes: PipescriptPipeValue[];
-    };
 };
 
 export type PipescriptWorkflowOutput = PipescriptVariable & {
     /** connections to output */
     pipe?: PipescriptPipeValue;
-
-    runtime?: {
-        workflow: PipescriptWorkflow;
-    };
 };
 
 /** variable */
@@ -133,7 +119,7 @@ export type PipescriptNode = {
     nodeId: string;
 
     /** node type */
-    implementation: PipescriptNodeImplementation;
+    workflowUri: string;
 
     /** connected inputs */
     inputPipes: PipescriptPipe[];
@@ -149,58 +135,12 @@ export type PipescriptNode = {
     };
 };
 
-export type PipescriptNodeImplementation = {
-    workflowUri: string;
-
-    runtime?: {
-        workflow: PipescriptWorkflow;
-        output: {
-            output: PipescriptWorkflowOutput;
-            outflowPipes: PipescriptPipeValue[];
-        }[];
-    };
-};
-
 /** passed arguments */
 export type PipescriptPipe = {
     name: string;
 } & PipescriptPipeValue;
 
-export type PipescriptPipeValue = {
-    runtime?: {
-        source:
-            | {
-                  kind: `node-output`;
-                  name: string;
-                  node: PipescriptNode;
-                  nodeWorkflowOutput: PipescriptWorkflowOutput;
-              }
-            | {
-                  kind: `workflow-input`;
-                  workflowInput: PipescriptWorkflowInput;
-              }
-            | {
-                  kind: `workflow-operator`;
-              }
-            | {
-                  kind: `data`;
-                  name: `data`;
-                  json: string;
-              };
-        destination:
-            | {
-                  kind: `node-input`;
-                  name: string;
-                  node: PipescriptNode;
-                  nodeWorkflowInput: PipescriptWorkflowInput;
-              }
-            | {
-                  kind: `workflow-output`;
-                  name: string;
-                  workflowOutput: PipescriptWorkflowOutput;
-              };
-    };
-} & (
+export type PipescriptPipeValue =
     | {
           /** connected to peer node */
           kind: `node`;
@@ -223,5 +163,74 @@ export type PipescriptPipeValue = {
           kind: `data`;
           /** json must fulfill output type */
           json: string;
-      }
-);
+      };
+
+// Instances
+export type PipescriptNodeInstance = {
+    node: PipescriptNode;
+    workflow: PipescriptWorkflow;
+    inputs: PipescriptNodeInputInstance[];
+    outputs: PipescriptNodeOutputInstance[];
+
+    children: PipescriptNodeInstance[];
+    operator?: PipescriptNodeOperatorInstance;
+};
+
+export type PipescriptNodeInputInstance = {
+    name: string;
+    workflowInput: PipescriptWorkflowInput;
+    inflowPipe: PipescriptPipeValueInstance;
+    outflowPipes: PipescriptPipeValueInstance[];
+
+    nodeInstance: PipescriptNodeInstance;
+};
+export type PipescriptNodeOutputInstance = {
+    name: string;
+    workflowOutput: PipescriptWorkflowOutput;
+    inflowPipe: PipescriptPipeValueInstance;
+    outflowPipes: PipescriptPipeValueInstance[];
+
+    nodeInstance: PipescriptNodeInstance;
+};
+export type PipescriptNodeOperatorInstance = {
+    operator: PipescriptBuiltinOperator;
+    inputs: PipescriptNodeInputInstance[];
+    outputs: PipescriptNodeOutputInstance[];
+
+    nodeInstance: PipescriptNodeInstance;
+};
+
+export type PipescriptPipeValueInstance = {
+    pipe: PipescriptPipeValue;
+    source:
+        | {
+              kind: `input`;
+              input: PipescriptNodeInputInstance;
+          }
+        | {
+              kind: `output`;
+              output: PipescriptNodeOutputInstance;
+          }
+        | {
+              kind: `operator`;
+              operator: PipescriptNodeOperatorInstance;
+          }
+        | {
+              kind: `data`;
+              name: `data`;
+              json: string;
+          };
+    destination:
+        | {
+              kind: `input`;
+              input: PipescriptNodeInputInstance;
+          }
+        | {
+              kind: `output`;
+              output: PipescriptNodeOutputInstance;
+          }
+        | {
+              kind: `operator`;
+              operator: PipescriptNodeOperatorInstance;
+          };
+};

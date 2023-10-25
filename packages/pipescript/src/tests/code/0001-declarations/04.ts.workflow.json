@@ -52,9 +52,7 @@
     "nodes": [
       {
         "nodeId": "file.ts:1",
-        "implementation": {
-          "workflowUri": "file.ts/answer-declaration"
-        },
+        "workflowUri": "file.ts/answer-declaration",
         "inputPipes": [
           {
             "name": "answer",

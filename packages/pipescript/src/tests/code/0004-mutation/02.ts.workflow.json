@@ -125,9 +125,7 @@
     "nodes": [
       {
         "nodeId": "file.ts:1",
-        "implementation": {
-          "workflowUri": "file.ts/a-declaration"
-        },
+        "workflowUri": "file.ts/a-declaration",
         "inputPipes": [
           {
             "name": "a",
@@ -138,9 +136,7 @@
       },
       {
         "nodeId": "file.ts:2",
-        "implementation": {
-          "workflowUri": "file.ts/*"
-        },
+        "workflowUri": "file.ts/*",
         "inputPipes": [
           {
             "name": "left",
@@ -157,9 +153,7 @@
       },
       {
         "nodeId": "file.ts:3",
-        "implementation": {
-          "workflowUri": "file.ts/a="
-        },
+        "workflowUri": "file.ts/a=",
         "inputPipes": [
           {
             "name": "old",

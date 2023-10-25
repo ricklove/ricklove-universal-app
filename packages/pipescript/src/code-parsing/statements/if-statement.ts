@@ -41,9 +41,7 @@ export const parseIfStatement = (builder: WorkflowBuilder, t: ts.IfStatement) =>
 
     const expressionNode: PipescriptNode = {
         nodeId: expressionNodeId,
-        implementation: {
-            workflowUri: expressionWorkflowUri,
-        },
+        workflowUri: expressionWorkflowUri,
         inputPipes: [
             {
                 name: `condition`,

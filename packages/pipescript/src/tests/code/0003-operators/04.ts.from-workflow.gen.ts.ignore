@@ -1,13 +1,1 @@
-const a = 42;
-
-const file_ts_3_value = a * 3;
-
-const file_ts_4_value = 2 - file_ts_3_value;
-
-const file_ts_5_value = a * file_ts_4_value;
-
-const file_ts_6_value = a + file_ts_5_value;
-
-const file_ts_7_value = file_ts_6_value + 7;
-
-export const b = file_ts_7_value;
+[object Object]

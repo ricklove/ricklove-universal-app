@@ -61,9 +61,7 @@ export const parsePostfixUnaryExpression = (
 
     const expressionNode: PipescriptNode = {
         nodeId: expressionNodeId,
-        implementation: {
-            workflowUri: expressionWorkflowUri,
-        },
+        workflowUri: expressionWorkflowUri,
         inputPipes: [
             {
                 name: `old`,

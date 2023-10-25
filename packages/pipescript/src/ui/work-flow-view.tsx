@@ -211,8 +211,7 @@ const NodeView = ({ node, container }: { node: PipescriptNode; container: Pipesc
     });
 
     const workflow = (() => {
-        const imp = node.implementation;
-        return container.workflows?.find(w => w.workflowUri === imp.workflowUri);
+        return container.workflows?.find(w => w.workflowUri === node.workflowUri);
     })();
     return (
         <MoveableView

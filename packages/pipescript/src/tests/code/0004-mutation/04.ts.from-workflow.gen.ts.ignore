@@ -1,3 +1,1 @@
-export const a = 42;
-
-const { old, a } = a + undefined;
+[object Object]

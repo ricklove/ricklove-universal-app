@@ -1,5 +1,1 @@
-export const a = 42;
-
-const value = a * 2;
-
-export const a = a;
+[object Object]

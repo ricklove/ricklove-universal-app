@@ -27,8 +27,7 @@ export const createWorkflowBuilder = (
 
     const findNodeSource = (varName: string, varType: PipescriptType) => {
         const node = nodes.findLast(x => {
-            const implementation = x.implementation;
-            const workflow = workflows.find(w => w.workflowUri === implementation.workflowUri);
+            const workflow = workflows.find(w => w.workflowUri === x.workflowUri);
             const workflowOutput = workflow?.outputs.find(o => o.name === varName);
 
             return !!workflowOutput;

@@ -77,9 +77,7 @@ export const parseBinaryExpression = (
 
         const expressionNode: PipescriptNode = {
             nodeId: expressionNodeId,
-            implementation: {
-                workflowUri: expressionWorkflowUri,
-            },
+            workflowUri: expressionWorkflowUri,
             inputPipes: [
                 {
                     name: `old`,
@@ -138,9 +136,7 @@ export const parseBinaryExpression = (
 
     const expressionNode: PipescriptNode = {
         nodeId: expressionNodeId,
-        implementation: {
-            workflowUri: expressionWorkflowUri,
-        },
+        workflowUri: expressionWorkflowUri,
         inputPipes: [
             {
                 name: `left`,
