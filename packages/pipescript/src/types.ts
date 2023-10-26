@@ -181,8 +181,18 @@ export type PipescriptNodeInstance = {
     inputs: PipescriptNodePipeConnectionInputInstance[];
     outputs: PipescriptNodePipeConnectionOutputInstance[];
 
+    parent: undefined | PipescriptNodeInstance;
     children: PipescriptNodeInstance[];
-    operator?: PipescriptNodeOperatorInstance;
+    operator?: PipescriptBuiltinOperator;
+};
+
+export type PipescriptNodeInstance_Operator = {
+    node: PipescriptNode;
+    workflow: PipescriptWorkflow;
+    inputs: Omit<PipescriptNodePipeConnectionInputInstance, `outflowPipes`>[];
+    outputs: Omit<PipescriptNodePipeConnectionOutputInstance, `inflowPipe`>[];
+
+    operator: PipescriptBuiltinOperator;
 };
 
 export type PipescriptNodePipeConnectionInstance_InputOrOutput =
@@ -206,15 +216,6 @@ export type PipescriptNodePipeConnectionInstance = {
     nodeInstance: PipescriptNodeInstance;
 };
 
-export type PipescriptNodeOperatorInstance = {
-    operator: PipescriptBuiltinOperator;
-    // needed?
-    inputs: PipescriptNodePipeConnectionInputInstance[];
-    outputs: PipescriptNodePipeConnectionOutputInstance[];
-
-    nodeInstance: PipescriptNodeInstance;
-};
-
 export type PipescriptPipeValueInstance = {
     pipe: PipescriptPipeValue;
     source:
@@ -229,9 +230,7 @@ export type PipescriptPipeValueInstance = {
         | {
               // needed?
               kind: `operator-output`;
-              // operator: PipescriptNodeOperatorInstance;
-              // operator: output.nodeInstance.operator!
-              output: PipescriptNodePipeConnectionOutputInstance;
+              nodeInstance: PipescriptNodeInstance_Operator;
           }
         | {
               kind: `data`;
@@ -250,8 +249,6 @@ export type PipescriptPipeValueInstance = {
         | {
               // needed?
               kind: `operator-input`;
-              // operator: PipescriptNodeOperatorInstance;
-              // operator: input.nodeInstance.operator!
-              input: PipescriptNodePipeConnectionInputInstance;
+              node: PipescriptNodeInstance_Operator;
           };
 };

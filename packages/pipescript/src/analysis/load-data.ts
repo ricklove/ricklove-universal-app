@@ -1,7 +1,7 @@
 import {
     PipescriptNode,
     PipescriptNodeInstance,
-    PipescriptNodeOperatorInstance,
+    PipescriptNodeInstance_Operator,
     PipescriptNodePipeConnectionInputInstance,
     PipescriptNodePipeConnectionOutputInstance,
     PipescriptPipe,
@@ -16,7 +16,7 @@ export const loadRuntime = (
 ): {
     workflow: PipescriptWorkflow;
     context: PipescriptRuntimeContext;
-    rootNodeInstance: PipescriptNodeInstance;
+    rootNodeInstances: PipescriptNodeInstance[];
 } => {
     const workflow = workflowRaw as PipescriptWorkflow;
     workflow.tree = {
@@ -46,28 +46,42 @@ export const loadRuntime = (
         allNodes,
         allNodesMap: new Map(allNodes.map(x => [x.nodeId, x])),
         allPipes,
+        allNodeInstances: [],
     };
 
     // workflow.workflows?.forEach(w => {
     //     loadRuntime_workflow(w, workflow, context);
     // });
 
-    const mainNode = workflow.body.nodes?.[0];
-    const mainWorkflow = context.allWorkflowsMap.get(mainNode?.workflowUri ?? ``);
+    // const mainNode = workflow.body.nodes?.[0];
+    // const mainWorkflow = context.allWorkflowsMap.get(mainNode?.workflowUri ?? ``);
 
-    if (!mainNode) {
-        throw Error(`missing mainNode ${workflow.workflowUri}`);
-    }
-    if (!mainWorkflow) {
-        throw Error(`missing mainWorkflow ${workflow.workflowUri}`);
-    }
+    // if (!mainNode) {
+    //     throw Error(`missing mainNode ${workflow.workflowUri}`);
+    // }
+    // if (!mainWorkflow) {
+    //     throw Error(`missing mainWorkflow ${workflow.workflowUri}`);
+    // }
 
-    const rootNodeInstance = createNodeInstances(mainNode, undefined, context);
+    const rootNodeInstances =
+        workflow.body.nodes?.map(node => createNodeInstances(node, undefined, context)) ?? [];
+
+    rootNodeInstances?.forEach(node => {
+        loadNodeConnections_inflows(node);
+    });
+
+    const allInflowPipes = context.allNodeInstances
+        .flatMap(x => [...x.inputs.map(y => y.inflowPipe), ...x.outputs.map(y => y.inflowPipe)])
+        .filter(x => x)
+        .map(x => x!);
+    rootNodeInstances?.forEach(node => {
+        loadNodeConnections_outflows(node, allInflowPipes);
+    });
 
     return {
         workflow,
         context,
-        rootNodeInstance,
+        rootNodeInstances,
     };
 };
 
@@ -77,11 +91,14 @@ export type PipescriptRuntimeContext = {
     allNodes: PipescriptNode[];
     allNodesMap: Map<string, PipescriptNode>;
     allPipes: PipescriptPipeValue[];
+
+    // created during createNodeInstances
+    allNodeInstances: PipescriptNodeInstance[];
 };
 
 const createNodeInstances = (
     node: PipescriptNode,
-    container: undefined | PipescriptNodeInstance,
+    parent: undefined | PipescriptNodeInstance,
     context: PipescriptRuntimeContext,
 ): PipescriptNodeInstance => {
     const workflow = context.allWorkflowsMap.get(node.workflowUri);
@@ -97,8 +114,10 @@ const createNodeInstances = (
         workflow,
         inputs: [],
         outputs: [],
+        parent,
         children: [],
     };
+    context.allNodeInstances.push(instance);
 
     // Create connections (without pipes)
     instance.inputs = workflow.inputs.map(workflowInput => ({
@@ -122,260 +141,167 @@ const createNodeInstances = (
         workflow.body.nodes?.map(n => createNodeInstances(n, instance, context)) ?? [];
 
     if (workflow.body.kind === `operator`) {
-        instance.operator = {
-            nodeInstance: instance,
-            operator: workflow.body.operator,
-            // is this needed? - it should equal the node inputs and outputs
-            inputs: workflow.inputs.map(workflowInput => ({
-                nodeInstance: instance,
-                kind: `workflow-input`,
-                workflowInput,
-                name: workflowInput.name,
-                inflowPipe: undefined,
-                outflowPipes: [],
-            })),
-            outputs: workflow.outputs.map(workflowOutput => ({
-                nodeInstance: instance,
-                kind: `workflow-output`,
-                workflowOutput,
-                name: workflowOutput.name,
-                inflowPipe: undefined,
-                outflowPipes: [],
-            })),
-        };
+        instance.operator = workflow.body.operator;
     }
 
     return instance;
 };
 
-// const loadRuntime_workflow = (
-//     workflow: PipescriptWorkflow,
-//     container: PipescriptWorkflow,
-//     context: PipescriptRuntimeContext,
-// ) => {
-//     workflow.tree = {
-//         container,
-//         usages: context.allNodes.filter(n => n.workflowUri === workflow.workflowUri),
-//     };
-
-//     // workflow.outputs.forEach(x => {
-//     //     // x.tree = {
-//     //     //     workflow,
-//     //     // };
-
-//     //     if (x.pipe) {
-//     //         loadRuntime_pipe(
-//     //             x.pipe,
-//     //             {
-//     //                 kind: `workflow-output`,
-//     //                 name: x.name,
-//     //                 workflowOutput: x,
-//     //             },
-//     //             workflow,
-//     //             context,
-//     //         );
-//     //     }
-//     // });
-
-//     if (workflow.body.kind === `nodes`) {
-//         workflow.body.nodes.forEach(n => {
-//             loadRuntime_node(n, workflow, context);
-//         });
-//     }
-
-//     // workflow.workflows?.forEach(w => {
-//     //     loadRuntime_workflow(w, workflow, context);
-//     // });
-
-//     // workflow.inputs.forEach(x => {
-//     //     // x.runtime = {
-//     //     //     workflow,
-//     //     //     outflowPipes: context.allPipes.filter(
-//     //     //         p =>
-//     //     //             p.runtime?.source.kind === `workflow-input`
-//     //     //             && p.runtime.source.workflowInput === x,
-//     //     //     ),
-//     //     // };
-//     // });
-// };
-
-// const loadPipeContext: LoadPipeContext = {};
-
-// instance.inputs = workflow.inputs.map(workflowInput => {
-//     const nodeInput = node.inputPipes.find(x => workflowInput.name === x.name);
-//     // if (!nodeInput) {
-//     //     throw new Error(`missing nodeInput: ${workflow.workflowUri} ${workflowInput.name}`);
-//     // }
-
-//     // if (!container) {
-//     //     throw new Error(`missing container for nodeInputs: ${workflow.workflowUri} ${x.name}`);
-//     // }
-
-//     const inputDestination: PipescriptPipeValueInstance[`destination`] =
-//         workflow.body.kind === `operator`
-//             ? {
-//                   kind: `operator-input`,
-//                   input: loadPipeContext.getOrCreateWorkflowOperatorInputInstance(workflow),
-//               }
-//             : {
-//                   kind: ``,
-//               };
-
-//     return {
-//         kind: `workflow-input`,
-//         workflowInput,
-//         name: workflowInput.name,
-//         nodeInstance: instance,
-//         inflowPipe: !nodeInput
-//             ? undefined
-//             : loadRuntime_pipe(nodeInput, inputDestination, workflow, loadPipeContext),
-//         outflowPipes: [],
-//     } satisfies PipescriptNodePipeConnectionInputInstance;
-// });
-
-// if (workflow.body.kind === `operator`) {
-//     if (!container) {
-//         throw new Error(`missing container for operator: ${workflow.workflowUri}`);
-//     }
-
-//     instance.operator = {};
-// }
-
-// input: {},
-// output:
-//     node.implementation.runtime?.workflow.outputs.map(output => ({
-//         output,
-//         outflowPipes: context.allPipes.filter(
-//             p =>
-//                 p.runtime?.source.kind === `node-output`
-//                 && p.runtime.source.nodeWorkflowOutput === output,
-//         ),
-//     })) ?? [],
-
-// node.inputPipes.forEach(p =>
-//     loadRuntime_pipe(
-//         p,
-//         {
-//             kind: `node-input`,
-//             name: p.name,
-//             node: node,
-//             nodeWorkflowInput:
-//                 workflow.inputs.find(x => x.name === p.name)
-//                 || (() => {
-//                     throw new Error(`Missing workflow input ${p.name}`);
-//                 })(),
-//         },
-//         container,
-//         context,
-//     ),
-// );
-// };
-
-type LoadPipeContext = {
-    getOrCreateWorkflowInputConnection: (
-        workflow: PipescriptWorkflow,
-        name: string,
-    ) => {
-        input: PipescriptNodePipeConnectionInputInstance;
-    };
-    getOrCreateNodeOutputConnection: (
-        workflow: PipescriptWorkflow,
-        sourceNodeId: string,
-        sourceNodeOutputName: string,
-    ) => {
-        output: PipescriptNodePipeConnectionOutputInstance;
-    };
-    getOrCreateWorkflowOperatorInputInstance: (workflow: PipescriptWorkflow) => {
-        input: PipescriptNodePipeConnectionInputInstance;
-    };
-    getOrCreateWorkflowOperatorOutputInstance: (workflow: PipescriptWorkflow) => {
-        output: PipescriptNodePipeConnectionOutputInstance;
-    };
-};
-const loadRuntime_pipe = (
-    pipeSource: PipescriptPipeValue,
-    inputDestination: PipescriptPipeValueInstance[`destination`],
-    workflow: PipescriptWorkflow,
-    context: LoadPipeContext,
-): PipescriptPipeValueInstance => {
-    const getSource = (): PipescriptPipeValueInstance[`source`] => {
-        if (pipeSource.kind === `data`) {
-            return {
-                kind: `data`,
-                json: pipeSource.json,
-            };
+const loadNodeConnections_inflows = (nodeInstance: PipescriptNodeInstance) => {
+    // connect inflows
+    nodeInstance.inputs.forEach(input => {
+        const nodeInput = nodeInstance.node.inputPipes.find(x => x.name === input.name);
+        if (!nodeInput) {
+            return;
         }
-        if (pipeSource.kind === `workflow-operator`) {
-            if (workflow.body.kind !== `operator`) {
-                throw new Error(`loadRuntime_pipe: getSource: workflow.body is not operator`);
+
+        const getInflowSource = (): undefined | PipescriptPipeValueInstance[`source`] => {
+            const pipeSource = nodeInput;
+            if (pipeSource.kind === `data`) {
+                return {
+                    kind: `data`,
+                    json: pipeSource.json,
+                } satisfies PipescriptPipeValueInstance[`source`];
             }
-            return {
-                kind: `operator-output`,
-                ...context.getOrCreateWorkflowOperatorOutputInstance(workflow),
-            };
+            if (pipeSource.kind === `workflow-operator`) {
+                return {
+                    kind: `operator-output`,
+                    nodeInstance: nodeInstance as PipescriptNodeInstance_Operator,
+                } satisfies PipescriptPipeValueInstance[`source`];
+            }
+            if (pipeSource.kind === `workflow-input`) {
+                const nodeWorkflowInput = nodeInstance.inputs.find(x => x.name === pipeSource.name);
+                if (!nodeWorkflowInput) {
+                    console.warn(
+                        `loadNodeConnections: getInflowSource: Missing nodeWorkflowInput ${pipeSource.name}`,
+                    );
+                    return undefined;
+                }
+                return {
+                    kind: `input`,
+                    input: nodeWorkflowInput,
+                } satisfies PipescriptPipeValueInstance[`source`];
+            }
+            if (pipeSource.kind === `node`) {
+                const peerNodeOutput = nodeInstance.children
+                    .find(n2 => n2.node.nodeId === pipeSource.sourceNodeId)
+                    ?.outputs.find(x => x.name === pipeSource.name);
+                if (!peerNodeOutput) {
+                    console.warn(
+                        `loadNodeConnections: getInflowSource: Missing peerNodeOutput ${pipeSource.name}`,
+                    );
+                    return undefined;
+                }
+                return {
+                    kind: `output`,
+                    output: peerNodeOutput,
+                } satisfies PipescriptPipeValueInstance[`source`];
+            }
+            console.warn(
+                `loadNodeConnections: unknown pipeSource ${(pipeSource as { kind: string }).kind}`,
+            );
+            return undefined;
+        };
+
+        const source = getInflowSource();
+        if (!source) {
+            return;
         }
-        if (pipeSource.kind === `workflow-input`) {
-            return {
+
+        input.inflowPipe = {
+            pipe: nodeInput,
+            source,
+            destination: {
                 kind: `input`,
-                ...context.getOrCreateWorkflowInputConnection(
-                    workflow,
-                    pipeSource.workflowInputName,
-                ),
-            };
+                input: input,
+            },
+        };
+    });
+
+    nodeInstance.outputs.forEach(output => {
+        const workflowOutput = nodeInstance.workflow.outputs.find(x => x.name === output.name);
+        const workflowOutputPipe = workflowOutput?.pipe;
+        if (!workflowOutputPipe) {
+            return;
         }
-        if (pipeSource.kind === `node`) {
-            return {
+
+        const getInflowSource = (): undefined | PipescriptPipeValueInstance[`source`] => {
+            const pipeSource = workflowOutputPipe;
+            const { name: pipeSourceName } = workflowOutput;
+            if (pipeSource.kind === `data`) {
+                return {
+                    kind: `data`,
+                    json: pipeSource.json,
+                } satisfies PipescriptPipeValueInstance[`source`];
+            }
+            if (pipeSource.kind === `workflow-operator`) {
+                return {
+                    kind: `operator-output`,
+                    nodeInstance: nodeInstance as PipescriptNodeInstance_Operator,
+                } satisfies PipescriptPipeValueInstance[`source`];
+            }
+            if (pipeSource.kind === `workflow-input`) {
+                const nodeWorkflowInput = nodeInstance.inputs.find(x => x.name === pipeSourceName);
+                if (!nodeWorkflowInput) {
+                    console.warn(
+                        `loadNodeConnections: getInflowSource: Missing nodeWorkflowInput ${pipeSourceName}`,
+                    );
+                    return undefined;
+                }
+                return {
+                    kind: `input`,
+                    input: nodeWorkflowInput,
+                } satisfies PipescriptPipeValueInstance[`source`];
+            }
+            if (pipeSource.kind === `node`) {
+                const peerNodeOutput = nodeInstance.children
+                    .find(n2 => n2.node.nodeId === pipeSource.sourceNodeId)
+                    ?.outputs.find(x => x.name === pipeSourceName);
+                if (!peerNodeOutput) {
+                    console.warn(
+                        `loadNodeConnections: getInflowSource: Missing peerNodeOutput ${pipeSourceName}`,
+                    );
+                    return undefined;
+                }
+                return {
+                    kind: `output`,
+                    output: peerNodeOutput,
+                } satisfies PipescriptPipeValueInstance[`source`];
+            }
+            console.warn(
+                `loadNodeConnections: unknown pipeSource ${(pipeSource as { kind: string }).kind}`,
+            );
+            return undefined;
+        };
+
+        const source = getInflowSource();
+        if (!source) {
+            return;
+        }
+
+        output.inflowPipe = {
+            pipe: workflowOutputPipe,
+            source,
+            destination: {
                 kind: `output`,
-                ...context.getOrCreateNodeOutputConnection(
-                    workflow,
-                    pipeSource.sourceNodeId,
-                    pipeSource.sourceNodeOutputName,
-                ),
-            };
-        }
-        throw new Error(
-            `Unknown PipescriptPipeValue.kind ${(pipeSource as unknown as { kind: string }).kind}`,
+                output: output,
+            },
+        };
+    });
+};
+
+const loadNodeConnections_outflows = (
+    nodeInstance: PipescriptNodeInstance,
+    allInflowPipes: PipescriptPipeValueInstance[],
+) => {
+    nodeInstance.inputs.forEach(input => {
+        input.outflowPipes = allInflowPipes.filter(
+            x => x.source.kind === `input` && x.source.input === input,
         );
-    };
-
-    const getDestination = (): PipescriptPipeValueInstance[`destination`] => {
-        return inputDestination;
-        // if (pipeSource.kind === `workflow-operator`) {
-        //     if (workflow.body.kind !== `operator`) {
-        //         throw new Error(`loadRuntime_pipe: getDestination: workflow.body is not operator`);
-        //     }
-        //     return {
-        //         kind: `operator-input`,
-        //         ...context.getOrCreateWorkflowOperatorInputInstance(workflow),
-        //     };
-        // }
-        // if (pipeSource.kind === `workflow-input`) {
-        //     return {
-        //         kind: `input`,
-        //         ...context.getOrCreateWorkflowInputConnection(
-        //             workflow,
-        //             pipeSource.workflowInputName,
-        //         ),
-        //     };
-        // }
-        // if (pipeSource.kind === `node`) {
-        //     return {
-        //         kind: `output`,
-        //         ...context.getOrCreateNodeOutputConnection(
-        //             workflow,
-        //             pipeSource.sourceNodeId,
-        //             pipeSource.sourceNodeOutputName,
-        //         ),
-        //     };
-        // }
-        // throw new Error(
-        //     `Unknown PipescriptPipeValue.kind ${(pipeSource as unknown as { kind: string }).kind}`,
-        // );
-    };
-
-    return {
-        pipe: pipeSource,
-        source: getSource(),
-        destination: getDestination(),
-    };
+    });
+    nodeInstance.outputs.forEach(output => {
+        output.outflowPipes = allInflowPipes.filter(
+            x => x.source.kind === `output` && x.source.output === output,
+        );
+    });
 };
