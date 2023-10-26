@@ -39,14 +39,14 @@ export const run = async () => {
                     code: content,
                 },
             ]);
-            const workflow = projectWorkflow.workflows?.[0]!;
+            // const workflow = projectWorkflow.workflows?.[0]!;
 
-            Bun.write(`${filePath}.workflow.json`, JSON.stringify(workflow, null, 2));
+            Bun.write(`${filePath}.workflow.json`, JSON.stringify(projectWorkflow, null, 2));
 
-            const generatedCode = convertWorkflowToTypescriptFile(workflow);
+            const generatedCode = convertWorkflowToTypescriptFile(projectWorkflow);
             Bun.write(`${filePath}.from-workflow.gen.ts.ignore`, generatedCode.content);
         } catch (err) {
-            console.error(err);
+            console.error(`convert code error`, { err });
         }
     }
 };

@@ -42,7 +42,7 @@ const functionBuiltins = [
 ];
 
 export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) => {
-    loadRuntime(workflow);
+    const { rootNodeInstance } = loadRuntime(workflow);
 
     // just in time (reverse dependency order)
 

@@ -1,34 +1,23 @@
 {
-  "workflowUri": "file.ts",
-  "name": "file.ts",
+  "name": "",
+  "workflowUri": "",
   "inputs": [],
-  "outputs": [
-    {
-      "name": "answer",
-      "type": {
-        "kind": "simple",
-        "type": "int"
-      },
-      "pipe": {
-        "kind": "node",
-        "sourceNodeId": "file.ts:1",
-        "sourceNodeOutputName": "answer"
+  "outputs": [],
+  "body": {
+    "kind": "nodes",
+    "nodes": [
+      {
+        "workflowUri": "file.ts",
+        "nodeId": "main",
+        "inputPipes": []
       }
-    }
-  ],
+    ]
+  },
   "workflows": [
     {
-      "workflowUri": "file.ts/answer-declaration",
-      "name": "file.ts/answer-declaration",
-      "inputs": [
-        {
-          "name": "answer",
-          "type": {
-            "kind": "simple",
-            "type": "int"
-          }
-        }
-      ],
+      "workflowUri": "file.ts",
+      "name": "file.ts",
+      "inputs": [],
       "outputs": [
         {
           "name": "answer",
@@ -37,30 +26,59 @@
             "type": "int"
           },
           "pipe": {
-            "kind": "workflow-operator"
+            "kind": "node",
+            "sourceNodeId": "file.ts:1",
+            "sourceNodeOutputName": "answer"
+          }
+        }
+      ],
+      "workflows": [
+        {
+          "workflowUri": "file.ts/answer-declaration",
+          "name": "file.ts/answer-declaration",
+          "inputs": [
+            {
+              "name": "answer",
+              "type": {
+                "kind": "simple",
+                "type": "int"
+              }
+            }
+          ],
+          "outputs": [
+            {
+              "name": "answer",
+              "type": {
+                "kind": "simple",
+                "type": "int"
+              },
+              "pipe": {
+                "kind": "workflow-operator"
+              }
+            }
+          ],
+          "body": {
+            "kind": "operator",
+            "operator": "declaration"
           }
         }
       ],
       "body": {
-        "kind": "operator",
-        "operator": "declaration"
-      }
-    }
-  ],
-  "body": {
-    "kind": "nodes",
-    "nodes": [
-      {
-        "nodeId": "file.ts:1",
-        "workflowUri": "file.ts/answer-declaration",
-        "inputPipes": [
+        "kind": "nodes",
+        "nodes": [
           {
-            "name": "answer",
-            "kind": "data",
-            "json": "42"
+            "nodeId": "file.ts:1",
+            "workflowUri": "file.ts/answer-declaration",
+            "inputPipes": [
+              {
+                "name": "answer",
+                "kind": "data",
+                "json": "42"
+              }
+            ]
           }
         ]
       }
-    ]
-  }
+    }
+  ]
 }

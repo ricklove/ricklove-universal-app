@@ -23,7 +23,7 @@ export const createWorkflowBuilder = (
         outputs,
         workflows,
         body: { kind: `nodes`, nodes },
-    } satisfies Omit<Required<PipescriptWorkflow>, `runtime`>;
+    } satisfies Omit<Required<PipescriptWorkflow>, `tree`>;
 
     const findNodeSource = (varName: string, varType: PipescriptType) => {
         const node = nodes.findLast(x => {
