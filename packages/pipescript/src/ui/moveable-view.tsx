@@ -24,6 +24,7 @@ export enum MouseButton {
 
 export const MoveableView = ({
     children,
+    HeaderComponent,
     position: initPosition,
     onMove,
     mouseButton = MouseButton.All,
@@ -33,6 +34,7 @@ export const MoveableView = ({
     outerClassName,
 }: {
     children: JSX.Element;
+    HeaderComponent?: () => JSX.Element;
     position: { x: number; y: number; scale: number };
     onMove: (position: { x: number; y: number; scale: number }) => void;
     mouseButton?: MouseButton;
@@ -62,7 +64,7 @@ export const MoveableView = ({
 
         const xPointer = e.clientX ?? 0;
         const yPointer = e.clientY ?? 0;
-        // console.log(`startDrag`, { xPointer, yPointer, e, position, contextScale });
+        console.log(`startDrag`, { xPointer, yPointer, e, position, contextScale });
 
         hostRef.current?.setPointerCapture(e.pointerId ?? 0);
 
@@ -166,37 +168,56 @@ export const MoveableView = ({
         <MoveableContext.Consumer>
             {({ position: contextScale }) => (
                 <>
-                    {wholeCanvas && (
-                        <Pressable
-                            className='fixed top-0 bottom-0 left-0 right-0'
-                            ref={wholeHostRef}
-                            onPointerDown={e => wholeCanvas && startDrag(e, contextScale.scale)}
-                            onPointerUp={e => endDrag(e, contextScale.scale)}
-                            onPointerMove={e => moveDrag(e, contextScale.scale)}
-                        />
-                    )}
-                    <Pressable
-                        className={outerClassName}
-                        ref={hostRef}
-                        onPointerDown={e => wholeCanvas && startDrag(e, contextScale.scale)}
-                        onPointerUp={e => endDrag(e, contextScale.scale)}
-                        onPointerMove={e => moveDrag(e, contextScale.scale)}
+                    <View
+                        className='flex-col flex-1'
                     >
-                        <Pressable
-                            className={innerClassName}
-                            style={{
-                                transform: `translate(${position.x}px, ${position.y}px) scale(${position.scale})`,
-                            }}
-                            onPointerDown={e => startDrag(e, contextScale.scale)}
+                        {wholeCanvas && (
+                            <View
+                                className='flex-col'
+                            >
+                                {HeaderComponent && (
+                                    <View
+                                        className='bg-white'>
+                                        <HeaderComponent />
+                                    </View>
+                                )}
+                                {/* <Pressable
+                                className='flex-1 bg-fuchsia-600 opacity-50'
+                                ref={wholeHostRef}
+                                onPointerDown={e => wholeCanvas && startDrag(e, contextScale.scale)}
+                                onPointerUp={e => endDrag(e, contextScale.scale)}
+                                onPointerMove={e => moveDrag(e, contextScale.scale)}
+                            /> */}
+                            </View>
+                        )}
+                        <View
+                            className={`flex-1 ${wholeCanvas ? `overflow-hidden` : ``}`}
                         >
-                            <MoveableContext.Provider value={{ position, wholeCanvas }}>
-                                {children}
-                            </MoveableContext.Provider>
-                        </Pressable>
-                    </Pressable>
+                            <Pressable
+                                className={outerClassName}
+                                ref={hostRef}
+                                onPointerDown={e => wholeCanvas && startDrag(e, contextScale.scale)}
+                                onPointerUp={e => endDrag(e, contextScale.scale)}
+                                onPointerMove={e => moveDrag(e, contextScale.scale)}
+                            >
+                                <Pressable
+                                    className={`${innerClassName}`}
+                                    style={{
+                                        transform: `translate(${position.x}px, ${position.y}px) scale(${position.scale})`,
+                                    }}
+                                    onPointerDown={e => startDrag(e, contextScale.scale)}
+                                >
+                                    <MoveableContext.Provider value={{ position, wholeCanvas }}>
+                                        {children}
+                                    </MoveableContext.Provider>
+                                </Pressable>
+                            </Pressable>
+                        </View>
+                    </View>
                 </>
-            )}
-        </MoveableContext.Consumer>
+            )
+            }
+        </MoveableContext.Consumer >
     );
 };
 
