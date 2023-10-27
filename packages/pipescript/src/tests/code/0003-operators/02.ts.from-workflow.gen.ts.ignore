@@ -1,6 +1,10 @@
-function file_ts(){
-        
-        file_ts()
-    }
-
-file_ts()
+function file_ts() {
+    
+    const a = undefined /* disconnected */
+,    
+,    const b = undefined /* disconnected */
+,    
+,    const value = undefined /* disconnected */ + undefined /* disconnected */
+,    
+,    const c = undefined /* disconnected */
+}

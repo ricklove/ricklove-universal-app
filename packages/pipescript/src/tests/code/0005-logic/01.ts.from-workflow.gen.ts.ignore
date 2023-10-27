@@ -1,9 +1,13 @@
-function file_ts(){
-        function file_ts_if_body(condition: bool, b: number){
-        
-        file_ts_if_body(condition, b)
-    }
-        file_ts()
-    }
-
-file_ts()
+function file_ts() {
+    function file_ts_if_body(condition: bool, b: number) {
+,        
+,        const b = undefined /* disconnected */
+,    }
+    const a = undefined /* disconnected */
+,    
+,    const b = undefined
+,    
+,    const value = /* missing operator >*/
+,    
+,    const b = file_ts_if_body(undefined /* disconnected */, undefined /* disconnected */)
+}

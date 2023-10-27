@@ -12,6 +12,10 @@ import {
     PipescriptWorkflowOutput,
 } from '../types';
 
+const indent = (text: string, depth: number = 1) => {
+    return text.split(`\n`).map(x => `${[...new Array(depth)].map(x => `    `)}${x}\n`);
+};
+
 const functionBuiltins = [
     {
         operator: `declaration`,
@@ -46,35 +50,135 @@ const functionBuiltins = [
     template: (argNames: string[]) => string;
 }[];
 
+/** Convert workflow to typescript file with exports
+ *
+ * - nested workflows are functions
+ * - outputs are exports
+ * - rootNodes are flat code
+ *
+ */
 export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) => {
     const { rootNodeInstances, context } = loadRuntime(workflow);
 
-    const { content } = convertNodesToFile(rootNodeInstances, workflow, {
+    const builder: Builder = {
         ...context,
-        createdWorkflows: [],
-    });
+        declaredWorkflows: [],
+    };
+
+    const nestedFunctionDeclarations =
+        workflow.workflows
+            ?.map(w => convertWorkflowToFunctionDeclaration(w, builder))
+            .filter(x => x)
+            .map(x => x!) ?? [];
+
+    const content = `${nestedFunctionDeclarations.map(x => x.content).join(`\n\n`)}`;
+
+    // const { content } = convertNodesToFile(rootNodeInstances, workflow, builder);
 
     return {
         content,
     };
 };
 
-type Context = PipescriptRuntimeContext & {
-    createdWorkflows: {
+type Builder = PipescriptRuntimeContext & {
+    declaredWorkflows: {
         workflow: PipescriptWorkflow;
         getCallExpression: (args: string[]) => string;
     }[];
 };
 
-const convertNodesToFile = (
-    nodeInstances: PipescriptNodeInstance[],
+const convertWorkflowToFunctionDeclaration = (
     workflow: PipescriptWorkflow,
-    context: Context,
-): { content: string } => {
-    const functions = convertNestedWorkflowsToFunction(workflow, context);
+    builder: Builder,
+): undefined | { content: string } => {
+    if (builder.declaredWorkflows.find(x => x.workflow === workflow)) {
+        return;
+    }
 
-    const statements = convertNodesToStatements(nodeInstances, context);
-    const content = `${functions.map(x => x.content).join(`\n\n`)}\n\n${statements?.content ?? ``}`;
+    const functionName = getFunctionName(workflow);
+
+    const create_getCallExpression = () => {
+        if (workflow.body.kind === `operator`) {
+            const { operator } = workflow.body;
+            const fun = functionBuiltins.find(f => f.operator === operator);
+            if (!fun) {
+                return () => `/* missing operator ${operator}*/`;
+            }
+            return fun.template;
+        }
+
+        return (args: string[]) => {
+            return `${functionName}(${args.join(`, `)})`;
+        };
+    };
+
+    const declaration: Builder[`declaredWorkflows`][number] = {
+        workflow,
+        getCallExpression: create_getCallExpression(),
+    };
+    builder.declaredWorkflows.push(declaration);
+
+    if (workflow.body.kind === `operator`) {
+        return;
+    }
+
+    const nestedFunctionDeclarations =
+        workflow.workflows
+            ?.map(w => convertWorkflowToFunctionDeclaration(w, builder))
+            .filter(x => x)
+            .map(x => x!) ?? [];
+
+    const statements = workflow.body.nodes.map(node => {
+        const nodeInstance = builder.allNodeInstances.find(x => x.node === node);
+        const workflow = nodeInstance?.workflow;
+        if (!workflow) {
+            return `/* missing workflow ${node.workflowUri} */`;
+        }
+        const fun = builder.declaredWorkflows.find(x => x.workflow === workflow);
+        if (!fun) {
+            return `/* missing workflow function ${node.workflowUri} */`;
+        }
+        const args = nodeInstance.inputs.map(x => {
+            const source = x.inflowPipe?.source;
+            if (!source) {
+                return `undefined /* disconnected */`;
+            }
+            if (source.kind === `data`) {
+                return source.json;
+            }
+            if (source.kind === `input`) {
+                // TODO: prevent name conflicts in the function scope - this should be done in the nodeInstance
+                return source.input.name;
+            }
+            if (source.kind === `output`) {
+                // TODO: prevent name conflicts in the function scope - this should be done in the nodeInstance
+                return source.output.name;
+            }
+            if (source.kind === `operator-output`) {
+                // TODO: this should not be possible
+                return `undefined /* an operator cannot an argument of the same node */`;
+            }
+
+            return `undefined /* unknown source.kind ${(source as { kind: string }).kind} */`;
+        });
+        const funCall = fun.getCallExpression(args);
+        const outputsExpression = nodeInstance.outputs.map(x => {
+            // TODO: prevent name conflicts in the function scope - this should be done in the nodeInstance
+            return x.name;
+        });
+        return `const ${outputsExpression} = ${funCall}`;
+    });
+
+    const parameters = workflow.inputs.map(x => generateDeclaration(x));
+    const parametersCode =
+        parameters.join(`, `).length > 40
+            ? `\n${indent(`${parameters.join(`,\n`)},`)}\n`
+            : parameters.join(`, `);
+
+    const content = `function ${functionName}(${parametersCode}) {
+${indent(nestedFunctionDeclarations.map(x => x.content).join(`\n\n`))}${indent(
+        statements.join(`\n\n`),
+    )}}`;
 
     return {
         content,
@@ -84,82 +188,6 @@ const convertNodesToFile = (
 const getFunctionName = (workflow: PipescriptWorkflow) => {
     const functionName = workflow.workflowUri.replace(/[^A-Za-z0-9]+/g, `_`);
     return functionName;
-};
-
-const convertNestedWorkflowsToFunction = (workflow: PipescriptWorkflow, context: Context) => {
-    context.createdWorkflows.push({
-        workflow,
-        getCallExpression: (args: string[]): string => {
-            const { body } = workflow;
-            if (body.kind === `operator`) {
-                return (
-                    functionBuiltins.find(f => body.operator === f.operator)?.template(args)
-                    ?? `/* missing operator ${body.operator} */`
-                );
-            }
-
-            const functionName = getFunctionName(workflow);
-            return `${functionName}(${args.join(`, `)})`;
-        },
-    });
-
-    const functions =
-        workflow.workflows
-            ?.map(w => convertWorkflowToFunctionDeclaration(w, context))
-            .filter(x => x)
-            .map(x => x!) ?? [];
-
-    return functions;
-};
-
-const convertWorkflowToFunctionDeclaration = (
-    workflow: PipescriptWorkflow,
-    context: Context,
-): undefined | { content: string } => {
-    if (workflow.body.kind === `operator`) {
-        return;
-    }
-
-    if (context.createdWorkflows.find(x => x.workflow === workflow)) {
-        return;
-    }
-
-    const nestedFunctions = convertNestedWorkflowsToFunction(workflow, context);
-
-    const firstNodeInstance = context.allNodeInstances.find(x => x.workflow === workflow);
-    const statements = !firstNodeInstance
-        ? undefined
-        : convertNodesToStatements([firstNodeInstance], context);
-
-    const content = `function ${getFunctionName(workflow)}(${workflow.inputs
-        .map(x => generateDeclaration(x))
-        .join(`, `)}){
-        ${nestedFunctions.map(x => x.content).join(`
-        `)}
-        ${statements?.content ?? ``}
-    }`;
-
-    return {
-        content,
-    };
-};
-
-const convertNodesToStatements = (
-    nodeInstances: PipescriptNodeInstance[],
-    context: Context,
-): undefined | { content: string } => {
-    const statements = nodeInstances.map(nodeInstance => {
-        const fun = context.createdWorkflows.find(x => x.workflow === nodeInstance.workflow);
-        if (!fun) {
-            return `/* missing function: '${nodeInstance.workflow.workflowUri}' */`;
-        }
-        return fun.getCallExpression(nodeInstance.inputs.map(input => input.name));
-    });
-    const content = `${statements.join(`;\n`)}`;
-
-    return {
-        content,
-    };
 };
 
 const generateDeclaration = (x: PipescriptVariable): string => {
@@ -198,6 +226,97 @@ const generateType = (type: PipescriptType): string => {
 
     return `unknown`;
 };
+
+// const convertNodesToFile = (
+//     nodeInstances: PipescriptNodeInstance[],
+//     workflow: PipescriptWorkflow,
+//     context: Builder,
+// ): { content: string } => {
+//     const functions = convertNestedWorkflowsToFunction(workflow, context);
+
+//     const statements = convertNodesToStatements(nodeInstances, context);
+//     const content = `${functions.map(x => x.content).join(`\n\n`)}\n\n${statements?.content ?? ``}`;
+
+//     return {
+//         content,
+//     };
+// };
+
+// const convertNestedWorkflowsToFunction = (workflow: PipescriptWorkflow, context: Builder) => {
+//     context.createdWorkflows.push({
+//         workflow,
+//         getCallExpression: (args: string[]): string => {
+//             const { body } = workflow;
+//             if (body.kind === `operator`) {
+//                 return (
+//                     functionBuiltins.find(f => body.operator === f.operator)?.template(args)
+//                     ?? `/* missing operator ${body.operator} */`
+//                 );
+//             }
+
+//             const functionName = getFunctionName(workflow);
+//             return `${functionName}(${args.join(`, `)})`;
+//         },
+//     });
+
+//     const functions =
+//         workflow.workflows
+//             ?.map(w => convertWorkflowToFunctionDeclaration(w, context))
+//             .filter(x => x)
+//             .map(x => x!) ?? [];
+
+//     return functions;
+// };
+
+// const convertWorkflowToFunctionDeclaration = (
+//     workflow: PipescriptWorkflow,
+//     context: Builder,
+// ): undefined | { content: string } => {
+//     if (workflow.body.kind === `operator`) {
+//         return;
+//     }
+
+//     if (context.createdWorkflows.find(x => x.workflow === workflow)) {
+//         return;
+//     }
+
+//     const nestedFunctions = convertNestedWorkflowsToFunction(workflow, context);
+
+//     const firstNodeInstance = context.allNodeInstances.find(x => x.workflow === workflow);
+//     const statements = !firstNodeInstance
+//         ? undefined
+//         : convertNodesToStatements([firstNodeInstance], context);
+
+//     const content = `function ${getFunctionName(workflow)}(${workflow.inputs
+//         .map(x => generateDeclaration(x))
+//         .join(`, `)}){
+//         ${nestedFunctions.map(x => x.content).join(`
+//         `)}
+//         ${statements?.content ?? ``}
+//     }`;
+
+//     return {
+//         content,
+//     };
+// };
+
+// const convertNodesToStatements = (
+//     nodeInstances: PipescriptNodeInstance[],
+//     context: Builder,
+// ): undefined | { content: string } => {
+//     const statements = nodeInstances.map(nodeInstance => {
+//         const fun = context.createdWorkflows.find(x => x.workflow === nodeInstance.workflow);
+//         if (!fun) {
+//             return `/* missing function: '${nodeInstance.workflow.workflowUri}' */`;
+//         }
+//         return fun.getCallExpression(nodeInstance.inputs.map(input => input.name));
+//     });
+//     const content = `${statements.join(`;\n`)}`;
+
+//     return {
+//         content,
+//     };
+// };
 
 // export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) => {
 //     const { rootNodeInstances } = loadRuntime(workflow);
