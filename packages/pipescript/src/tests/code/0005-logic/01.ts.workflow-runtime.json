@@ -1,634 +1,800 @@
 {
+  "_id_1_": "",
   "allWorkflows": [
     {
+      "_id_3_": "",
       "name": "",
       "workflowUri": "",
       "inputs": [],
       "outputs": [],
       "body": {
+        "_id_6_": "",
         "kind": "nodes",
         "nodes": [
           {
-            "workflowUri": "file.ts",
-            "nodeId": "main",
-            "inputPipes": [],
-            "___id": "___id_7_"
+            "___ref": "_id_8_"
           }
-        ],
-        "___id": "___id_5_"
+        ]
       },
       "workflows": [
         {
-          "workflowUri": "file.ts",
-          "name": "file.ts",
-          "inputs": [],
-          "outputs": [
-            {
-              "name": "b",
-              "type": {
-                "kind": "simple",
-                "type": "number",
-                "___id": "___id_14_"
-              },
-              "pipe": {
-                "kind": "node",
-                "sourceNodeId": "file.ts:4",
-                "sourceNodeOutputName": "b",
-                "___id": "___id_15_"
-              },
-              "___id": "___id_13_"
-            }
-          ],
-          "workflows": [
-            {
-              "workflowUri": "file.ts/a-declaration",
-              "name": "file.ts/a-declaration",
-              "inputs": [
-                {
-                  "name": "a",
-                  "type": {
-                    "kind": "simple",
-                    "type": "int",
-                    "___id": "___id_20_"
-                  },
-                  "___id": "___id_19_"
-                }
-              ],
-              "outputs": [
-                {
-                  "name": "a",
-                  "type": "[OBJ-DUPLICATED: ___id_20_]",
-                  "pipe": {
-                    "kind": "workflow-operator",
-                    "___id": "___id_23_"
-                  },
-                  "___id": "___id_22_"
-                }
-              ],
-              "body": {
-                "kind": "operator",
-                "operator": "declaration",
-                "___id": "___id_24_"
-              },
-              "___id": "___id_17_"
-            },
-            {
-              "workflowUri": "file.ts/b-declaration",
-              "name": "file.ts/b-declaration",
-              "inputs": [],
-              "outputs": [
-                {
-                  "name": "b",
-                  "type": {
-                    "kind": "simple",
-                    "type": "number",
-                    "___id": "___id_29_"
-                  },
-                  "___id": "___id_28_"
-                }
-              ],
-              "body": {
-                "kind": "operator",
-                "operator": "declaration",
-                "___id": "___id_30_"
-              },
-              "___id": "___id_25_"
-            },
-            {
-              "workflowUri": "file.ts/>",
-              "name": "file.ts/>",
-              "inputs": [
-                {
-                  "name": "left",
-                  "type": {
-                    "kind": "simple",
-                    "type": "int",
-                    "___id": "___id_34_"
-                  },
-                  "___id": "___id_33_"
-                },
-                {
-                  "name": "right",
-                  "type": {
-                    "kind": "simple",
-                    "type": "int",
-                    "___id": "___id_36_"
-                  },
-                  "___id": "___id_35_"
-                }
-              ],
-              "outputs": [
-                {
-                  "name": "value",
-                  "type": {
-                    "kind": "simple",
-                    "type": "bool",
-                    "___id": "___id_39_"
-                  },
-                  "pipe": {
-                    "kind": "workflow-operator",
-                    "___id": "___id_40_"
-                  },
-                  "___id": "___id_38_"
-                }
-              ],
-              "body": {
-                "kind": "operator",
-                "operator": ">",
-                "___id": "___id_41_"
-              },
-              "___id": "___id_31_"
-            },
-            {
-              "workflowUri": "file.ts/if-body",
-              "name": "file.ts/if-body",
-              "inputs": [
-                {
-                  "name": "condition",
-                  "type": "[OBJ-DUPLICATED: ___id_39_]",
-                  "___id": "___id_44_"
-                },
-                {
-                  "name": "b",
-                  "type": {
-                    "kind": "simple",
-                    "type": "number",
-                    "___id": "___id_46_"
-                  },
-                  "___id": "___id_45_"
-                }
-              ],
-              "outputs": [
-                {
-                  "name": "b",
-                  "type": "[OBJ-DUPLICATED: ___id_46_]",
-                  "pipe": {
-                    "kind": "node",
-                    "sourceNodeId": "file.ts/if-body:1",
-                    "sourceNodeOutputName": "b",
-                    "___id": "___id_49_"
-                  },
-                  "___id": "___id_48_"
-                }
-              ],
-              "workflows": [
-                {
-                  "workflowUri": "file.ts/if-body/b=",
-                  "name": "file.ts/if-body/b=",
-                  "inputs": [
-                    {
-                      "name": "old",
-                      "type": "[OBJ-DUPLICATED: ___id_46_]",
-                      "ignored": true,
-                      "___id": "___id_53_"
-                    },
-                    {
-                      "name": "value",
-                      "type": {
-                        "kind": "simple",
-                        "type": "int",
-                        "___id": "___id_55_"
-                      },
-                      "___id": "___id_54_"
-                    }
-                  ],
-                  "outputs": [
-                    {
-                      "name": "b",
-                      "type": {
-                        "kind": "simple",
-                        "type": "int",
-                        "___id": "___id_58_"
-                      },
-                      "pipe": {
-                        "kind": "workflow-operator",
-                        "___id": "___id_59_"
-                      },
-                      "___id": "___id_57_"
-                    }
-                  ],
-                  "body": {
-                    "kind": "operator",
-                    "operator": "=",
-                    "___id": "___id_60_"
-                  },
-                  "___id": "___id_51_"
-                }
-              ],
-              "body": {
-                "kind": "nodes",
-                "nodes": [
-                  {
-                    "nodeId": "file.ts/if-body:1",
-                    "workflowUri": "file.ts/if-body/b=",
-                    "inputPipes": [
-                      {
-                        "name": "old",
-                        "kind": "workflow-input",
-                        "workflowInputName": "b",
-                        "___id": "___id_65_"
-                      },
-                      {
-                        "name": "value",
-                        "kind": "data",
-                        "json": "43",
-                        "___id": "___id_66_"
-                      }
-                    ],
-                    "___id": "___id_63_"
-                  }
-                ],
-                "___id": "___id_61_"
-              },
-              "___id": "___id_42_"
-            }
-          ],
-          "body": {
-            "kind": "nodes",
-            "nodes": [
-              {
-                "nodeId": "file.ts:1",
-                "workflowUri": "file.ts/a-declaration",
-                "inputPipes": [
-                  {
-                    "name": "a",
-                    "kind": "data",
-                    "json": "42",
-                    "___id": "___id_71_"
-                  }
-                ],
-                "___id": "___id_69_"
-              },
-              {
-                "nodeId": "file.ts:2",
-                "workflowUri": "file.ts/b-declaration",
-                "inputPipes": [],
-                "___id": "___id_72_"
-              },
-              {
-                "nodeId": "file.ts:3",
-                "workflowUri": "file.ts/>",
-                "inputPipes": [
-                  {
-                    "name": "left",
-                    "kind": "node",
-                    "sourceNodeId": "file.ts:1",
-                    "sourceNodeOutputName": "a",
-                    "___id": "___id_76_"
-                  },
-                  {
-                    "name": "right",
-                    "kind": "data",
-                    "json": "40",
-                    "___id": "___id_77_"
-                  }
-                ],
-                "___id": "___id_74_"
-              },
-              {
-                "nodeId": "file.ts:4",
-                "workflowUri": "file.ts/if-body",
-                "inputPipes": [
-                  {
-                    "name": "condition",
-                    "kind": "node",
-                    "sourceNodeId": "file.ts:3",
-                    "sourceNodeOutputName": "value",
-                    "___id": "___id_80_"
-                  },
-                  {
-                    "name": "b",
-                    "kind": "node",
-                    "sourceNodeId": "file.ts:2",
-                    "sourceNodeOutputName": "b",
-                    "___id": "___id_81_"
-                  }
-                ],
-                "___id": "___id_78_"
-              }
-            ],
-            "___id": "___id_67_"
-          },
-          "___id": "___id_10_"
+          "___ref": "_id_11_"
         }
-      ],
-      "___id": "___id_2_"
+      ]
     },
-    "[OBJ-DUPLICATED: ___id_10_]",
-    "[OBJ-DUPLICATED: ___id_17_]",
-    "[OBJ-DUPLICATED: ___id_25_]",
-    "[OBJ-DUPLICATED: ___id_31_]",
-    "[OBJ-DUPLICATED: ___id_42_]",
-    "[OBJ-DUPLICATED: ___id_51_]"
-  ],
-  "allNodes": [
-    "[OBJ-DUPLICATED: ___id_7_]",
-    "[OBJ-DUPLICATED: ___id_69_]",
-    "[OBJ-DUPLICATED: ___id_72_]",
-    "[OBJ-DUPLICATED: ___id_74_]",
-    "[OBJ-DUPLICATED: ___id_78_]",
-    "[OBJ-DUPLICATED: ___id_63_]"
-  ],
-  "rootNodeInstances": [
     {
-      "node": "[OBJ-DUPLICATED: ___id_7_]",
-      "workflow": "[OBJ-DUPLICATED: ___id_10_]",
+      "_id_11_": "",
+      "workflowUri": "file.ts",
+      "name": "file.ts",
       "inputs": [],
       "outputs": [
         {
-          "nodeInstance": "[OBJ-DUPLICATED: ___id_84_]",
+          "_id_14_": "",
+          "name": "b",
+          "type": {
+            "_id_15_": "",
+            "kind": "simple",
+            "type": "number"
+          },
+          "pipe": {
+            "_id_16_": "",
+            "kind": "node",
+            "sourceNodeId": "file.ts:4",
+            "sourceNodeOutputName": "b"
+          }
+        }
+      ],
+      "workflows": [
+        {
+          "___ref": "_id_18_"
+        },
+        {
+          "___ref": "_id_26_"
+        },
+        {
+          "___ref": "_id_32_"
+        },
+        {
+          "___ref": "_id_43_"
+        }
+      ],
+      "body": {
+        "_id_68_": "",
+        "kind": "nodes",
+        "nodes": [
+          {
+            "___ref": "_id_70_"
+          },
+          {
+            "___ref": "_id_73_"
+          },
+          {
+            "___ref": "_id_75_"
+          },
+          {
+            "___ref": "_id_79_"
+          }
+        ]
+      }
+    },
+    {
+      "_id_18_": "",
+      "workflowUri": "file.ts/a-declaration",
+      "name": "file.ts/a-declaration",
+      "inputs": [
+        {
+          "_id_20_": "",
+          "name": "a",
+          "type": {
+            "_id_21_": "",
+            "kind": "simple",
+            "type": "int"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "_id_23_": "",
+          "name": "a",
+          "type": {
+            "___ref": "_id_21_"
+          },
+          "pipe": {
+            "_id_24_": "",
+            "kind": "workflow-operator"
+          }
+        }
+      ],
+      "body": {
+        "_id_25_": "",
+        "kind": "operator",
+        "operator": "declaration"
+      }
+    },
+    {
+      "_id_26_": "",
+      "workflowUri": "file.ts/b-declaration",
+      "name": "file.ts/b-declaration",
+      "inputs": [],
+      "outputs": [
+        {
+          "_id_29_": "",
+          "name": "b",
+          "type": {
+            "_id_30_": "",
+            "kind": "simple",
+            "type": "number"
+          }
+        }
+      ],
+      "body": {
+        "_id_31_": "",
+        "kind": "operator",
+        "operator": "declaration"
+      }
+    },
+    {
+      "_id_32_": "",
+      "workflowUri": "file.ts/>",
+      "name": "file.ts/>",
+      "inputs": [
+        {
+          "_id_34_": "",
+          "name": "left",
+          "type": {
+            "_id_35_": "",
+            "kind": "simple",
+            "type": "int"
+          }
+        },
+        {
+          "_id_36_": "",
+          "name": "right",
+          "type": {
+            "_id_37_": "",
+            "kind": "simple",
+            "type": "int"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "_id_39_": "",
+          "name": "value",
+          "type": {
+            "_id_40_": "",
+            "kind": "simple",
+            "type": "bool"
+          },
+          "pipe": {
+            "_id_41_": "",
+            "kind": "workflow-operator"
+          }
+        }
+      ],
+      "body": {
+        "_id_42_": "",
+        "kind": "operator",
+        "operator": ">"
+      }
+    },
+    {
+      "_id_43_": "",
+      "workflowUri": "file.ts/if-body",
+      "name": "file.ts/if-body",
+      "inputs": [
+        {
+          "_id_45_": "",
+          "name": "condition",
+          "type": {
+            "___ref": "_id_40_"
+          }
+        },
+        {
+          "_id_46_": "",
+          "name": "b",
+          "type": {
+            "_id_47_": "",
+            "kind": "simple",
+            "type": "number"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "_id_49_": "",
+          "name": "b",
+          "type": {
+            "___ref": "_id_47_"
+          },
+          "pipe": {
+            "_id_50_": "",
+            "kind": "node",
+            "sourceNodeId": "file.ts/if-body:1",
+            "sourceNodeOutputName": "b"
+          }
+        }
+      ],
+      "workflows": [
+        {
+          "___ref": "_id_52_"
+        }
+      ],
+      "body": {
+        "_id_62_": "",
+        "kind": "nodes",
+        "nodes": [
+          {
+            "___ref": "_id_64_"
+          }
+        ]
+      }
+    },
+    {
+      "_id_52_": "",
+      "workflowUri": "file.ts/if-body/b=",
+      "name": "file.ts/if-body/b=",
+      "inputs": [
+        {
+          "_id_54_": "",
+          "name": "old",
+          "type": {
+            "___ref": "_id_47_"
+          },
+          "ignored": true
+        },
+        {
+          "_id_55_": "",
+          "name": "value",
+          "type": {
+            "_id_56_": "",
+            "kind": "simple",
+            "type": "int"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "_id_58_": "",
+          "name": "b",
+          "type": {
+            "_id_59_": "",
+            "kind": "simple",
+            "type": "int"
+          },
+          "pipe": {
+            "_id_60_": "",
+            "kind": "workflow-operator"
+          }
+        }
+      ],
+      "body": {
+        "_id_61_": "",
+        "kind": "operator",
+        "operator": "="
+      }
+    }
+  ],
+  "allNodes": [
+    {
+      "_id_8_": "",
+      "workflowUri": "file.ts",
+      "nodeId": "main",
+      "inputPipes": []
+    },
+    {
+      "_id_70_": "",
+      "nodeId": "file.ts:1",
+      "workflowUri": "file.ts/a-declaration",
+      "inputPipes": [
+        {
+          "_id_72_": "",
+          "name": "a",
+          "kind": "data",
+          "json": "42"
+        }
+      ]
+    },
+    {
+      "_id_73_": "",
+      "nodeId": "file.ts:2",
+      "workflowUri": "file.ts/b-declaration",
+      "inputPipes": []
+    },
+    {
+      "_id_75_": "",
+      "nodeId": "file.ts:3",
+      "workflowUri": "file.ts/>",
+      "inputPipes": [
+        {
+          "_id_77_": "",
+          "name": "left",
+          "kind": "node",
+          "sourceNodeId": "file.ts:1",
+          "sourceNodeOutputName": "a"
+        },
+        {
+          "_id_78_": "",
+          "name": "right",
+          "kind": "data",
+          "json": "40"
+        }
+      ]
+    },
+    {
+      "_id_79_": "",
+      "nodeId": "file.ts:4",
+      "workflowUri": "file.ts/if-body",
+      "inputPipes": [
+        {
+          "_id_81_": "",
+          "name": "condition",
+          "kind": "node",
+          "sourceNodeId": "file.ts:3",
+          "sourceNodeOutputName": "value"
+        },
+        {
+          "_id_82_": "",
+          "name": "b",
+          "kind": "node",
+          "sourceNodeId": "file.ts:2",
+          "sourceNodeOutputName": "b"
+        }
+      ]
+    },
+    {
+      "_id_64_": "",
+      "nodeId": "file.ts/if-body:1",
+      "workflowUri": "file.ts/if-body/b=",
+      "inputPipes": [
+        {
+          "_id_66_": "",
+          "name": "old",
+          "kind": "workflow-input",
+          "workflowInputName": "b"
+        },
+        {
+          "_id_67_": "",
+          "name": "value",
+          "kind": "data",
+          "json": "43"
+        }
+      ]
+    }
+  ],
+  "rootNodeInstances": [
+    {
+      "_id_85_": "",
+      "node": {
+        "___ref": "_id_8_"
+      },
+      "workflow": {
+        "___ref": "_id_11_"
+      },
+      "inputs": [],
+      "outputs": [
+        {
+          "_id_88_": "",
+          "nodeInstance": {
+            "___ref": "_id_85_"
+          },
           "kind": "workflow-output",
-          "workflowOutput": "[OBJ-DUPLICATED: ___id_13_]",
+          "workflowOutput": {
+            "___ref": "_id_14_"
+          },
           "name": "b",
           "inflowPipe": {
-            "pipe": "[OBJ-DUPLICATED: ___id_15_]",
+            "_id_89_": "",
+            "pipe": {
+              "___ref": "_id_16_"
+            },
             "source": {
+              "_id_90_": "",
               "kind": "output",
               "output": {
+                "_id_91_": "",
                 "nodeInstance": {
-                  "node": "[OBJ-DUPLICATED: ___id_78_]",
-                  "workflow": "[OBJ-DUPLICATED: ___id_42_]",
-                  "inputs": [
-                    {
-                      "nodeInstance": "[OBJ-DUPLICATED: ___id_91_]",
-                      "kind": "workflow-input",
-                      "workflowInput": "[OBJ-DUPLICATED: ___id_44_]",
-                      "name": "condition",
-                      "outflowPipes": [],
-                      "___id": "___id_93_"
-                    },
-                    {
-                      "nodeInstance": "[OBJ-DUPLICATED: ___id_91_]",
-                      "kind": "workflow-input",
-                      "workflowInput": "[OBJ-DUPLICATED: ___id_45_]",
-                      "name": "b",
-                      "outflowPipes": [],
-                      "___id": "___id_95_"
-                    }
-                  ],
-                  "outputs": [
-                    "[OBJ-DUPLICATED: ___id_90_]"
-                  ],
-                  "parent": "[OBJ-DUPLICATED: ___id_84_]",
-                  "children": [
-                    {
-                      "node": "[OBJ-DUPLICATED: ___id_63_]",
-                      "workflow": "[OBJ-DUPLICATED: ___id_51_]",
-                      "inputs": [
-                        {
-                          "nodeInstance": "[OBJ-DUPLICATED: ___id_99_]",
-                          "kind": "workflow-input",
-                          "workflowInput": "[OBJ-DUPLICATED: ___id_53_]",
-                          "name": "old",
-                          "inflowPipe": {
-                            "pipe": "[OBJ-DUPLICATED: ___id_65_]",
-                            "source": {
-                              "kind": "input",
-                              "input": "[OBJ-DUPLICATED: ___id_101_]",
-                              "___id": "___id_103_"
-                            },
-                            "destination": {
-                              "kind": "input",
-                              "input": "[OBJ-DUPLICATED: ___id_101_]",
-                              "___id": "___id_104_"
-                            },
-                            "___id": "___id_102_"
-                          },
-                          "outflowPipes": [],
-                          "___id": "___id_101_"
-                        },
-                        {
-                          "nodeInstance": "[OBJ-DUPLICATED: ___id_99_]",
-                          "kind": "workflow-input",
-                          "workflowInput": "[OBJ-DUPLICATED: ___id_54_]",
-                          "name": "value",
-                          "inflowPipe": {
-                            "pipe": "[OBJ-DUPLICATED: ___id_66_]",
-                            "source": {
-                              "kind": "data",
-                              "json": "43",
-                              "___id": "___id_108_"
-                            },
-                            "destination": {
-                              "kind": "input",
-                              "input": "[OBJ-DUPLICATED: ___id_106_]",
-                              "___id": "___id_109_"
-                            },
-                            "___id": "___id_107_"
-                          },
-                          "outflowPipes": [],
-                          "___id": "___id_106_"
-                        }
-                      ],
-                      "outputs": [
-                        {
-                          "nodeInstance": "[OBJ-DUPLICATED: ___id_99_]",
-                          "kind": "workflow-output",
-                          "workflowOutput": "[OBJ-DUPLICATED: ___id_57_]",
-                          "name": "b",
-                          "inflowPipe": {
-                            "pipe": "[OBJ-DUPLICATED: ___id_59_]",
-                            "source": {
-                              "kind": "operator-output",
-                              "nodeInstance": "[OBJ-DUPLICATED: ___id_99_]",
-                              "___id": "___id_114_"
-                            },
-                            "destination": {
-                              "kind": "output",
-                              "output": "[OBJ-DUPLICATED: ___id_112_]",
-                              "___id": "___id_115_"
-                            },
-                            "___id": "___id_113_"
-                          },
-                          "outflowPipes": [],
-                          "___id": "___id_112_"
-                        }
-                      ],
-                      "parent": "[OBJ-DUPLICATED: ___id_91_]",
-                      "children": [],
-                      "operator": "=",
-                      "___id": "___id_99_"
-                    }
-                  ],
-                  "___id": "___id_91_"
+                  "___ref": "_id_92_"
                 },
                 "kind": "workflow-output",
-                "workflowOutput": "[OBJ-DUPLICATED: ___id_48_]",
+                "workflowOutput": {
+                  "___ref": "_id_49_"
+                },
                 "name": "b",
                 "inflowPipe": {
-                  "pipe": "[OBJ-DUPLICATED: ___id_49_]",
+                  "_id_119_": "",
+                  "pipe": {
+                    "___ref": "_id_50_"
+                  },
                   "source": {
+                    "_id_120_": "",
                     "kind": "output",
-                    "output": "[OBJ-DUPLICATED: ___id_112_]",
-                    "___id": "___id_119_"
+                    "output": {
+                      "_id_113_": "",
+                      "nodeInstance": {
+                        "___ref": "_id_100_"
+                      },
+                      "kind": "workflow-output",
+                      "workflowOutput": {
+                        "___ref": "_id_58_"
+                      },
+                      "name": "b",
+                      "inflowPipe": {
+                        "_id_114_": "",
+                        "pipe": {
+                          "___ref": "_id_60_"
+                        },
+                        "source": {
+                          "_id_115_": "",
+                          "kind": "operator-output",
+                          "nodeInstance": {
+                            "___ref": "_id_100_"
+                          }
+                        },
+                        "destination": {
+                          "_id_116_": "",
+                          "kind": "output",
+                          "output": {
+                            "___ref": "_id_113_"
+                          }
+                        }
+                      },
+                      "outflowPipes": []
+                    }
                   },
                   "destination": {
+                    "_id_121_": "",
                     "kind": "output",
-                    "output": "[OBJ-DUPLICATED: ___id_90_]",
-                    "___id": "___id_120_"
-                  },
-                  "___id": "___id_118_"
+                    "output": {
+                      "___ref": "_id_91_"
+                    }
+                  }
                 },
-                "outflowPipes": [],
-                "___id": "___id_90_"
-              },
-              "___id": "___id_89_"
+                "outflowPipes": []
+              }
             },
             "destination": {
+              "_id_123_": "",
               "kind": "output",
-              "output": "[OBJ-DUPLICATED: ___id_87_]",
-              "___id": "___id_122_"
-            },
-            "___id": "___id_88_"
+              "output": {
+                "___ref": "_id_88_"
+              }
+            }
           },
-          "outflowPipes": [],
-          "___id": "___id_87_"
+          "outflowPipes": []
         }
       ],
       "children": [
         {
-          "node": "[OBJ-DUPLICATED: ___id_69_]",
-          "workflow": "[OBJ-DUPLICATED: ___id_17_]",
+          "_id_126_": "",
+          "node": {
+            "___ref": "_id_70_"
+          },
+          "workflow": {
+            "___ref": "_id_18_"
+          },
           "inputs": [
             {
-              "nodeInstance": "[OBJ-DUPLICATED: ___id_125_]",
+              "_id_128_": "",
+              "nodeInstance": {
+                "___ref": "_id_126_"
+              },
               "kind": "workflow-input",
-              "workflowInput": "[OBJ-DUPLICATED: ___id_19_]",
+              "workflowInput": {
+                "___ref": "_id_20_"
+              },
               "name": "a",
               "inflowPipe": {
-                "pipe": "[OBJ-DUPLICATED: ___id_71_]",
+                "_id_129_": "",
+                "pipe": {
+                  "___ref": "_id_72_"
+                },
                 "source": {
+                  "_id_130_": "",
                   "kind": "data",
-                  "json": "42",
-                  "___id": "___id_129_"
+                  "json": "42"
                 },
                 "destination": {
+                  "_id_131_": "",
                   "kind": "input",
-                  "input": "[OBJ-DUPLICATED: ___id_127_]",
-                  "___id": "___id_130_"
-                },
-                "___id": "___id_128_"
+                  "input": {
+                    "___ref": "_id_128_"
+                  }
+                }
               },
-              "outflowPipes": [],
-              "___id": "___id_127_"
+              "outflowPipes": []
             }
           ],
           "outputs": [
             {
-              "nodeInstance": "[OBJ-DUPLICATED: ___id_125_]",
+              "_id_134_": "",
+              "nodeInstance": {
+                "___ref": "_id_126_"
+              },
               "kind": "workflow-output",
-              "workflowOutput": "[OBJ-DUPLICATED: ___id_22_]",
+              "workflowOutput": {
+                "___ref": "_id_23_"
+              },
               "name": "a",
               "inflowPipe": {
-                "pipe": "[OBJ-DUPLICATED: ___id_23_]",
+                "_id_135_": "",
+                "pipe": {
+                  "___ref": "_id_24_"
+                },
                 "source": {
+                  "_id_136_": "",
                   "kind": "operator-output",
-                  "nodeInstance": "[OBJ-DUPLICATED: ___id_125_]",
-                  "___id": "___id_135_"
+                  "nodeInstance": {
+                    "___ref": "_id_126_"
+                  }
                 },
                 "destination": {
+                  "_id_137_": "",
                   "kind": "output",
-                  "output": "[OBJ-DUPLICATED: ___id_133_]",
-                  "___id": "___id_136_"
-                },
-                "___id": "___id_134_"
+                  "output": {
+                    "___ref": "_id_134_"
+                  }
+                }
               },
-              "outflowPipes": [],
-              "___id": "___id_133_"
+              "outflowPipes": []
             }
           ],
-          "parent": "[OBJ-DUPLICATED: ___id_84_]",
+          "parent": {
+            "___ref": "_id_85_"
+          },
           "children": [],
-          "operator": "declaration",
-          "___id": "___id_125_"
+          "operator": "declaration"
         },
         {
-          "node": "[OBJ-DUPLICATED: ___id_72_]",
-          "workflow": "[OBJ-DUPLICATED: ___id_25_]",
+          "_id_140_": "",
+          "node": {
+            "___ref": "_id_73_"
+          },
+          "workflow": {
+            "___ref": "_id_26_"
+          },
           "inputs": [],
           "outputs": [
             {
-              "nodeInstance": "[OBJ-DUPLICATED: ___id_139_]",
+              "_id_143_": "",
+              "nodeInstance": {
+                "___ref": "_id_140_"
+              },
               "kind": "workflow-output",
-              "workflowOutput": "[OBJ-DUPLICATED: ___id_28_]",
+              "workflowOutput": {
+                "___ref": "_id_29_"
+              },
               "name": "b",
-              "outflowPipes": [],
-              "___id": "___id_142_"
+              "outflowPipes": []
             }
           ],
-          "parent": "[OBJ-DUPLICATED: ___id_84_]",
+          "parent": {
+            "___ref": "_id_85_"
+          },
           "children": [],
-          "operator": "declaration",
-          "___id": "___id_139_"
+          "operator": "declaration"
         },
         {
-          "node": "[OBJ-DUPLICATED: ___id_74_]",
-          "workflow": "[OBJ-DUPLICATED: ___id_31_]",
+          "_id_146_": "",
+          "node": {
+            "___ref": "_id_75_"
+          },
+          "workflow": {
+            "___ref": "_id_32_"
+          },
           "inputs": [
             {
-              "nodeInstance": "[OBJ-DUPLICATED: ___id_145_]",
+              "_id_148_": "",
+              "nodeInstance": {
+                "___ref": "_id_146_"
+              },
               "kind": "workflow-input",
-              "workflowInput": "[OBJ-DUPLICATED: ___id_33_]",
+              "workflowInput": {
+                "___ref": "_id_34_"
+              },
               "name": "left",
-              "outflowPipes": [],
-              "___id": "___id_147_"
+              "outflowPipes": []
             },
             {
-              "nodeInstance": "[OBJ-DUPLICATED: ___id_145_]",
+              "_id_150_": "",
+              "nodeInstance": {
+                "___ref": "_id_146_"
+              },
               "kind": "workflow-input",
-              "workflowInput": "[OBJ-DUPLICATED: ___id_35_]",
+              "workflowInput": {
+                "___ref": "_id_36_"
+              },
               "name": "right",
               "inflowPipe": {
-                "pipe": "[OBJ-DUPLICATED: ___id_77_]",
+                "_id_151_": "",
+                "pipe": {
+                  "___ref": "_id_78_"
+                },
                 "source": {
+                  "_id_152_": "",
                   "kind": "data",
-                  "json": "40",
-                  "___id": "___id_151_"
+                  "json": "40"
                 },
                 "destination": {
+                  "_id_153_": "",
                   "kind": "input",
-                  "input": "[OBJ-DUPLICATED: ___id_149_]",
-                  "___id": "___id_152_"
-                },
-                "___id": "___id_150_"
+                  "input": {
+                    "___ref": "_id_150_"
+                  }
+                }
               },
-              "outflowPipes": [],
-              "___id": "___id_149_"
+              "outflowPipes": []
             }
           ],
           "outputs": [
             {
-              "nodeInstance": "[OBJ-DUPLICATED: ___id_145_]",
+              "_id_156_": "",
+              "nodeInstance": {
+                "___ref": "_id_146_"
+              },
               "kind": "workflow-output",
-              "workflowOutput": "[OBJ-DUPLICATED: ___id_38_]",
+              "workflowOutput": {
+                "___ref": "_id_39_"
+              },
               "name": "value",
               "inflowPipe": {
-                "pipe": "[OBJ-DUPLICATED: ___id_40_]",
+                "_id_157_": "",
+                "pipe": {
+                  "___ref": "_id_41_"
+                },
                 "source": {
+                  "_id_158_": "",
                   "kind": "operator-output",
-                  "nodeInstance": "[OBJ-DUPLICATED: ___id_145_]",
-                  "___id": "___id_157_"
+                  "nodeInstance": {
+                    "___ref": "_id_146_"
+                  }
                 },
                 "destination": {
+                  "_id_159_": "",
                   "kind": "output",
-                  "output": "[OBJ-DUPLICATED: ___id_155_]",
-                  "___id": "___id_158_"
-                },
-                "___id": "___id_156_"
+                  "output": {
+                    "___ref": "_id_156_"
+                  }
+                }
               },
-              "outflowPipes": [],
-              "___id": "___id_155_"
+              "outflowPipes": []
             }
           ],
-          "parent": "[OBJ-DUPLICATED: ___id_84_]",
+          "parent": {
+            "___ref": "_id_85_"
+          },
           "children": [],
-          "operator": ">",
-          "___id": "___id_145_"
+          "operator": ">"
         },
-        "[OBJ-DUPLICATED: ___id_91_]"
-      ],
-      "___id": "___id_84_"
+        {
+          "_id_92_": "",
+          "node": {
+            "___ref": "_id_79_"
+          },
+          "workflow": {
+            "___ref": "_id_43_"
+          },
+          "inputs": [
+            {
+              "_id_94_": "",
+              "nodeInstance": {
+                "___ref": "_id_92_"
+              },
+              "kind": "workflow-input",
+              "workflowInput": {
+                "___ref": "_id_45_"
+              },
+              "name": "condition",
+              "outflowPipes": []
+            },
+            {
+              "_id_96_": "",
+              "nodeInstance": {
+                "___ref": "_id_92_"
+              },
+              "kind": "workflow-input",
+              "workflowInput": {
+                "___ref": "_id_46_"
+              },
+              "name": "b",
+              "outflowPipes": []
+            }
+          ],
+          "outputs": [
+            {
+              "___ref": "_id_91_"
+            }
+          ],
+          "parent": {
+            "___ref": "_id_85_"
+          },
+          "children": [
+            {
+              "_id_100_": "",
+              "node": {
+                "___ref": "_id_64_"
+              },
+              "workflow": {
+                "___ref": "_id_52_"
+              },
+              "inputs": [
+                {
+                  "_id_102_": "",
+                  "nodeInstance": {
+                    "___ref": "_id_100_"
+                  },
+                  "kind": "workflow-input",
+                  "workflowInput": {
+                    "___ref": "_id_54_"
+                  },
+                  "name": "old",
+                  "inflowPipe": {
+                    "_id_103_": "",
+                    "pipe": {
+                      "___ref": "_id_66_"
+                    },
+                    "source": {
+                      "_id_104_": "",
+                      "kind": "input",
+                      "input": {
+                        "___ref": "_id_102_"
+                      }
+                    },
+                    "destination": {
+                      "_id_105_": "",
+                      "kind": "input",
+                      "input": {
+                        "___ref": "_id_102_"
+                      }
+                    }
+                  },
+                  "outflowPipes": []
+                },
+                {
+                  "_id_107_": "",
+                  "nodeInstance": {
+                    "___ref": "_id_100_"
+                  },
+                  "kind": "workflow-input",
+                  "workflowInput": {
+                    "___ref": "_id_55_"
+                  },
+                  "name": "value",
+                  "inflowPipe": {
+                    "_id_108_": "",
+                    "pipe": {
+                      "___ref": "_id_67_"
+                    },
+                    "source": {
+                      "_id_109_": "",
+                      "kind": "data",
+                      "json": "43"
+                    },
+                    "destination": {
+                      "_id_110_": "",
+                      "kind": "input",
+                      "input": {
+                        "___ref": "_id_107_"
+                      }
+                    }
+                  },
+                  "outflowPipes": []
+                }
+              ],
+              "outputs": [
+                {
+                  "___ref": "_id_113_"
+                }
+              ],
+              "parent": {
+                "___ref": "_id_92_"
+              },
+              "children": [],
+              "operator": "="
+            }
+          ]
+        }
+      ]
     }
-  ],
-  "___id": "___id_0_"
+  ]
 }

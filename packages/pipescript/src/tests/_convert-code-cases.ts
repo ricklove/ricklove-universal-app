@@ -27,42 +27,31 @@ async function getAllFiles(directoryPath: string): Promise<string[]> {
 
 export const jsonStringify_safe = (objRaw: unknown, shouldFormat?: boolean): string => {
     let nextId = 1;
-    type Registry = Map<unknown, { ___id: string; minDepth: number; visited?: boolean }>;
-    const deepRegister = (obj: unknown, visited: Registry, depth: number): unknown => {
-        if (typeof obj === `object`) {
-            if (!obj) {
-                return obj;
-            }
-
-            // if (Array.isArray(obj)) {
-            //     return obj.map(x => deepClone(x, visited, depth + 1));
-            // }
-
-            if (Array.isArray(obj)) {
-                obj.forEach(x => deepRegister(x, visited, depth + 1));
-            } else {
-                Object.values(obj).forEach(x => deepRegister(x, visited, depth + 1));
-            }
-
-            const objReg = visited.get(obj);
-            if (objReg) {
-                objReg.minDepth = Math.min(depth, objReg.minDepth);
-                return obj;
-            }
-
-            visited.set(obj, { ___id: `${nextId++}`, minDepth: depth });
-
-            // return {
-            //     ___id: visited.get(obj),
-            //     ...Object.fromEntries(
-            //         Object.entries(obj).map(([k, v]) => [k, deepClone(v, visited, depth + 1)]),
-            //     ),
-            // };
-
-            return obj;
+    type Registry = Map<unknown, { id: string; minDepth: number; visited?: boolean }>;
+    const deepRegister = (obj: unknown, visited: Registry, depth: number): void => {
+        if (typeof obj !== `object`) {
+            return;
         }
 
-        return obj;
+        if (!obj) {
+            return;
+        }
+
+        const objReg = visited.get(obj);
+        if (objReg) {
+            objReg.minDepth = Math.min(depth, objReg.minDepth);
+            return;
+        }
+
+        visited.set(obj, { id: `_id_${nextId++}_`, minDepth: depth });
+
+        if (Array.isArray(obj)) {
+            obj.forEach(x => deepRegister(x, visited, depth + 1));
+            return;
+        }
+
+        Object.values(obj).forEach(x => deepRegister(x, visited, depth + 1));
+        return;
     };
 
     const deepClone = (obj: unknown, visited: Registry, depth: number): unknown => {
@@ -74,8 +63,7 @@ export const jsonStringify_safe = (objRaw: unknown, shouldFormat?: boolean): str
             const r = visited.get(obj);
             if (depth > (r?.minDepth ?? 0) || r?.visited) {
                 return {
-                    ___id: visited.get(obj)?.___id ?? ``,
-                    ref: true,
+                    ___ref: visited.get(obj)?.id ?? ``,
                 };
             }
 
@@ -88,7 +76,7 @@ export const jsonStringify_safe = (objRaw: unknown, shouldFormat?: boolean): str
             }
 
             return {
-                ___id: visited.get(obj),
+                [visited.get(obj)?.id ?? ``]: ``,
                 ...Object.fromEntries(
                     Object.entries(obj).map(([k, v]) => [k, deepClone(v, visited, depth + 1)]),
                 ),
@@ -99,66 +87,11 @@ export const jsonStringify_safe = (objRaw: unknown, shouldFormat?: boolean): str
     };
 
     const registry: Registry = new Map();
-    const obj_registered = deepRegister(objRaw, registry, 0);
-    const obj = deepClone(obj_registered, registry, 0);
-
-    // const visitedShallowParents = new Map<
-    //     unknown,
-    //     {
-    //         id: number;
-    //         obj: unknown;
-    //         parent: unknown;
-    //         depth: number;
-    //         count: number;
-    //     }
-    // >();
-    // const visitObj = (o: unknown, parent: unknown, depth: number) => {
-    //     if (typeof o !== `object`) {
-    //         return;
-    //     }
-    //     if (o == null) {
-    //         return;
-    //     }
-
-    //     const existing = visitedShallowParents.get(o);
-    //     if ((existing?.depth ?? 0) <= depth) {
-    //         if (existing) {
-    //             existing.count++;
-    //         }
-    //         return;
-    //     }
-
-    //     const id = visitedShallowParents.keys.length;
-    //     visitedShallowParents.set(obj, {
-    //         id,
-    //         obj: o,
-    //         parent,
-    //         depth,
-    //         count: (existing?.count ?? 0) + 1,
-    //     });
-    //     for (const k in o) {
-    //         const oTyped = o as Record<string, unknown>;
-    //         visitObj(oTyped[k], o, depth + 1);
-    //     }
-    // };
-    // visitObj(obj, undefined, 0);
+    deepRegister(objRaw, registry, 0);
+    const obj = deepClone(objRaw, registry, 0);
 
     const visited = [] as unknown[];
-    return JSON.stringify(
-        obj,
-        (_, val: unknown) => {
-            if (val != null && typeof val === `object`) {
-                const i = visited.indexOf(val);
-                if (i >= 0) {
-                    return `[OBJ-DUPLICATED: ___id_${i}_]`;
-                }
-                const iNext = visited.push(val) - 1;
-                (val as { ___id: string }).___id = `___id_${iNext}_`;
-            }
-            return val;
-        },
-        shouldFormat ? 2 : 0,
-    );
+    return JSON.stringify(obj, null, shouldFormat ? 2 : 0);
 };
 
 export const run = async () => {
