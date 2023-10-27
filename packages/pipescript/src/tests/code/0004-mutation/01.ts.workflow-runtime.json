@@ -205,6 +205,20 @@
                       "kind": "workflow-input",
                       "workflowInput": "[OBJ-DUPLICATED: ___id_29_]",
                       "name": "value",
+                      "inflowPipe": {
+                        "pipe": "[OBJ-DUPLICATED: ___id_44_]",
+                        "source": {
+                          "kind": "data",
+                          "json": "43",
+                          "___id": "___id_60_"
+                        },
+                        "destination": {
+                          "kind": "input",
+                          "input": "[OBJ-DUPLICATED: ___id_58_]",
+                          "___id": "___id_61_"
+                        },
+                        "___id": "___id_59_"
+                      },
                       "outflowPipes": [],
                       "___id": "___id_58_"
                     }
@@ -220,6 +234,20 @@
                 "kind": "workflow-output",
                 "workflowOutput": "[OBJ-DUPLICATED: ___id_32_]",
                 "name": "a",
+                "inflowPipe": {
+                  "pipe": "[OBJ-DUPLICATED: ___id_34_]",
+                  "source": {
+                    "kind": "operator-output",
+                    "nodeInstance": "[OBJ-DUPLICATED: ___id_54_]",
+                    "___id": "___id_66_"
+                  },
+                  "destination": {
+                    "kind": "output",
+                    "output": "[OBJ-DUPLICATED: ___id_53_]",
+                    "___id": "___id_67_"
+                  },
+                  "___id": "___id_65_"
+                },
                 "outflowPipes": [],
                 "___id": "___id_53_"
               },
@@ -228,7 +256,7 @@
             "destination": {
               "kind": "output",
               "output": "[OBJ-DUPLICATED: ___id_50_]",
-              "___id": "___id_63_"
+              "___id": "___id_69_"
             },
             "___id": "___id_51_"
           },
@@ -242,28 +270,56 @@
           "workflow": "[OBJ-DUPLICATED: ___id_17_]",
           "inputs": [
             {
-              "nodeInstance": "[OBJ-DUPLICATED: ___id_66_]",
+              "nodeInstance": "[OBJ-DUPLICATED: ___id_72_]",
               "kind": "workflow-input",
               "workflowInput": "[OBJ-DUPLICATED: ___id_19_]",
               "name": "a",
+              "inflowPipe": {
+                "pipe": "[OBJ-DUPLICATED: ___id_40_]",
+                "source": {
+                  "kind": "data",
+                  "json": "42",
+                  "___id": "___id_76_"
+                },
+                "destination": {
+                  "kind": "input",
+                  "input": "[OBJ-DUPLICATED: ___id_74_]",
+                  "___id": "___id_77_"
+                },
+                "___id": "___id_75_"
+              },
               "outflowPipes": [],
-              "___id": "___id_68_"
+              "___id": "___id_74_"
             }
           ],
           "outputs": [
             {
-              "nodeInstance": "[OBJ-DUPLICATED: ___id_66_]",
+              "nodeInstance": "[OBJ-DUPLICATED: ___id_72_]",
               "kind": "workflow-output",
               "workflowOutput": "[OBJ-DUPLICATED: ___id_22_]",
               "name": "a",
+              "inflowPipe": {
+                "pipe": "[OBJ-DUPLICATED: ___id_23_]",
+                "source": {
+                  "kind": "operator-output",
+                  "nodeInstance": "[OBJ-DUPLICATED: ___id_72_]",
+                  "___id": "___id_82_"
+                },
+                "destination": {
+                  "kind": "output",
+                  "output": "[OBJ-DUPLICATED: ___id_80_]",
+                  "___id": "___id_83_"
+                },
+                "___id": "___id_81_"
+              },
               "outflowPipes": [],
-              "___id": "___id_71_"
+              "___id": "___id_80_"
             }
           ],
           "parent": "[OBJ-DUPLICATED: ___id_47_]",
           "children": [],
           "operator": "declaration",
-          "___id": "___id_66_"
+          "___id": "___id_72_"
         },
         "[OBJ-DUPLICATED: ___id_54_]"
       ],

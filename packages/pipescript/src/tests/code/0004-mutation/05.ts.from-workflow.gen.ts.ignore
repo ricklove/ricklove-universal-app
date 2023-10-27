@@ -1,8 +1,6 @@
 function file_ts() {
     
-    const a = undefined /* disconnected */
-,    
-,    const old,a = /* missing operator ++*/
-,    
-,    const b = undefined /* disconnected */
+    const a = 42
+    const old,a = /* missing operator ++*/
+    const b = undefined /* disconnected */
 }

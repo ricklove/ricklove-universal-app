@@ -52,7 +52,7 @@ export const loadRuntime = (
     const rootNodeInstances =
         workflow.body.nodes?.map(node => createNodeInstances(node, undefined, context)) ?? [];
 
-    rootNodeInstances?.forEach(node => {
+    context.allNodeInstances.forEach(node => {
         loadNodeConnections_inflows(node);
     });
 

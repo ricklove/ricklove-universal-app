@@ -13,7 +13,10 @@ import {
 } from '../types';
 
 const indent = (text: string, depth: number = 1) => {
-    return text.split(`\n`).map(x => `${[...new Array(depth)].map(x => `    `)}${x}\n`);
+    return text
+        .split(`\n`)
+        .map(x => `${[...new Array(depth)].map(x => `    `)}${x}\n`)
+        .join(``);
 };
 
 const functionBuiltins = [
@@ -177,7 +180,7 @@ const convertWorkflowToFunctionDeclaration = (
 
     const content = `function ${functionName}(${parametersCode}) {
 ${indent(nestedFunctionDeclarations.map(x => x.content).join(`\n\n`))}${indent(
-        statements.join(`\n\n`),
+        statements.join(`\n`),
     )}}`;
 
     return {

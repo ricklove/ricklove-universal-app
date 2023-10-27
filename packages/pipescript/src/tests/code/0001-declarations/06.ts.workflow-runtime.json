@@ -129,6 +129,20 @@
               "kind": "workflow-input",
               "workflowInput": "[OBJ-DUPLICATED: ___id_19_]",
               "name": "answer",
+              "inflowPipe": {
+                "pipe": "[OBJ-DUPLICATED: ___id_29_]",
+                "source": {
+                  "kind": "data",
+                  "json": "42",
+                  "___id": "___id_42_"
+                },
+                "destination": {
+                  "kind": "input",
+                  "input": "[OBJ-DUPLICATED: ___id_40_]",
+                  "___id": "___id_43_"
+                },
+                "___id": "___id_41_"
+              },
               "outflowPipes": [],
               "___id": "___id_40_"
             }
@@ -139,8 +153,22 @@
               "kind": "workflow-output",
               "workflowOutput": "[OBJ-DUPLICATED: ___id_22_]",
               "name": "answer",
+              "inflowPipe": {
+                "pipe": "[OBJ-DUPLICATED: ___id_23_]",
+                "source": {
+                  "kind": "operator-output",
+                  "nodeInstance": "[OBJ-DUPLICATED: ___id_38_]",
+                  "___id": "___id_48_"
+                },
+                "destination": {
+                  "kind": "output",
+                  "output": "[OBJ-DUPLICATED: ___id_46_]",
+                  "___id": "___id_49_"
+                },
+                "___id": "___id_47_"
+              },
               "outflowPipes": [],
-              "___id": "___id_43_"
+              "___id": "___id_46_"
             }
           ],
           "parent": "[OBJ-DUPLICATED: ___id_32_]",

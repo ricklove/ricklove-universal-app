@@ -1,4 +1,4 @@
 function file_ts() {
     
-    const answer = undefined /* disconnected */
+    const answer = 42
 }

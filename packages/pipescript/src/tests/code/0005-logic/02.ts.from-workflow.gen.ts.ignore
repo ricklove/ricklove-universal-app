@@ -1,20 +1,15 @@
 function file_ts() {
     function file_ts_if_body(condition: bool, b: number, a: number) {
-,        function file_ts_if_body_if_body(condition: bool, b: number) {
-,    ,        
-,    ,        const b = undefined /* disconnected */
-,    ,    }
-,        const b = undefined /* disconnected */
-,    ,    
-,    ,    const value = /* missing operator >*/
-,    ,    
-,    ,    const b = file_ts_if_body_if_body(undefined /* disconnected */, undefined /* disconnected */)
-,    }
-    const a = undefined /* disconnected */
-,    
-,    const b = undefined
-,    
-,    const value = /* missing operator >*/
-,    
-,    const b,a = file_ts_if_body(undefined /* disconnected */, undefined /* disconnected */, undefined /* disconnected */)
+        function file_ts_if_body_if_body(condition: bool, b: number) {
+            
+            const b = old
+        }
+        const b = old
+        const value = /* missing operator >*/
+        const b = file_ts_if_body_if_body(undefined /* disconnected */, undefined /* disconnected */)
+    }
+    const a = 42
+    const b = undefined
+    const value = /* missing operator >*/
+    const b,a = file_ts_if_body(undefined /* disconnected */, undefined /* disconnected */, undefined /* disconnected */)
 }

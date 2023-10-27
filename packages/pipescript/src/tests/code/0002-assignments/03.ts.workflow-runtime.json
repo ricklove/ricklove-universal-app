@@ -192,6 +192,20 @@
                 "kind": "workflow-output",
                 "workflowOutput": "[OBJ-DUPLICATED: ___id_30_]",
                 "name": "b",
+                "inflowPipe": {
+                  "pipe": "[OBJ-DUPLICATED: ___id_31_]",
+                  "source": {
+                    "kind": "operator-output",
+                    "nodeInstance": "[OBJ-DUPLICATED: ___id_50_]",
+                    "___id": "___id_57_"
+                  },
+                  "destination": {
+                    "kind": "output",
+                    "output": "[OBJ-DUPLICATED: ___id_49_]",
+                    "___id": "___id_58_"
+                  },
+                  "___id": "___id_56_"
+                },
                 "outflowPipes": [],
                 "___id": "___id_49_"
               },
@@ -200,7 +214,7 @@
             "destination": {
               "kind": "output",
               "output": "[OBJ-DUPLICATED: ___id_46_]",
-              "___id": "___id_57_"
+              "___id": "___id_60_"
             },
             "___id": "___id_47_"
           },
@@ -214,28 +228,56 @@
           "workflow": "[OBJ-DUPLICATED: ___id_17_]",
           "inputs": [
             {
-              "nodeInstance": "[OBJ-DUPLICATED: ___id_60_]",
+              "nodeInstance": "[OBJ-DUPLICATED: ___id_63_]",
               "kind": "workflow-input",
               "workflowInput": "[OBJ-DUPLICATED: ___id_19_]",
               "name": "a",
+              "inflowPipe": {
+                "pipe": "[OBJ-DUPLICATED: ___id_37_]",
+                "source": {
+                  "kind": "data",
+                  "json": "42",
+                  "___id": "___id_67_"
+                },
+                "destination": {
+                  "kind": "input",
+                  "input": "[OBJ-DUPLICATED: ___id_65_]",
+                  "___id": "___id_68_"
+                },
+                "___id": "___id_66_"
+              },
               "outflowPipes": [],
-              "___id": "___id_62_"
+              "___id": "___id_65_"
             }
           ],
           "outputs": [
             {
-              "nodeInstance": "[OBJ-DUPLICATED: ___id_60_]",
+              "nodeInstance": "[OBJ-DUPLICATED: ___id_63_]",
               "kind": "workflow-output",
               "workflowOutput": "[OBJ-DUPLICATED: ___id_22_]",
               "name": "a",
+              "inflowPipe": {
+                "pipe": "[OBJ-DUPLICATED: ___id_23_]",
+                "source": {
+                  "kind": "operator-output",
+                  "nodeInstance": "[OBJ-DUPLICATED: ___id_63_]",
+                  "___id": "___id_73_"
+                },
+                "destination": {
+                  "kind": "output",
+                  "output": "[OBJ-DUPLICATED: ___id_71_]",
+                  "___id": "___id_74_"
+                },
+                "___id": "___id_72_"
+              },
               "outflowPipes": [],
-              "___id": "___id_65_"
+              "___id": "___id_71_"
             }
           ],
           "parent": "[OBJ-DUPLICATED: ___id_43_]",
           "children": [],
           "operator": "declaration",
-          "___id": "___id_60_"
+          "___id": "___id_63_"
         },
         "[OBJ-DUPLICATED: ___id_50_]"
       ],

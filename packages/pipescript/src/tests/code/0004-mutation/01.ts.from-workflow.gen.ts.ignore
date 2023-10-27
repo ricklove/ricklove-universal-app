@@ -1,6 +1,5 @@
 function file_ts() {
     
+    const a = 42
     const a = undefined /* disconnected */
-,    
-,    const a = undefined /* disconnected */
 }
