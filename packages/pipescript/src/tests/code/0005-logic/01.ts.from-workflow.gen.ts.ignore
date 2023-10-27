@@ -1,0 +1,9 @@
+function file_ts(){
+        function file_ts_if_body(condition: bool, b: number){
+        
+        file_ts_if_body(condition, b)
+    }
+        file_ts()
+    }
+
+file_ts()

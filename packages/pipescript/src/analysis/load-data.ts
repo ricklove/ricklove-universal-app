@@ -19,10 +19,10 @@ export const loadRuntime = (
     rootNodeInstances: PipescriptNodeInstance[];
 } => {
     const workflow = workflowRaw as PipescriptWorkflow;
-    workflow.tree = {
-        container: undefined,
-        usages: [],
-    };
+    // workflow.tree = {
+    //     container: undefined,
+    //     usages: [],
+    // };
 
     const getWorkflowsRecursive = (w: PipescriptWorkflow): PipescriptWorkflow[] => {
         return [w, ...(w.workflows?.flatMap(w2 => getWorkflowsRecursive(w2)) ?? [])];
@@ -48,20 +48,6 @@ export const loadRuntime = (
         allPipes,
         allNodeInstances: [],
     };
-
-    // workflow.workflows?.forEach(w => {
-    //     loadRuntime_workflow(w, workflow, context);
-    // });
-
-    // const mainNode = workflow.body.nodes?.[0];
-    // const mainWorkflow = context.allWorkflowsMap.get(mainNode?.workflowUri ?? ``);
-
-    // if (!mainNode) {
-    //     throw Error(`missing mainNode ${workflow.workflowUri}`);
-    // }
-    // if (!mainWorkflow) {
-    //     throw Error(`missing mainWorkflow ${workflow.workflowUri}`);
-    // }
 
     const rootNodeInstances =
         workflow.body.nodes?.map(node => createNodeInstances(node, undefined, context)) ?? [];
@@ -105,9 +91,9 @@ const createNodeInstances = (
     if (!workflow) {
         throw Error(`missing workflow ${node.workflowUri}`);
     }
-    node.tree = {
-        workflow,
-    };
+    // node.tree = {
+    //     workflow,
+    // };
 
     const instance: PipescriptNodeInstance = {
         node,

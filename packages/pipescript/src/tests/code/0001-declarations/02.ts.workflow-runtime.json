@@ -1,0 +1,166 @@
+{
+  "allWorkflows": [
+    {
+      "name": "",
+      "workflowUri": "",
+      "inputs": [],
+      "outputs": [],
+      "body": {
+        "kind": "nodes",
+        "nodes": [
+          {
+            "workflowUri": "file.ts",
+            "nodeId": "main",
+            "inputPipes": [],
+            "___id": "___id_7_"
+          }
+        ],
+        "___id": "___id_5_"
+      },
+      "workflows": [
+        {
+          "workflowUri": "file.ts",
+          "name": "file.ts",
+          "inputs": [],
+          "outputs": [
+            {
+              "name": "answer",
+              "type": {
+                "kind": "simple",
+                "type": "int",
+                "___id": "___id_14_"
+              },
+              "pipe": {
+                "kind": "node",
+                "sourceNodeId": "file.ts:1",
+                "sourceNodeOutputName": "answer",
+                "___id": "___id_15_"
+              },
+              "___id": "___id_13_"
+            }
+          ],
+          "workflows": [
+            {
+              "workflowUri": "file.ts/answer-declaration",
+              "name": "file.ts/answer-declaration",
+              "inputs": [
+                {
+                  "name": "answer",
+                  "type": "[OBJ-DUPLICATED: ___id_14_]",
+                  "___id": "___id_19_"
+                }
+              ],
+              "outputs": [
+                {
+                  "name": "answer",
+                  "type": "[OBJ-DUPLICATED: ___id_14_]",
+                  "pipe": {
+                    "kind": "workflow-operator",
+                    "___id": "___id_22_"
+                  },
+                  "___id": "___id_21_"
+                }
+              ],
+              "body": {
+                "kind": "operator",
+                "operator": "declaration",
+                "___id": "___id_23_"
+              },
+              "___id": "___id_17_"
+            }
+          ],
+          "body": {
+            "kind": "nodes",
+            "nodes": [
+              {
+                "nodeId": "file.ts:1",
+                "workflowUri": "file.ts/answer-declaration",
+                "inputPipes": [
+                  {
+                    "name": "answer",
+                    "kind": "data",
+                    "json": "42",
+                    "___id": "___id_28_"
+                  }
+                ],
+                "___id": "___id_26_"
+              }
+            ],
+            "___id": "___id_24_"
+          },
+          "___id": "___id_10_"
+        }
+      ],
+      "___id": "___id_2_"
+    },
+    "[OBJ-DUPLICATED: ___id_10_]",
+    "[OBJ-DUPLICATED: ___id_17_]"
+  ],
+  "allNodes": [
+    "[OBJ-DUPLICATED: ___id_7_]",
+    "[OBJ-DUPLICATED: ___id_26_]"
+  ],
+  "rootNodeInstances": [
+    {
+      "node": "[OBJ-DUPLICATED: ___id_7_]",
+      "workflow": "[OBJ-DUPLICATED: ___id_10_]",
+      "inputs": [],
+      "outputs": [
+        {
+          "nodeInstance": "[OBJ-DUPLICATED: ___id_31_]",
+          "kind": "workflow-output",
+          "workflowOutput": "[OBJ-DUPLICATED: ___id_13_]",
+          "name": "answer",
+          "inflowPipe": {
+            "pipe": "[OBJ-DUPLICATED: ___id_15_]",
+            "source": {
+              "kind": "output",
+              "output": {
+                "nodeInstance": {
+                  "node": "[OBJ-DUPLICATED: ___id_26_]",
+                  "workflow": "[OBJ-DUPLICATED: ___id_17_]",
+                  "inputs": [
+                    {
+                      "nodeInstance": "[OBJ-DUPLICATED: ___id_38_]",
+                      "kind": "workflow-input",
+                      "workflowInput": "[OBJ-DUPLICATED: ___id_19_]",
+                      "name": "answer",
+                      "outflowPipes": [],
+                      "___id": "___id_40_"
+                    }
+                  ],
+                  "outputs": [
+                    "[OBJ-DUPLICATED: ___id_37_]"
+                  ],
+                  "parent": "[OBJ-DUPLICATED: ___id_31_]",
+                  "children": [],
+                  "operator": "declaration",
+                  "___id": "___id_38_"
+                },
+                "kind": "workflow-output",
+                "workflowOutput": "[OBJ-DUPLICATED: ___id_21_]",
+                "name": "answer",
+                "outflowPipes": [],
+                "___id": "___id_37_"
+              },
+              "___id": "___id_36_"
+            },
+            "destination": {
+              "kind": "output",
+              "output": "[OBJ-DUPLICATED: ___id_34_]",
+              "___id": "___id_45_"
+            },
+            "___id": "___id_35_"
+          },
+          "outflowPipes": [],
+          "___id": "___id_34_"
+        }
+      ],
+      "children": [
+        "[OBJ-DUPLICATED: ___id_38_]"
+      ],
+      "___id": "___id_31_"
+    }
+  ],
+  "___id": "___id_0_"
+}
