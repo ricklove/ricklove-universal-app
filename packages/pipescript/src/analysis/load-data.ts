@@ -123,6 +123,7 @@ const createNodeInstances = (
         outflowPipes: [],
     }));
 
+    // TODO: handle recursive/cyclical workflows
     instance.children =
         workflow.body.nodes?.map(n => createNodeInstances(n, instance, context)) ?? [];
 

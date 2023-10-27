@@ -1,10 +1,10 @@
-function file_ts() {
-    
-    const a = 42
-    const value = undefined /* disconnected */ + undefined /* disconnected */
-    const a = undefined /* disconnected */
-    const value = undefined /* disconnected */ + 2
-    const a = undefined /* disconnected */
-    const value = 42 - undefined /* disconnected */
-    const a = undefined /* disconnected */
+function file_ts() {    
+    const a = 42;
+    const value = undefined /* disconnected */ + undefined /* disconnected */;
+    const a = undefined /* disconnected */;
+    const value = undefined /* disconnected */ + 2;
+    const a = undefined /* disconnected */;
+    const value = 42 - undefined /* disconnected */;
+    const a = undefined /* disconnected */;
+    return { a };
 }

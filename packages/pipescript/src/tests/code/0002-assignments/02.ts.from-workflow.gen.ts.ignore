@@ -1,5 +1,5 @@
-function file_ts() {
-    
-    const a = 42
-    const b = undefined /* disconnected */
+function file_ts() {    
+    const a = 42;
+    const b = undefined /* disconnected */;
+    return { a, b };
 }

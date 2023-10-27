@@ -25,7 +25,83 @@ async function getAllFiles(directoryPath: string): Promise<string[]> {
     return filePaths.sort();
 }
 
-export const jsonStringify_safe = (obj: unknown, shouldFormat?: boolean): string => {
+export const jsonStringify_safe = (objRaw: unknown, shouldFormat?: boolean): string => {
+    let nextId = 1;
+    type Registry = Map<unknown, { ___id: string; minDepth: number; visited?: boolean }>;
+    const deepRegister = (obj: unknown, visited: Registry, depth: number): unknown => {
+        if (typeof obj === `object`) {
+            if (!obj) {
+                return obj;
+            }
+
+            // if (Array.isArray(obj)) {
+            //     return obj.map(x => deepClone(x, visited, depth + 1));
+            // }
+
+            if (Array.isArray(obj)) {
+                obj.forEach(x => deepRegister(x, visited, depth + 1));
+            } else {
+                Object.values(obj).forEach(x => deepRegister(x, visited, depth + 1));
+            }
+
+            const objReg = visited.get(obj);
+            if (objReg) {
+                objReg.minDepth = Math.min(depth, objReg.minDepth);
+                return obj;
+            }
+
+            visited.set(obj, { ___id: `${nextId++}`, minDepth: depth });
+
+            // return {
+            //     ___id: visited.get(obj),
+            //     ...Object.fromEntries(
+            //         Object.entries(obj).map(([k, v]) => [k, deepClone(v, visited, depth + 1)]),
+            //     ),
+            // };
+
+            return obj;
+        }
+
+        return obj;
+    };
+
+    const deepClone = (obj: unknown, visited: Registry, depth: number): unknown => {
+        if (typeof obj === `object`) {
+            if (!obj) {
+                return obj;
+            }
+
+            const r = visited.get(obj);
+            if (depth > (r?.minDepth ?? 0) || r?.visited) {
+                return {
+                    ___id: visited.get(obj)?.___id ?? ``,
+                    ref: true,
+                };
+            }
+
+            if (r) {
+                r.visited = true;
+            }
+
+            if (Array.isArray(obj)) {
+                return obj.map(x => deepClone(x, visited, depth + 1));
+            }
+
+            return {
+                ___id: visited.get(obj),
+                ...Object.fromEntries(
+                    Object.entries(obj).map(([k, v]) => [k, deepClone(v, visited, depth + 1)]),
+                ),
+            };
+        }
+
+        return obj;
+    };
+
+    const registry: Registry = new Map();
+    const obj_registered = deepRegister(objRaw, registry, 0);
+    const obj = deepClone(obj_registered, registry, 0);
+
     // const visitedShallowParents = new Map<
     //     unknown,
     //     {

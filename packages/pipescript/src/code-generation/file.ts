@@ -169,8 +169,20 @@ const convertWorkflowToFunctionDeclaration = (
             // TODO: prevent name conflicts in the function scope - this should be done in the nodeInstance
             return x.name;
         });
-        return `const ${outputsExpression} = ${funCall}`;
+        return `const ${outputsExpression} = ${funCall};`;
     });
+
+    const returnStatement = (() => {
+        if (!workflow.outputs.length) {
+            return undefined;
+        }
+
+        // if (workflow.outputs.length === 1) {
+        //     return `return ${workflow.outputs.map(x => x.name).join(`, `)};`;
+        // }
+
+        return `return { ${workflow.outputs.map(x => x.name).join(`, `)} };`;
+    })();
 
     const parameters = workflow.inputs.map(x => generateDeclaration(x));
     const parametersCode =
@@ -178,10 +190,9 @@ const convertWorkflowToFunctionDeclaration = (
             ? `\n${indent(`${parameters.join(`,\n`)},`)}\n`
             : parameters.join(`, `);
 
-    const content = `function ${functionName}(${parametersCode}) {
-${indent(nestedFunctionDeclarations.map(x => x.content).join(`\n\n`))}${indent(
-        statements.join(`\n`),
-    )}}`;
+    const content = `function ${functionName}(${parametersCode}) {${indent(
+        nestedFunctionDeclarations.map(x => x.content).join(`\n\n`),
+    )}${indent([...statements, returnStatement].filter(x => x).join(`\n`))}}`;
 
     return {
         content,
@@ -223,8 +234,7 @@ const generateType = (type: PipescriptType): string => {
     }
 
     if (type.kind === `node`) {
-        // TODO: function callbacks
-        return `/*TODO*/fun_${type.node.nodeId}`;
+        return `/* TODO: function callbacks */ fun_${type.node.nodeId}`;
     }
 
     return `unknown`;
