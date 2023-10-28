@@ -52,14 +52,20 @@ export const calculateRunValue_connectionOverride = (
         };
     }
     const { runs } = connection;
+    runs.override = value;
+
     const allConnections = connection.nodeInstance.dataset.allNodeInstances.flatMap(x => [
         ...x.inputs,
         ...x.outputs,
     ]);
 
+    const visited = new Set<PipescriptNodePipeConnectionInstance>();
     const updateDependents = (dependencies: typeof runs.dependencies) => {
         const deps = new Set(dependencies);
-        const dependents = allConnections.filter(x => x.runs?.dependencies.some(d => deps.has(d)));
+        const dependents = allConnections.filter(
+            x => !visited.has(x) && x.runs?.dependencies.some(d => deps.has(d)),
+        );
+        dependents.forEach(d => visited.add(d));
         dependents.forEach(d => calculateRunValue_input(d, context));
         dependents.forEach(d => updateDependents(d.runs?.dependencies ?? []));
     };

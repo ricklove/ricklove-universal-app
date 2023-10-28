@@ -8,7 +8,7 @@ import React, {
     useRef,
     useState,
 } from 'react';
-import { View, Text, Pressable, PointerEvent } from 'react-native';
+import { View, Text, Pressable, PointerEvent, TextInput } from 'react-native';
 import { MouseButton, MoveableView } from "./moveable-view";
 import { PipeEndpointView, PipeView, calculatePipeEndpointIdForPipeSource, calculatePipeEndpointIdForWorkflow } from "./pipes";
 import { WorkflowInputName, getTypeName } from "./work-names";
@@ -26,8 +26,8 @@ export const NodeInstancesView = ({
 }) => {
 
     return (
-        <RunValueContext.Provider value={{ ValueChanged: new Subject() }}>
-            <View className={`flex-row`}>
+        <RunValueContext.Provider value={createRunValue()}>
+            <View testID={`NodeInstancesView:View`} className={`flex-row`}>
                 {nodeInstances.map(x => (
                     <React.Fragment key={x.key}>
                         <NodeView
@@ -36,7 +36,28 @@ export const NodeInstancesView = ({
                     </React.Fragment>
                 ))}
             </View>
+            <RootComponentsView />
         </RunValueContext.Provider>
+    )
+}
+
+const RootComponentsView = () => {
+    const { Components } = useContext(RunValueContext);
+
+    const [rootComponents, setRootComponents] = useState({} as Record<string, () => JSX.Element>);
+    useEffect(() => {
+        Components.subscribe(x => {
+            console.log(`RootComponentsView: Components.subscribe`, { x });
+            setRootComponents({ ...x })
+        });
+    }, [])
+
+    return (
+        <View
+            testID={`RootComponentsView:View`}
+            className={`flex-row`}>
+            {[...Object.entries(rootComponents)].map(([k, V]) => <React.Fragment key={k}><V /></React.Fragment>)}
+        </View>
     )
 }
 
@@ -68,7 +89,7 @@ const NodeView = ({
                     scale: position.scale,
                 }}
                 onMove={moveNode}
-                mouseButton={MouseButton.Left}
+                mouseButton={MouseButton.Middle}
             >
                 <View
                     className={`flex-column relative bg-slate-950/75 border-blue-100 border-solid border-[1px] m-[-1px] rounded p-1`}
@@ -207,12 +228,13 @@ const NodeConnection = ({
                             </View>
                             <PipeEndpointView id={getPipeConnectionKey(x, `in`)} />
                             <PipeValueView pipeValue={x.inflowPipe} side={`inflow`} />
+                            <View className='pl-1' />
                             <NodeConnectionValue connection={x} />
                         </View>
                     </React.Fragment>
                 ))}
             </View>
-            <Text className='pl-1' />
+            <View className='pl-1' />
             <Text
                 className={`text-blue-300 ${variable.ignored ? `line-through opacity-50` : ``}`}
             >{`${variable.name}`}</Text>
@@ -224,7 +246,7 @@ const NodeConnection = ({
                     )}`}</Text>
                 </>
             )}
-            <Text className='pl-1' />
+            <View className='pl-1' />
             <View className='flex-column'>
                 {connectionsOut.map(x => (
                     <React.Fragment key={x.key}>
@@ -241,9 +263,11 @@ const NodeConnection = ({
     );
 }
 
-export const RunValueContext = createContext({
+const createRunValue = () => ({
     ValueChanged: new Subject<void>(),
-});
+    Components: new BehaviorSubject({} as Record<string, () => JSX.Element>),
+})
+export const RunValueContext = createContext(createRunValue());
 
 const NodeConnectionValue = ({ connection }: { connection: PipescriptNodePipeConnectionInstance }) => {
     const runValueContext = useContext(RunValueContext);
@@ -264,16 +288,46 @@ const NodeConnectionValue = ({ connection }: { connection: PipescriptNodePipeCon
     return (
         <>
             {runValue && (
-                <ValueEditor value={runValue} onChange={changeValue} />
+                <ValueEditor id={connection.key} value={runValue} onChange={changeValue} />
             )}
         </>
     );
 }
 
-const ValueEditor = ({ value, onChange }: { value: unknown, onChange: (value: unknown) => void }) => {
+const ValueEditor = ({ id, value, onChange }: { id: string, value: unknown, onChange: (value: unknown) => void }) => {
+    const runValueContext = useContext(RunValueContext);
+
+    const toggleEdit = useStableCallback((visible: boolean) => {
+        console.log(`ValueEditor: toggleEdit`, { visible });
+        const newShowEdit = visible;
+
+        const components = runValueContext.Components.value;
+        if (newShowEdit) {
+            components[id] = () => (
+                <View
+                    className={`absolute flex-col bg-gray-100 p-2 rounded z-10`}
+                >
+                    <TextInput
+                        value={JSON.stringify(value)}
+                        onChangeText={x => onChange(JSON.parse(x))}
+                    />
+                </View>
+            );
+        } else {
+            delete components[id];
+        }
+        runValueContext.Components.next(components);
+    })
+
     return (
-        <Text className='text-purple-400 px-1'>
-            {JSON.stringify(value)}
-        </Text>
+        <>
+            <Pressable onPressIn={() => toggleEdit(true)}>
+                <View className='bg-purple-50'>
+                    <Text className='text-purple-400 px-1'>
+                        {JSON.stringify(value)}
+                    </Text>
+                </View>
+            </Pressable>
+        </>
     );
 };
