@@ -54,23 +54,26 @@ export const calculateRunValue_connectionOverride = (
     const { runs } = connection;
     runs.override = value;
 
+    console.log(`calculateRunValue_connectionOverride`, { connection });
+
     const allConnections = connection.nodeInstance.dataset.allNodeInstances.flatMap(x => [
         ...x.inputs,
         ...x.outputs,
     ]);
 
     const visited = new Set<PipescriptNodePipeConnectionInstance>();
-    const updateDependents = (dependencies: typeof runs.dependencies) => {
-        const deps = new Set(dependencies);
+    const updateDependents = (c: PipescriptNodePipeConnectionInstance) => {
+        calculateRunValue_input(c, context);
+
         const dependents = allConnections.filter(
-            x => !visited.has(x) && x.runs?.dependencies.some(d => deps.has(d)),
+            x => !visited.has(x) && x.runs?.dependencies.includes(c),
         );
+        console.log(`updateDependents`, { c, dependents });
         dependents.forEach(d => visited.add(d));
-        dependents.forEach(d => calculateRunValue_input(d, context));
-        dependents.forEach(d => updateDependents(d.runs?.dependencies ?? []));
+        dependents.forEach(d => updateDependents(d));
     };
 
-    updateDependents(runs.dependencies);
+    updateDependents(connection);
 };
 
 const calculateRunValue_input = (
