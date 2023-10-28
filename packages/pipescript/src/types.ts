@@ -178,7 +178,13 @@ export type PipescriptPipeValue =
       };
 
 // Instances
+export type PipescriptNodeInstanceDataset = {
+    allNodeInstances: PipescriptNodeInstance[];
+    rootNodeInstances: PipescriptNodeInstance[];
+};
+
 export type PipescriptNodeInstance = {
+    dataset: PipescriptNodeInstanceDataset;
     key: string;
     node: PipescriptNode;
     workflow: PipescriptWorkflow;
@@ -222,6 +228,7 @@ export type PipescriptNodePipeConnectionInstance = {
 
     runs?: {
         value: unknown;
+        override?: unknown;
         dependencies: PipescriptNodePipeConnectionInstance[];
     };
 };

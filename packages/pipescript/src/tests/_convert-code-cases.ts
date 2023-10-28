@@ -118,7 +118,7 @@ export const run = async () => {
                     {
                         allWorkflows: runtime.context.allWorkflows,
                         allNodes: runtime.context.allNodes,
-                        rootNodeInstances: runtime.rootNodeInstances,
+                        rootNodeInstances: runtime.dataset.rootNodeInstances,
                     },
                     true,
                 ),

@@ -1,6 +1,7 @@
 import {
     PipescriptNode,
     PipescriptNodeInstance,
+    PipescriptNodeInstanceDataset,
     PipescriptNodeInstance_Operator,
     PipescriptPipeValue,
     PipescriptPipeValueInstance,
@@ -13,7 +14,7 @@ export const loadRuntime = (
 ): {
     workflow: PipescriptWorkflow;
     context: PipescriptRuntimeContext;
-    rootNodeInstances: PipescriptNodeInstance[];
+    dataset: PipescriptNodeInstanceDataset;
 } => {
     const workflow = workflowRaw as PipescriptWorkflow;
     // workflow.tree = {
@@ -37,17 +38,24 @@ export const loadRuntime = (
         .map(x => x!);
     const allPipes = [...allPipes_workflowOutputs, ...allPipes_nodeInputs];
 
+    const dataset: PipescriptNodeInstanceDataset = {
+        allNodeInstances: [],
+        rootNodeInstances: [],
+    };
     const context: PipescriptRuntimeContext = {
         allWorkflows,
         allWorkflowsMap: new Map(allWorkflows.map(x => [x.workflowUri, x])),
         allNodes,
         allNodesMap: new Map(allNodes.map(x => [x.nodeId, x])),
         allPipes,
-        allNodeInstances: [],
+        dataset,
+        allNodeInstances: dataset.allNodeInstances,
+        rootNodeInstances: dataset.rootNodeInstances,
     };
 
-    const rootNodeInstances =
-        workflow.body.nodes?.map(node => createNodeInstances(node, undefined, context)) ?? [];
+    context.rootNodeInstances.push(
+        ...(workflow.body.nodes?.map(node => createNodeInstances(node, undefined, context)) ?? []),
+    );
 
     context.allNodeInstances.forEach(node => {
         loadNodeConnections_inflows(node);
@@ -61,12 +69,12 @@ export const loadRuntime = (
         loadNodeConnections_outflows(node, allInflowPipes);
     });
 
-    calculateRun(context.allNodeInstances);
+    calculateRun(dataset);
 
     return {
         workflow,
         context,
-        rootNodeInstances,
+        dataset,
     };
 };
 
@@ -78,7 +86,9 @@ export type PipescriptRuntimeContext = {
     allPipes: PipescriptPipeValue[];
 
     // created during createNodeInstances
+    dataset: PipescriptNodeInstanceDataset;
     allNodeInstances: PipescriptNodeInstance[];
+    rootNodeInstances: PipescriptNodeInstance[];
 };
 
 const createNodeInstances = (
@@ -95,6 +105,7 @@ const createNodeInstances = (
     // };
 
     const instance: PipescriptNodeInstance = {
+        dataset: context.dataset,
         key: `${context.allNodeInstances.length}`,
         node,
         workflow,

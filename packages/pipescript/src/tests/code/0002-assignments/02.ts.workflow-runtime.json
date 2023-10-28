@@ -185,6 +185,23 @@
   "rootNodeInstances": [
     {
       "_id_46_": "",
+      "dataset": {
+        "_id_47_": "",
+        "allNodeInstances": [
+          {
+            "___ref": "_id_46_"
+          },
+          {
+            "___ref": "_id_49_"
+          },
+          {
+            "___ref": "_id_75_"
+          }
+        ],
+        "rootNodeInstances": {
+          "___ref": "_id_45_"
+        }
+      },
       "key": "0",
       "node": {
         "___ref": "_id_8_"
@@ -195,7 +212,7 @@
       "inputs": [],
       "outputs": [
         {
-          "_id_49_": "",
+          "_id_67_": "",
           "key": "1:a:workflowOutput",
           "nodeInstance": {
             "___ref": "_id_46_"
@@ -206,19 +223,19 @@
           },
           "name": "a",
           "inflowPipe": {
-            "_id_50_": "",
+            "_id_64_": "",
             "key": "1:a:workflowOutput:pipe",
             "pipe": {
               "___ref": "_id_16_"
             },
             "source": {
-              "_id_51_": "",
+              "_id_65_": "",
               "kind": "output",
               "output": {
-                "_id_52_": "",
+                "_id_59_": "",
                 "key": "2:a:workflowOutput",
                 "nodeInstance": {
-                  "___ref": "_id_53_"
+                  "___ref": "_id_49_"
                 },
                 "kind": "workflow-output",
                 "workflowOutput": {
@@ -226,51 +243,51 @@
                 },
                 "name": "a",
                 "inflowPipe": {
-                  "_id_64_": "",
+                  "_id_60_": "",
                   "key": "2:a:workflowOutput:pipe",
                   "pipe": {
                     "___ref": "_id_26_"
                   },
                   "source": {
-                    "_id_65_": "",
+                    "_id_61_": "",
                     "kind": "operator-output",
                     "nodeInstance": {
-                      "___ref": "_id_53_"
+                      "___ref": "_id_49_"
                     }
                   },
                   "destination": {
-                    "_id_66_": "",
+                    "_id_62_": "",
                     "kind": "output",
                     "output": {
-                      "___ref": "_id_52_"
+                      "___ref": "_id_59_"
                     }
                   }
                 },
                 "outflowPipes": [
                   {
-                    "___ref": "_id_50_"
+                    "___ref": "_id_64_"
                   },
                   {
-                    "_id_68_": "",
+                    "_id_71_": "",
                     "key": "3:b:workflowInput:pipe",
                     "pipe": {
                       "___ref": "_id_43_"
                     },
                     "source": {
-                      "_id_69_": "",
+                      "_id_72_": "",
                       "kind": "output",
                       "output": {
-                        "___ref": "_id_52_"
+                        "___ref": "_id_59_"
                       }
                     },
                     "destination": {
-                      "_id_70_": "",
+                      "_id_73_": "",
                       "kind": "input",
                       "input": {
-                        "_id_71_": "",
+                        "_id_74_": "",
                         "key": "3:b:workflowInput",
                         "nodeInstance": {
-                          "___ref": "_id_72_"
+                          "___ref": "_id_75_"
                         },
                         "kind": "workflow-input",
                         "workflowInput": {
@@ -278,15 +295,15 @@
                         },
                         "name": "b",
                         "inflowPipe": {
-                          "___ref": "_id_68_"
+                          "___ref": "_id_71_"
                         },
                         "outflowPipes": [],
                         "runs": {
-                          "_id_91_": "",
+                          "_id_94_": "",
                           "value": 42,
                           "dependencies": [
                             {
-                              "___ref": "_id_52_"
+                              "___ref": "_id_59_"
                             }
                           ]
                         }
@@ -295,70 +312,36 @@
                   }
                 ],
                 "runs": {
-                  "_id_93_": "",
+                  "_id_96_": "",
                   "value": 42,
                   "dependencies": [
                     {
-                      "_id_55_": "",
-                      "key": "2:a:workflowInput",
-                      "nodeInstance": {
-                        "___ref": "_id_53_"
-                      },
-                      "kind": "workflow-input",
-                      "workflowInput": {
-                        "___ref": "_id_23_"
-                      },
-                      "name": "a",
-                      "inflowPipe": {
-                        "_id_56_": "",
-                        "key": "2:a:workflowInput:pipe",
-                        "pipe": {
-                          "___ref": "_id_40_"
-                        },
-                        "source": {
-                          "_id_57_": "",
-                          "kind": "data",
-                          "json": "42"
-                        },
-                        "destination": {
-                          "_id_58_": "",
-                          "kind": "input",
-                          "input": {
-                            "___ref": "_id_55_"
-                          }
-                        }
-                      },
-                      "outflowPipes": [],
-                      "runs": {
-                        "_id_60_": "",
-                        "value": 42,
-                        "dependencies": []
-                      }
+                      "___ref": "_id_51_"
                     }
                   ]
                 }
               }
             },
             "destination": {
-              "_id_95_": "",
+              "_id_66_": "",
               "kind": "output",
               "output": {
-                "___ref": "_id_49_"
+                "___ref": "_id_67_"
               }
             }
           },
           "outflowPipes": [],
           "runs": {
-            "_id_97_": "",
+            "_id_69_": "",
             "dependencies": [
               {
-                "___ref": "_id_52_"
+                "___ref": "_id_59_"
               }
             ]
           }
         },
         {
-          "_id_83_": "",
+          "_id_86_": "",
           "key": "1:b:workflowOutput",
           "nodeInstance": {
             "___ref": "_id_46_"
@@ -369,19 +352,19 @@
           },
           "name": "b",
           "inflowPipe": {
-            "_id_80_": "",
+            "_id_83_": "",
             "key": "1:b:workflowOutput:pipe",
             "pipe": {
               "___ref": "_id_19_"
             },
             "source": {
-              "_id_81_": "",
+              "_id_84_": "",
               "kind": "output",
               "output": {
-                "_id_75_": "",
+                "_id_78_": "",
                 "key": "3:b:workflowOutput",
                 "nodeInstance": {
-                  "___ref": "_id_72_"
+                  "___ref": "_id_75_"
                 },
                 "kind": "workflow-output",
                 "workflowOutput": {
@@ -389,56 +372,56 @@
                 },
                 "name": "b",
                 "inflowPipe": {
-                  "_id_76_": "",
+                  "_id_79_": "",
                   "key": "3:b:workflowOutput:pipe",
                   "pipe": {
                     "___ref": "_id_34_"
                   },
                   "source": {
-                    "_id_77_": "",
+                    "_id_80_": "",
                     "kind": "operator-output",
                     "nodeInstance": {
-                      "___ref": "_id_72_"
+                      "___ref": "_id_75_"
                     }
                   },
                   "destination": {
-                    "_id_78_": "",
+                    "_id_81_": "",
                     "kind": "output",
                     "output": {
-                      "___ref": "_id_75_"
+                      "___ref": "_id_78_"
                     }
                   }
                 },
                 "outflowPipes": [
                   {
-                    "___ref": "_id_80_"
+                    "___ref": "_id_83_"
                   }
                 ],
                 "runs": {
-                  "_id_87_": "",
+                  "_id_90_": "",
                   "value": 42,
                   "dependencies": [
                     {
-                      "___ref": "_id_71_"
+                      "___ref": "_id_74_"
                     }
                   ]
                 }
               }
             },
             "destination": {
-              "_id_82_": "",
+              "_id_85_": "",
               "kind": "output",
               "output": {
-                "___ref": "_id_83_"
+                "___ref": "_id_86_"
               }
             }
           },
           "outflowPipes": [],
           "runs": {
-            "_id_85_": "",
+            "_id_88_": "",
             "dependencies": [
               {
-                "___ref": "_id_75_"
+                "___ref": "_id_78_"
               }
             ]
           }
@@ -446,7 +429,10 @@
       ],
       "children": [
         {
-          "_id_53_": "",
+          "_id_49_": "",
+          "dataset": {
+            "___ref": "_id_47_"
+          },
           "key": "1",
           "node": {
             "___ref": "_id_38_"
@@ -456,12 +442,46 @@
           },
           "inputs": [
             {
-              "___ref": "_id_55_"
+              "_id_51_": "",
+              "key": "2:a:workflowInput",
+              "nodeInstance": {
+                "___ref": "_id_49_"
+              },
+              "kind": "workflow-input",
+              "workflowInput": {
+                "___ref": "_id_23_"
+              },
+              "name": "a",
+              "inflowPipe": {
+                "_id_52_": "",
+                "key": "2:a:workflowInput:pipe",
+                "pipe": {
+                  "___ref": "_id_40_"
+                },
+                "source": {
+                  "_id_53_": "",
+                  "kind": "data",
+                  "json": "42"
+                },
+                "destination": {
+                  "_id_54_": "",
+                  "kind": "input",
+                  "input": {
+                    "___ref": "_id_51_"
+                  }
+                }
+              },
+              "outflowPipes": [],
+              "runs": {
+                "_id_56_": "",
+                "value": 42,
+                "dependencies": []
+              }
             }
           ],
           "outputs": [
             {
-              "___ref": "_id_52_"
+              "___ref": "_id_59_"
             }
           ],
           "parent": {
@@ -471,7 +491,10 @@
           "operator": "declaration"
         },
         {
-          "_id_72_": "",
+          "_id_75_": "",
+          "dataset": {
+            "___ref": "_id_47_"
+          },
           "key": "2",
           "node": {
             "___ref": "_id_41_"
@@ -481,12 +504,12 @@
           },
           "inputs": [
             {
-              "___ref": "_id_71_"
+              "___ref": "_id_74_"
             }
           ],
           "outputs": [
             {
-              "___ref": "_id_75_"
+              "___ref": "_id_78_"
             }
           ],
           "parent": {

@@ -1,6 +1,7 @@
 import {
     PipescriptBuiltinOperator,
     PipescriptNodeInstance,
+    PipescriptNodeInstanceDataset,
     PipescriptNodeInstance_Operator,
     PipescriptNodePipeConnectionInputInstance,
     PipescriptNodePipeConnectionInstance,
@@ -14,12 +15,10 @@ type RunContext = {
 };
 
 export const calculateRun = (
-    allNodeInstances: PipescriptNodeInstance[],
+    dataset: PipescriptNodeInstanceDataset,
     context: RunContext = { visited: new Set(), lazy: false },
 ) => {
-    const rootNodes = allNodeInstances.filter(x => !x.parent);
-
-    rootNodes.forEach(node => {
+    dataset.rootNodeInstances.forEach(node => {
         calculateRunValue_nodeOutput(node, context);
     });
 };
@@ -40,6 +39,34 @@ export const calculateRunValue_nodeOutput = (node: PipescriptNodeInstance, conte
     }
 };
 
+export const calculateRunValue_connectionOverride = (
+    connection: PipescriptNodePipeConnectionInstance,
+    value: unknown,
+    context: RunContext = { visited: new Set(), lazy: false },
+) => {
+    if (!connection.runs) {
+        connection.runs = {
+            override: value,
+            value: value,
+            dependencies: [],
+        };
+    }
+    const { runs } = connection;
+    const allConnections = connection.nodeInstance.dataset.allNodeInstances.flatMap(x => [
+        ...x.inputs,
+        ...x.outputs,
+    ]);
+
+    const updateDependents = (dependencies: typeof runs.dependencies) => {
+        const deps = new Set(dependencies);
+        const dependents = allConnections.filter(x => x.runs?.dependencies.some(d => deps.has(d)));
+        dependents.forEach(d => calculateRunValue_input(d, context));
+        dependents.forEach(d => updateDependents(d.runs?.dependencies ?? []));
+    };
+
+    updateDependents(runs.dependencies);
+};
+
 const calculateRunValue_input = (
     input: Omit<PipescriptNodePipeConnectionInstance, `outflowPipes`>,
     context: RunContext,
@@ -48,6 +75,11 @@ const calculateRunValue_input = (
         return input.runs;
     }
     context.visited.add(input);
+    if (input.runs?.override !== undefined) {
+        input.runs.value = input.runs.override;
+        return;
+    }
+
     input.runs = undefined;
 
     const inflowPipe = input.inflowPipe;

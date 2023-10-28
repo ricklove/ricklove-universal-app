@@ -12,6 +12,8 @@ import { View, Text, Pressable, PointerEvent } from 'react-native';
 import { MouseButton, MoveableView } from "./moveable-view";
 import { PipeEndpointView, PipeView, calculatePipeEndpointIdForPipeSource, calculatePipeEndpointIdForWorkflow } from "./pipes";
 import { WorkflowInputName, getTypeName } from "./work-names";
+import { BehaviorSubject, Subject, Subscription } from "rxjs";
+import { calculateRunValue_connectionOverride } from "../analysis/calculate-run";
 
 export const NodeInstancesView = ({
     nodeInstances,
@@ -24,15 +26,17 @@ export const NodeInstancesView = ({
 }) => {
 
     return (
-        <View className={`flex-row`}>
-            {nodeInstances.map(x => (
-                <React.Fragment key={x.key}>
-                    <NodeView
-                        nodeInstance={x}
-                    />
-                </React.Fragment>
-            ))}
-        </View>
+        <RunValueContext.Provider value={{ ValueChanged: new Subject() }}>
+            <View className={`flex-row`}>
+                {nodeInstances.map(x => (
+                    <React.Fragment key={x.key}>
+                        <NodeView
+                            nodeInstance={x}
+                        />
+                    </React.Fragment>
+                ))}
+            </View>
+        </RunValueContext.Provider>
     )
 }
 
@@ -237,15 +241,30 @@ const NodeConnection = ({
     );
 }
 
-const NodeConnectionValue = ({ connection }: { connection: PipescriptNodePipeConnectionInstance }) => {
-    const changeValue = (value: unknown) => {
+export const RunValueContext = createContext({
+    ValueChanged: new Subject<void>(),
+});
 
+const NodeConnectionValue = ({ connection }: { connection: PipescriptNodePipeConnectionInstance }) => {
+    const runValueContext = useContext(RunValueContext);
+
+    const [runValue, setRunValue] = useState(connection.runs?.value);
+
+    useEffect(() => {
+        runValueContext.ValueChanged.subscribe(() => {
+            setRunValue(connection.runs?.value);
+        });
+    }, [])
+
+    const changeValue = (value: unknown) => {
+        calculateRunValue_connectionOverride(connection, value);
+        runValueContext.ValueChanged.next();
     }
 
     return (
         <>
-            {connection.runs && (
-                <ValueEditor value={connection.runs.value} onChange={changeValue} />
+            {runValue && (
+                <ValueEditor value={runValue} onChange={changeValue} />
             )}
         </>
     );

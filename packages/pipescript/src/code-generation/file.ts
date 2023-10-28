@@ -63,7 +63,7 @@ const operatorExpressions = [
  *
  */
 export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) => {
-    const { rootNodeInstances, context } = loadRuntime(workflow);
+    const { dataset, context } = loadRuntime(workflow);
 
     const builder: Builder = {
         ...context,

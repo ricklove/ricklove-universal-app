@@ -11,8 +11,8 @@ import { loadRuntime } from '../analysis/load-data';
 import { PipeEndpointsRegistry, PipeEndpointsRegistryType } from './pipes';
 
 export const WorkCanvasView = ({ workflow }: { workflow: PipescriptWorkflow }) => {
-    const nodeInstancesRef = useRef(loadRuntime(workflow).rootNodeInstances);
-    const nodeInstances = nodeInstancesRef.current;
+    const nodeInstancesDatasetRef = useRef(loadRuntime(workflow).dataset);
+    const nodeInstances = nodeInstancesDatasetRef.current.rootNodeInstances;
 
     const viewRef = useRef(null as null | View);
     const hostRef = useRef(new Subject<View>());
