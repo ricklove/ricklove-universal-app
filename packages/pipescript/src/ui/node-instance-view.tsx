@@ -194,18 +194,16 @@ const NodeConnection = ({
                 {connectionsIn.map(x => (
                     <React.Fragment key={x.key}>
                         <View className='flex-row justify-start items-center'>
-                            {x.inflowPipe?.pipe.kind === `data` && (
-                                <Text className='text-purple-400 px-1'>
-                                    {x.inflowPipe?.pipe.json}
-                                </Text>
-                            )}
-                            {x.runs?.value != null && (
-                                <Text className='text-purple-400 px-1'>
-                                    {JSON.stringify(x.runs.value)}
-                                </Text>
-                            )}
+                            <View className={`absolute right-10`}>
+                                {x.inflowPipe?.pipe.kind === `data` && (
+                                    <Text className='text-purple-400 px-1'>
+                                        {x.inflowPipe?.pipe.json}
+                                    </Text>
+                                )}
+                            </View>
                             <PipeEndpointView id={getPipeConnectionKey(x, `in`)} />
                             <PipeValueView pipeValue={x.inflowPipe} side={`inflow`} />
+                            <NodeConnectionValue connection={x} />
                         </View>
                     </React.Fragment>
                 ))}
@@ -236,5 +234,18 @@ const NodeConnection = ({
                 ))}
             </View>
         </View>
+    );
+}
+
+const NodeConnectionValue = ({ connection }: { connection: PipescriptNodePipeConnectionInstance }) => {
+    // TODO: override run value
+    return (
+        <>
+            {connection.runs && (
+                <Text className='text-purple-400 px-1'>
+                    {JSON.stringify(connection.runs.value)}
+                </Text>
+            )}
+        </>
     );
 }
