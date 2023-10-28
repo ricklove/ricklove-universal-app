@@ -12,6 +12,6 @@ function file_ts() {
     const a = 42;
     const b = undefined;
     const value = a > 40;
-    const b,a = file_ts_if_body(value, b, a);
+    const { b, a } = file_ts_if_body(value, b, a);
     return { b };
 }
