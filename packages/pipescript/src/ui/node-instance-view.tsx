@@ -194,43 +194,36 @@ const PipeValueView = ({
 
 const NodeConnection = ({
     variable,
-    connection: connectionRaw,
-    connectionsIn: connectionsInRaw,
-    connectionsOut: connectionsOutRaw,
+    connection,
 }: {
     variable: {
         name: string;
         type?: PipescriptType;
         ignored?: boolean;
     };
-    connection?: undefined | PipescriptNodePipeConnectionInstance;
-    connectionsIn?: PipescriptNodePipeConnectionInstance[];
-    connectionsOut?: PipescriptNodePipeConnectionInstance[];
+    connection: undefined | PipescriptNodePipeConnectionInstance;
 }) => {
-
-    const connectionsIn = connectionsInRaw ?? (connectionRaw ? [connectionRaw] : []);
-    const connectionsOut = connectionsOutRaw ?? (connectionRaw ? [connectionRaw] : []);
 
     return (
         <View className='flex-row justify-start items-center'>
             <View className='flex-column'>
-                {connectionsIn.map(x => (
-                    <React.Fragment key={x.key}>
+                {connection && (
+                    <React.Fragment key={connection.key}>
                         <View className='flex-row justify-start items-center'>
                             <View className={`absolute right-10`}>
-                                {x.inflowPipe?.pipe.kind === `data` && (
+                                {connection.inflowPipe?.pipe.kind === `data` && (
                                     <Text className='text-purple-400 px-1'>
-                                        {x.inflowPipe?.pipe.json}
+                                        {connection.inflowPipe?.pipe.json}
                                     </Text>
                                 )}
                             </View>
-                            <PipeEndpointView id={getPipeConnectionKey(x, `in`)} />
-                            <PipeValueView pipeValue={x.inflowPipe} side={`inflow`} />
+                            <PipeEndpointView id={getPipeConnectionKey(connection, `in`)} />
+                            <PipeValueView pipeValue={connection.inflowPipe} side={`inflow`} />
                             <View className='pl-1' />
-                            <NodeConnectionValue connection={x} />
+                            <NodeConnectionValue connection={connection} />
                         </View>
                     </React.Fragment>
-                ))}
+                )}
             </View>
             <View className='pl-1' />
             <Text
@@ -246,16 +239,16 @@ const NodeConnection = ({
             )}
             <View className='pl-1' />
             <View className='flex-column'>
-                {connectionsOut.map(x => (
-                    <React.Fragment key={x.key}>
-                        <PipeEndpointView id={getPipeConnectionKey(x, `out`)} />
-                        {x.outflowPipes.map(outflowPipe => outflowPipe && (
+                {connection && (
+                    <React.Fragment key={connection.key}>
+                        <PipeEndpointView id={getPipeConnectionKey(connection, `out`)} />
+                        {connection.outflowPipes.map(outflowPipe => outflowPipe && (
                             <React.Fragment key={outflowPipe.key}>
                                 <PipeValueView pipeValue={outflowPipe} side={`outflow`} />
                             </React.Fragment>
                         ))}
                     </React.Fragment>
-                ))}
+                )}
             </View>
         </View>
     );
@@ -277,7 +270,7 @@ const NodeConnectionValue = ({ connection }: { connection: PipescriptNodePipeCon
         runValueContext.ValueChanged.subscribe(() => {
             console.log(`NodeConnectionValue: ValueChanged.subscribe`, { value: connection.runs?.value, connection });
             setRunValue(connection.runs?.value);
-            setHasOverride(!!connection.runs?.override);
+            setHasOverride(connection.runs?.override !== undefined);
         });
     }, [])
 
@@ -288,9 +281,7 @@ const NodeConnectionValue = ({ connection }: { connection: PipescriptNodePipeCon
 
     return (
         <>
-            {runValue && (
-                <ValueEditorContainer id={connection.key} value={runValue} hasOverride={hasOverride} onChange={changeValue} />
-            )}
+            <ValueEditorContainer id={connection.key} value={runValue} hasOverride={hasOverride} onChange={changeValue} />
         </>
     );
 }
