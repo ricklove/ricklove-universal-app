@@ -58,6 +58,9 @@ export type PipescriptBuiltinOperator =
     | `*`
     | `/`
     | `%`
+    // logical
+    | `&&`
+    | `||`
     // ternary
     | `conditional-ternary`
     // comparisons

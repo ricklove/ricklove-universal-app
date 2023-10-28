@@ -19,35 +19,34 @@ const indent = (text: string, depth: number = 1) => {
         .join(``);
 };
 
-const functionBuiltins = [
-    {
-        operator: `declaration`,
+const operatorExpressions = [
+    // assignment
+    ...([`declaration`, `=`] as const).map(operator => ({
+        operator: operator,
         template: (argNames: string[]) => `${argNames[0]}`,
-    },
-    {
-        operator: `=`,
-        template: (argNames: string[]) => `${argNames[0]}`,
-    },
-    {
-        operator: `+`,
-        template: (argNames: string[]) => `${argNames[0]} + ${argNames[1]}`,
-    },
-    {
-        operator: `-`,
-        template: (argNames: string[]) => `${argNames[0]} - ${argNames[1]}`,
-    },
-    {
-        operator: `*`,
-        template: (argNames: string[]) => `${argNames[0]} * ${argNames[1]}`,
-    },
-    {
-        operator: `/`,
-        template: (argNames: string[]) => `${argNames[0]} / ${argNames[1]}`,
-    },
-    {
-        operator: `%`,
-        template: (argNames: string[]) => `${argNames[0]} % ${argNames[1]}`,
-    },
+    })),
+    // prefix unary
+    ...([`!`] as const).map(operator => ({
+        operator: operator,
+        template: (argNames: string[]) => `${operator}${argNames[0]}`,
+    })),
+    // postfix unary
+    ...([`++`, `--`] as const).map(operator => ({
+        operator: operator,
+        template: (argNames: string[]) => `${argNames[0]}${operator}`,
+    })),
+    // binary
+    ...([`+`, `-`, `*`, `/`, `%`, `&&`, `||`, '==', '!=', '<', '>', '<=', '>='] as const).map(
+        operator => ({
+            operator: operator,
+            template: (argNames: string[]) => `${argNames[0]} ${operator} ${argNames[1]}`,
+        }),
+    ),
+    // custom
+    ...([`conditional-ternary`] as const).map(operator => ({
+        operator: operator,
+        template: (argNames: string[]) => `${argNames[0]} ? ${argNames[1]} : ${argNames[2]}`,
+    })),
 ] satisfies {
     operator: PipescriptBuiltinOperator;
     template: (argNames: string[]) => string;
@@ -103,7 +102,7 @@ const convertWorkflowToFunctionDeclaration = (
     const create_getCallExpression = () => {
         if (workflow.body.kind === `operator`) {
             const { operator } = workflow.body;
-            const fun = functionBuiltins.find(f => f.operator === operator);
+            const fun = operatorExpressions.find(f => f.operator === operator);
             if (!fun) {
                 return () => `/* missing operator ${operator}*/`;
             }

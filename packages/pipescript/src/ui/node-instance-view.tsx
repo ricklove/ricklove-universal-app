@@ -238,14 +238,23 @@ const NodeConnection = ({
 }
 
 const NodeConnectionValue = ({ connection }: { connection: PipescriptNodePipeConnectionInstance }) => {
-    // TODO: override run value
+    const changeValue = (value: unknown) => {
+
+    }
+
     return (
         <>
             {connection.runs && (
-                <Text className='text-purple-400 px-1'>
-                    {JSON.stringify(connection.runs.value)}
-                </Text>
+                <ValueEditor value={connection.runs.value} onChange={changeValue} />
             )}
         </>
     );
 }
+
+const ValueEditor = ({ value, onChange }: { value: unknown, onChange: (value: unknown) => void }) => {
+    return (
+        <Text className='text-purple-400 px-1'>
+            {JSON.stringify(value)}
+        </Text>
+    );
+};
