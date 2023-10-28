@@ -92,7 +92,7 @@ const NodeView = ({
                 mouseButton={MouseButton.Middle}
             >
                 <View
-                    className={`flex-column relative bg-slate-950/75 border-blue-100 border-solid border-[1px] m-[-1px] rounded p-1`}
+                    className={`flex-col relative bg-slate-950/75 border-blue-100 border-solid border-[1px] m-[-1px] rounded p-1`}
                 >
                     <Text className='text-yellow-400 self-center'>{`${nodeInstance.workflow.name} #${nodeInstance.key}`}</Text>
 
@@ -113,7 +113,7 @@ const NodeView = ({
                                 </View>
                                 <View className='flex-row'>
                                     {nodeInstance.children.length && (
-                                        <View className={`flex-row`}>
+                                        <View className={`flex-col`}>
                                             {nodeInstance.children.map(x => (
                                                 <React.Fragment key={x.key}>
                                                     <NodeView
@@ -125,9 +125,7 @@ const NodeView = ({
                                     )}
                                     {workflow.body.kind === `operator` && (
                                         <React.Fragment>
-                                            <NodeConnection variable={{ name: workflow.body.operator }}
-                                            //  connectionsIn={nodeInstance.inputs} connectionsOut={nodeInstance.outputs}
-                                            />
+                                            <Text className={`text-blue-600`}>{workflow.body.operator}</Text>
                                         </React.Fragment>
                                     )}
                                 </View>
