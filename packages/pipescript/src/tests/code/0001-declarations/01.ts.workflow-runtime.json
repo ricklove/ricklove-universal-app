@@ -152,12 +152,16 @@
                   }
                 }
               },
-              "outflowPipes": []
+              "outflowPipes": [],
+              "runs": {
+                "_id_41_": "",
+                "value": 42
+              }
             }
           ],
           "outputs": [
             {
-              "_id_42_": "",
+              "_id_43_": "",
               "key": "2:answer:workflowOutput",
               "nodeInstance": {
                 "___ref": "_id_34_"
@@ -168,27 +172,31 @@
               },
               "name": "answer",
               "inflowPipe": {
-                "_id_43_": "",
+                "_id_44_": "",
                 "key": "2:answer:workflowOutput:pipe",
                 "pipe": {
                   "___ref": "_id_21_"
                 },
                 "source": {
-                  "_id_44_": "",
+                  "_id_45_": "",
                   "kind": "operator-output",
                   "nodeInstance": {
                     "___ref": "_id_34_"
                   }
                 },
                 "destination": {
-                  "_id_45_": "",
+                  "_id_46_": "",
                   "kind": "output",
                   "output": {
-                    "___ref": "_id_42_"
+                    "___ref": "_id_43_"
                   }
                 }
               },
-              "outflowPipes": []
+              "outflowPipes": [],
+              "runs": {
+                "_id_48_": "",
+                "value": 42
+              }
             }
           ],
           "parent": {

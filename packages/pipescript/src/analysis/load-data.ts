@@ -1,4 +1,5 @@
 import {
+    PipescriptBuiltinOperator,
     PipescriptNode,
     PipescriptNodeInstance,
     PipescriptNodeInstance_Operator,
@@ -10,6 +11,7 @@ import {
     PipescriptWorkflow,
     PipescriptWorkflowInput,
 } from '../types';
+import { calculateNodeRun, calculateOperator } from './calculate-operators';
 
 export const loadRuntime = (
     workflowRaw: PipescriptWorkflow,
@@ -63,6 +65,8 @@ export const loadRuntime = (
     context.allNodeInstances.forEach(node => {
         loadNodeConnections_outflows(node, allInflowPipes);
     });
+
+    calculateNodeRun(context.allNodeInstances);
 
     return {
         workflow,

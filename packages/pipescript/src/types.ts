@@ -216,6 +216,10 @@ export type PipescriptNodePipeConnectionInstance = {
     outflowPipes: PipescriptPipeValueInstance[];
 
     nodeInstance: PipescriptNodeInstance;
+
+    runs?: {
+        value: unknown;
+    };
 };
 
 export type PipescriptPipeValueInstance = {

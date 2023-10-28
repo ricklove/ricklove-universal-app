@@ -227,20 +227,20 @@
                 },
                 "name": "notAnswer",
                 "inflowPipe": {
-                  "_id_63_": "",
+                  "_id_64_": "",
                   "key": "3:notAnswer:workflowOutput:pipe",
                   "pipe": {
                     "___ref": "_id_35_"
                   },
                   "source": {
-                    "_id_64_": "",
+                    "_id_65_": "",
                     "kind": "operator-output",
                     "nodeInstance": {
                       "___ref": "_id_54_"
                     }
                   },
                   "destination": {
-                    "_id_65_": "",
+                    "_id_66_": "",
                     "kind": "output",
                     "output": {
                       "___ref": "_id_53_"
@@ -251,21 +251,28 @@
                   {
                     "___ref": "_id_51_"
                   }
-                ]
+                ],
+                "runs": {
+                  "_id_68_": "",
+                  "value": 43
+                }
               }
             },
             "destination": {
-              "_id_67_": "",
+              "_id_69_": "",
               "kind": "output",
               "output": {
                 "___ref": "_id_50_"
               }
             }
           },
-          "outflowPipes": []
+          "outflowPipes": [],
+          "runs": {
+            "_id_71_": ""
+          }
         },
         {
-          "_id_69_": "",
+          "_id_72_": "",
           "key": "1:answer:workflowOutput",
           "nodeInstance": {
             "___ref": "_id_47_"
@@ -276,19 +283,19 @@
           },
           "name": "answer",
           "inflowPipe": {
-            "_id_70_": "",
+            "_id_73_": "",
             "key": "1:answer:workflowOutput:pipe",
             "pipe": {
               "___ref": "_id_19_"
             },
             "source": {
-              "_id_71_": "",
+              "_id_74_": "",
               "kind": "output",
               "output": {
-                "_id_72_": "",
+                "_id_75_": "",
                 "key": "2:answer:workflowOutput",
                 "nodeInstance": {
-                  "___ref": "_id_73_"
+                  "___ref": "_id_76_"
                 },
                 "kind": "workflow-output",
                 "workflowOutput": {
@@ -296,47 +303,54 @@
                 },
                 "name": "answer",
                 "inflowPipe": {
-                  "_id_82_": "",
+                  "_id_86_": "",
                   "key": "2:answer:workflowOutput:pipe",
                   "pipe": {
                     "___ref": "_id_27_"
                   },
                   "source": {
-                    "_id_83_": "",
+                    "_id_87_": "",
                     "kind": "operator-output",
                     "nodeInstance": {
-                      "___ref": "_id_73_"
+                      "___ref": "_id_76_"
                     }
                   },
                   "destination": {
-                    "_id_84_": "",
+                    "_id_88_": "",
                     "kind": "output",
                     "output": {
-                      "___ref": "_id_72_"
+                      "___ref": "_id_75_"
                     }
                   }
                 },
                 "outflowPipes": [
                   {
-                    "___ref": "_id_70_"
+                    "___ref": "_id_73_"
                   }
-                ]
+                ],
+                "runs": {
+                  "_id_90_": "",
+                  "value": 42
+                }
               }
             },
             "destination": {
-              "_id_86_": "",
+              "_id_91_": "",
               "kind": "output",
               "output": {
-                "___ref": "_id_69_"
+                "___ref": "_id_72_"
               }
             }
           },
-          "outflowPipes": []
+          "outflowPipes": [],
+          "runs": {
+            "_id_93_": ""
+          }
         }
       ],
       "children": [
         {
-          "_id_73_": "",
+          "_id_76_": "",
           "key": "1",
           "node": {
             "___ref": "_id_39_"
@@ -346,10 +360,10 @@
           },
           "inputs": [
             {
-              "_id_75_": "",
+              "_id_78_": "",
               "key": "2:answer:workflowInput",
               "nodeInstance": {
-                "___ref": "_id_73_"
+                "___ref": "_id_76_"
               },
               "kind": "workflow-input",
               "workflowInput": {
@@ -357,30 +371,34 @@
               },
               "name": "answer",
               "inflowPipe": {
-                "_id_76_": "",
+                "_id_79_": "",
                 "key": "2:answer:workflowInput:pipe",
                 "pipe": {
                   "___ref": "_id_41_"
                 },
                 "source": {
-                  "_id_77_": "",
+                  "_id_80_": "",
                   "kind": "data",
                   "json": "42"
                 },
                 "destination": {
-                  "_id_78_": "",
+                  "_id_81_": "",
                   "kind": "input",
                   "input": {
-                    "___ref": "_id_75_"
+                    "___ref": "_id_78_"
                   }
                 }
               },
-              "outflowPipes": []
+              "outflowPipes": [],
+              "runs": {
+                "_id_83_": "",
+                "value": 42
+              }
             }
           ],
           "outputs": [
             {
-              "___ref": "_id_72_"
+              "___ref": "_id_75_"
             }
           ],
           "parent": {
@@ -429,7 +447,11 @@
                   }
                 }
               },
-              "outflowPipes": []
+              "outflowPipes": [],
+              "runs": {
+                "_id_61_": "",
+                "value": 43
+              }
             }
           ],
           "outputs": [

@@ -199,6 +199,11 @@ const NodeConnection = ({
                                     {x.inflowPipe?.pipe.json}
                                 </Text>
                             )}
+                            {x.runs?.value != null && (
+                                <Text className='text-purple-400 px-1'>
+                                    {JSON.stringify(x.runs.value)}
+                                </Text>
+                            )}
                             <PipeEndpointView id={getPipeConnectionKey(x, `in`)} />
                             <PipeValueView pipeValue={x.inflowPipe} side={`inflow`} />
                         </View>

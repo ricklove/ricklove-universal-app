@@ -160,7 +160,7 @@ export const PipeView = ({
         init.next();
     }, [!destinationEndpoint, !sourceEndpoint]);
 
-    const debug = true;
+    const debug = false;
     const isOutflow = side === `outflow`;
     const xDelta = (isOutflow ? -1 : 1) * (position.destination.x - position.source.x);
     const yDelta = (isOutflow ? -1 : 1) * (position.destination.y - position.source.y);
@@ -254,7 +254,7 @@ export const PipeEndpointView = ({ id }: { id: string; }) => {
         moveContext.position.scale,
     ]);
 
-    const debug = true;
+    const debug = false;
     return (
         <View className='w-2 h-2 justify-center items-center'>
             <View ref={targetRef} className='w-0 h-0 absolute pt-1'>
