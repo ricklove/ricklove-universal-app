@@ -13,6 +13,9 @@ import {
 } from '../types';
 
 const indent = (text: string, depth: number = 1) => {
+    if (!text) {
+        return ``;
+    }
     return text
         .split(`\n`)
         .map(x => `${[...new Array(depth)].map(x => `    `)}${x}\n`)
@@ -189,9 +192,10 @@ const convertWorkflowToFunctionDeclaration = (
             ? `\n${indent(`${parameters.join(`,\n`)},`)}\n`
             : parameters.join(`, `);
 
-    const content = `function ${functionName}(${parametersCode}) {${indent(
-        nestedFunctionDeclarations.map(x => x.content).join(`\n\n`),
-    )}${indent([...statements, returnStatement].filter(x => x).join(`\n`))}}`;
+    const content = `function ${functionName}(${parametersCode}) {
+${indent(nestedFunctionDeclarations.map(x => x.content).join(`\n\n`))}${indent(
+        [...statements, returnStatement].filter(x => x).join(`\n`),
+    )}}`;
 
     return {
         content,

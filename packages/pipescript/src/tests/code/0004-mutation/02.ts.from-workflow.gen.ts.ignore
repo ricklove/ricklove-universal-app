@@ -1,4 +1,4 @@
-function file_ts() {    
+function file_ts() {
     const a = 42;
     const value = a * 2;
     const a = a;

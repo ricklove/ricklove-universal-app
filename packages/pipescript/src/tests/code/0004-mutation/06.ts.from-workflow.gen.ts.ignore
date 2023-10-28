@@ -1,4 +1,4 @@
-function file_ts() {    
+function file_ts() {
     const a = undefined;
     const a = a;
     const a = a;

@@ -1,4 +1,5 @@
-function file_ts() {    function file_ts_if_body(condition: bool, b: number) {    
+function file_ts() {
+    function file_ts_if_body(condition: bool, b: number) {
         const b = old;
         return { b };
     }
