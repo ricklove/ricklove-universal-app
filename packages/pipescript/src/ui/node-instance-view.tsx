@@ -193,8 +193,15 @@ const NodeConnection = ({
             <View className='flex-column'>
                 {connectionsIn.map(x => (
                     <React.Fragment key={x.key}>
-                        <PipeEndpointView id={getPipeConnectionKey(x, `in`)} />
-                        <PipeValueView pipeValue={x.inflowPipe} side={`inflow`} />
+                        <View className='flex-row justify-start items-center'>
+                            {x.inflowPipe?.pipe.kind === `data` && (
+                                <Text className='text-purple-400 px-1'>
+                                    {x.inflowPipe?.pipe.json}
+                                </Text>
+                            )}
+                            <PipeEndpointView id={getPipeConnectionKey(x, `in`)} />
+                            <PipeValueView pipeValue={x.inflowPipe} side={`inflow`} />
+                        </View>
                     </React.Fragment>
                 ))}
             </View>

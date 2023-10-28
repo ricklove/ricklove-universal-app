@@ -1,6 +1,6 @@
 function file_ts() {    
     const a = 42;
     const old,a = /* missing operator ++*/;
-    const b = undefined /* disconnected */;
+    const b = old;
     return { b, a };
 }

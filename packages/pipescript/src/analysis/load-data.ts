@@ -173,12 +173,22 @@ const loadNodeConnections_inflows = (nodeInstance: PipescriptNodeInstance) => {
                 } satisfies PipescriptPipeValueInstance[`source`];
             }
             if (pipeSource.kind === `node`) {
-                const peerNodeOutput = nodeInstance.children
+                const peerNodeOutput = nodeInstance.parent?.children
                     .find(n2 => n2.node.nodeId === pipeSource.sourceNodeId)
-                    ?.outputs.find(x => x.name === pipeSource.name);
+                    ?.outputs.find(x => x.name === pipeSource.sourceNodeOutputName);
                 if (!peerNodeOutput) {
                     console.warn(
                         `loadNodeConnections: getInflowSource: Missing peerNodeOutput ${pipeSource.name}`,
+                        {
+                            pipeSource,
+                            childrenOutputs: nodeInstance.children.map(x =>
+                                x.outputs.map(o => ({
+                                    key: o.key,
+                                    name: o.name,
+                                    nodeId: o.nodeInstance.node.nodeId,
+                                })),
+                            ),
+                        },
                     );
                     return undefined;
                 }
@@ -245,10 +255,10 @@ const loadNodeConnections_inflows = (nodeInstance: PipescriptNodeInstance) => {
                 } satisfies PipescriptPipeValueInstance[`source`];
             }
             if (pipeSource.kind === `node`) {
-                const peerNodeOutput = nodeInstance.children
+                const innerNodeOutput = nodeInstance.children
                     .find(n2 => n2.node.nodeId === pipeSource.sourceNodeId)
                     ?.outputs.find(x => x.name === pipeSourceName);
-                if (!peerNodeOutput) {
+                if (!innerNodeOutput) {
                     console.warn(
                         `loadNodeConnections: getInflowSource: Missing peerNodeOutput ${pipeSourceName}`,
                     );
@@ -256,7 +266,7 @@ const loadNodeConnections_inflows = (nodeInstance: PipescriptNodeInstance) => {
                 }
                 return {
                     kind: `output`,
-                    output: peerNodeOutput,
+                    output: innerNodeOutput,
                 } satisfies PipescriptPipeValueInstance[`source`];
             }
             console.warn(

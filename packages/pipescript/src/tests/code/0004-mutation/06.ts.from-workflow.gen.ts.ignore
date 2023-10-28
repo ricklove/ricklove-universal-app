@@ -1,6 +1,6 @@
 function file_ts() {    
     const a = undefined;
-    const a = undefined /* disconnected */;
-    const a = undefined /* disconnected */;
+    const a = a;
+    const a = a;
     return { a };
 }

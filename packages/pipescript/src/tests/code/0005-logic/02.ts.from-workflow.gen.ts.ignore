@@ -4,12 +4,12 @@ function file_ts() {    function file_ts_if_body(condition: bool, b: number, a: 
         }
         const b = old;
         const value = /* missing operator >*/;
-        const b = file_ts_if_body_if_body(undefined /* disconnected */, undefined /* disconnected */);
+        const b = file_ts_if_body_if_body(value, b);
         return { b, a };
     }
     const a = 42;
     const b = undefined;
     const value = /* missing operator >*/;
-    const b,a = file_ts_if_body(undefined /* disconnected */, undefined /* disconnected */, undefined /* disconnected */);
+    const b,a = file_ts_if_body(value, b, a);
     return { b };
 }

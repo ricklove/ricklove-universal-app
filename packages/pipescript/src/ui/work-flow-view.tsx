@@ -191,6 +191,7 @@ const NodeView = ({ node, container }: { node: PipescriptNode; container: Pipesc
     });
     const moveNode = useStableCallback((value: { x: number; y: number; scale: number }) => {
         setPosition(value);
+        console.log(`NodeView`, { node, container });
     });
 
     const workflow = (() => {

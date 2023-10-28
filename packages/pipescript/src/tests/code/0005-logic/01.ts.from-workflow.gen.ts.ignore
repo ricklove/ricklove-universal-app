@@ -5,6 +5,6 @@ function file_ts() {    function file_ts_if_body(condition: bool, b: number) {
     const a = 42;
     const b = undefined;
     const value = /* missing operator >*/;
-    const b = file_ts_if_body(undefined /* disconnected */, undefined /* disconnected */);
+    const b = file_ts_if_body(value, b);
     return { b };
 }
