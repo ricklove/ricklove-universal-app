@@ -227,20 +227,20 @@
                 },
                 "name": "notAnswer",
                 "inflowPipe": {
-                  "_id_64_": "",
+                  "_id_65_": "",
                   "key": "3:notAnswer:workflowOutput:pipe",
                   "pipe": {
                     "___ref": "_id_35_"
                   },
                   "source": {
-                    "_id_65_": "",
+                    "_id_66_": "",
                     "kind": "operator-output",
                     "nodeInstance": {
                       "___ref": "_id_54_"
                     }
                   },
                   "destination": {
-                    "_id_66_": "",
+                    "_id_67_": "",
                     "kind": "output",
                     "output": {
                       "___ref": "_id_53_"
@@ -253,13 +253,52 @@
                   }
                 ],
                 "runs": {
-                  "_id_68_": "",
-                  "value": 43
+                  "_id_69_": "",
+                  "value": 43,
+                  "dependencies": [
+                    {
+                      "_id_56_": "",
+                      "key": "3:notAnswer:workflowInput",
+                      "nodeInstance": {
+                        "___ref": "_id_54_"
+                      },
+                      "kind": "workflow-input",
+                      "workflowInput": {
+                        "___ref": "_id_31_"
+                      },
+                      "name": "notAnswer",
+                      "inflowPipe": {
+                        "_id_57_": "",
+                        "key": "3:notAnswer:workflowInput:pipe",
+                        "pipe": {
+                          "___ref": "_id_44_"
+                        },
+                        "source": {
+                          "_id_58_": "",
+                          "kind": "data",
+                          "json": "43"
+                        },
+                        "destination": {
+                          "_id_59_": "",
+                          "kind": "input",
+                          "input": {
+                            "___ref": "_id_56_"
+                          }
+                        }
+                      },
+                      "outflowPipes": [],
+                      "runs": {
+                        "_id_61_": "",
+                        "value": 43,
+                        "dependencies": []
+                      }
+                    }
+                  ]
                 }
               }
             },
             "destination": {
-              "_id_69_": "",
+              "_id_71_": "",
               "kind": "output",
               "output": {
                 "___ref": "_id_50_"
@@ -268,11 +307,16 @@
           },
           "outflowPipes": [],
           "runs": {
-            "_id_71_": ""
+            "_id_73_": "",
+            "dependencies": [
+              {
+                "___ref": "_id_53_"
+              }
+            ]
           }
         },
         {
-          "_id_72_": "",
+          "_id_75_": "",
           "key": "1:answer:workflowOutput",
           "nodeInstance": {
             "___ref": "_id_47_"
@@ -283,19 +327,19 @@
           },
           "name": "answer",
           "inflowPipe": {
-            "_id_73_": "",
+            "_id_76_": "",
             "key": "1:answer:workflowOutput:pipe",
             "pipe": {
               "___ref": "_id_19_"
             },
             "source": {
-              "_id_74_": "",
+              "_id_77_": "",
               "kind": "output",
               "output": {
-                "_id_75_": "",
+                "_id_78_": "",
                 "key": "2:answer:workflowOutput",
                 "nodeInstance": {
-                  "___ref": "_id_76_"
+                  "___ref": "_id_79_"
                 },
                 "kind": "workflow-output",
                 "workflowOutput": {
@@ -303,54 +347,98 @@
                 },
                 "name": "answer",
                 "inflowPipe": {
-                  "_id_86_": "",
+                  "_id_90_": "",
                   "key": "2:answer:workflowOutput:pipe",
                   "pipe": {
                     "___ref": "_id_27_"
                   },
                   "source": {
-                    "_id_87_": "",
+                    "_id_91_": "",
                     "kind": "operator-output",
                     "nodeInstance": {
-                      "___ref": "_id_76_"
+                      "___ref": "_id_79_"
                     }
                   },
                   "destination": {
-                    "_id_88_": "",
+                    "_id_92_": "",
                     "kind": "output",
                     "output": {
-                      "___ref": "_id_75_"
+                      "___ref": "_id_78_"
                     }
                   }
                 },
                 "outflowPipes": [
                   {
-                    "___ref": "_id_73_"
+                    "___ref": "_id_76_"
                   }
                 ],
                 "runs": {
-                  "_id_90_": "",
-                  "value": 42
+                  "_id_94_": "",
+                  "value": 42,
+                  "dependencies": [
+                    {
+                      "_id_81_": "",
+                      "key": "2:answer:workflowInput",
+                      "nodeInstance": {
+                        "___ref": "_id_79_"
+                      },
+                      "kind": "workflow-input",
+                      "workflowInput": {
+                        "___ref": "_id_23_"
+                      },
+                      "name": "answer",
+                      "inflowPipe": {
+                        "_id_82_": "",
+                        "key": "2:answer:workflowInput:pipe",
+                        "pipe": {
+                          "___ref": "_id_41_"
+                        },
+                        "source": {
+                          "_id_83_": "",
+                          "kind": "data",
+                          "json": "42"
+                        },
+                        "destination": {
+                          "_id_84_": "",
+                          "kind": "input",
+                          "input": {
+                            "___ref": "_id_81_"
+                          }
+                        }
+                      },
+                      "outflowPipes": [],
+                      "runs": {
+                        "_id_86_": "",
+                        "value": 42,
+                        "dependencies": []
+                      }
+                    }
+                  ]
                 }
               }
             },
             "destination": {
-              "_id_91_": "",
+              "_id_96_": "",
               "kind": "output",
               "output": {
-                "___ref": "_id_72_"
+                "___ref": "_id_75_"
               }
             }
           },
           "outflowPipes": [],
           "runs": {
-            "_id_93_": ""
+            "_id_98_": "",
+            "dependencies": [
+              {
+                "___ref": "_id_78_"
+              }
+            ]
           }
         }
       ],
       "children": [
         {
-          "_id_76_": "",
+          "_id_79_": "",
           "key": "1",
           "node": {
             "___ref": "_id_39_"
@@ -360,45 +448,12 @@
           },
           "inputs": [
             {
-              "_id_78_": "",
-              "key": "2:answer:workflowInput",
-              "nodeInstance": {
-                "___ref": "_id_76_"
-              },
-              "kind": "workflow-input",
-              "workflowInput": {
-                "___ref": "_id_23_"
-              },
-              "name": "answer",
-              "inflowPipe": {
-                "_id_79_": "",
-                "key": "2:answer:workflowInput:pipe",
-                "pipe": {
-                  "___ref": "_id_41_"
-                },
-                "source": {
-                  "_id_80_": "",
-                  "kind": "data",
-                  "json": "42"
-                },
-                "destination": {
-                  "_id_81_": "",
-                  "kind": "input",
-                  "input": {
-                    "___ref": "_id_78_"
-                  }
-                }
-              },
-              "outflowPipes": [],
-              "runs": {
-                "_id_83_": "",
-                "value": 42
-              }
+              "___ref": "_id_81_"
             }
           ],
           "outputs": [
             {
-              "___ref": "_id_75_"
+              "___ref": "_id_78_"
             }
           ],
           "parent": {
@@ -418,40 +473,7 @@
           },
           "inputs": [
             {
-              "_id_56_": "",
-              "key": "3:notAnswer:workflowInput",
-              "nodeInstance": {
-                "___ref": "_id_54_"
-              },
-              "kind": "workflow-input",
-              "workflowInput": {
-                "___ref": "_id_31_"
-              },
-              "name": "notAnswer",
-              "inflowPipe": {
-                "_id_57_": "",
-                "key": "3:notAnswer:workflowInput:pipe",
-                "pipe": {
-                  "___ref": "_id_44_"
-                },
-                "source": {
-                  "_id_58_": "",
-                  "kind": "data",
-                  "json": "43"
-                },
-                "destination": {
-                  "_id_59_": "",
-                  "kind": "input",
-                  "input": {
-                    "___ref": "_id_56_"
-                  }
-                }
-              },
-              "outflowPipes": [],
-              "runs": {
-                "_id_61_": "",
-                "value": 43
-              }
+              "___ref": "_id_56_"
             }
           ],
           "outputs": [

@@ -159,20 +159,20 @@
                 },
                 "name": "answer",
                 "inflowPipe": {
-                  "_id_50_": "",
+                  "_id_51_": "",
                   "key": "2:answer:workflowOutput:pipe",
                   "pipe": {
                     "___ref": "_id_24_"
                   },
                   "source": {
-                    "_id_51_": "",
+                    "_id_52_": "",
                     "kind": "operator-output",
                     "nodeInstance": {
                       "___ref": "_id_40_"
                     }
                   },
                   "destination": {
-                    "_id_52_": "",
+                    "_id_53_": "",
                     "kind": "output",
                     "output": {
                       "___ref": "_id_39_"
@@ -185,13 +185,52 @@
                   }
                 ],
                 "runs": {
-                  "_id_54_": "",
-                  "value": 42
+                  "_id_55_": "",
+                  "value": 42,
+                  "dependencies": [
+                    {
+                      "_id_42_": "",
+                      "key": "2:answer:workflowInput",
+                      "nodeInstance": {
+                        "___ref": "_id_40_"
+                      },
+                      "kind": "workflow-input",
+                      "workflowInput": {
+                        "___ref": "_id_20_"
+                      },
+                      "name": "answer",
+                      "inflowPipe": {
+                        "_id_43_": "",
+                        "key": "2:answer:workflowInput:pipe",
+                        "pipe": {
+                          "___ref": "_id_30_"
+                        },
+                        "source": {
+                          "_id_44_": "",
+                          "kind": "data",
+                          "json": "42"
+                        },
+                        "destination": {
+                          "_id_45_": "",
+                          "kind": "input",
+                          "input": {
+                            "___ref": "_id_42_"
+                          }
+                        }
+                      },
+                      "outflowPipes": [],
+                      "runs": {
+                        "_id_47_": "",
+                        "value": 42,
+                        "dependencies": []
+                      }
+                    }
+                  ]
                 }
               }
             },
             "destination": {
-              "_id_55_": "",
+              "_id_57_": "",
               "kind": "output",
               "output": {
                 "___ref": "_id_36_"
@@ -200,7 +239,12 @@
           },
           "outflowPipes": [],
           "runs": {
-            "_id_57_": ""
+            "_id_59_": "",
+            "dependencies": [
+              {
+                "___ref": "_id_39_"
+              }
+            ]
           }
         }
       ],
@@ -216,40 +260,7 @@
           },
           "inputs": [
             {
-              "_id_42_": "",
-              "key": "2:answer:workflowInput",
-              "nodeInstance": {
-                "___ref": "_id_40_"
-              },
-              "kind": "workflow-input",
-              "workflowInput": {
-                "___ref": "_id_20_"
-              },
-              "name": "answer",
-              "inflowPipe": {
-                "_id_43_": "",
-                "key": "2:answer:workflowInput:pipe",
-                "pipe": {
-                  "___ref": "_id_30_"
-                },
-                "source": {
-                  "_id_44_": "",
-                  "kind": "data",
-                  "json": "42"
-                },
-                "destination": {
-                  "_id_45_": "",
-                  "kind": "input",
-                  "input": {
-                    "___ref": "_id_42_"
-                  }
-                }
-              },
-              "outflowPipes": [],
-              "runs": {
-                "_id_47_": "",
-                "value": 42
-              }
+              "___ref": "_id_42_"
             }
           ],
           "outputs": [

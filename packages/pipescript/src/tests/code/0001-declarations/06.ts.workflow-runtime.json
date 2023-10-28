@@ -185,13 +185,14 @@
               "outflowPipes": [],
               "runs": {
                 "_id_46_": "",
-                "value": 42
+                "value": 42,
+                "dependencies": []
               }
             }
           ],
           "outputs": [
             {
-              "_id_48_": "",
+              "_id_49_": "",
               "key": "2:answer:workflowOutput",
               "nodeInstance": {
                 "___ref": "_id_39_"
@@ -202,30 +203,35 @@
               },
               "name": "answer",
               "inflowPipe": {
-                "_id_49_": "",
+                "_id_50_": "",
                 "key": "2:answer:workflowOutput:pipe",
                 "pipe": {
                   "___ref": "_id_24_"
                 },
                 "source": {
-                  "_id_50_": "",
+                  "_id_51_": "",
                   "kind": "operator-output",
                   "nodeInstance": {
                     "___ref": "_id_39_"
                   }
                 },
                 "destination": {
-                  "_id_51_": "",
+                  "_id_52_": "",
                   "kind": "output",
                   "output": {
-                    "___ref": "_id_48_"
+                    "___ref": "_id_49_"
                   }
                 }
               },
               "outflowPipes": [],
               "runs": {
-                "_id_53_": "",
-                "value": 42
+                "_id_54_": "",
+                "value": 42,
+                "dependencies": [
+                  {
+                    "___ref": "_id_41_"
+                  }
+                ]
               }
             }
           ],

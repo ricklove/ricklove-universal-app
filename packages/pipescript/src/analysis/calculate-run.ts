@@ -2,6 +2,7 @@ import {
     PipescriptBuiltinOperator,
     PipescriptNodeInstance,
     PipescriptNodeInstance_Operator,
+    PipescriptNodePipeConnectionInputInstance,
     PipescriptNodePipeConnectionInstance,
 } from '../types';
 
@@ -55,19 +56,22 @@ const calculateRunValue_input = (
     }
     const { source } = inflowPipe;
     if (source.kind === `data`) {
-        input.runs = { value: JSON.parse(source.json) };
+        input.runs = {
+            value: JSON.parse(source.json),
+            dependencies: [],
+        };
         return;
     }
     if (source.kind === `input`) {
-        input.runs = { value: source.input.runs?.value };
+        input.runs = { value: source.input.runs?.value, dependencies: [source.input] };
         return;
     }
     if (source.kind === `output`) {
-        input.runs = { value: source.output.runs?.value };
+        input.runs = { value: source.output.runs?.value, dependencies: [source.output] };
         return;
     }
     if (source.kind === `operator-output`) {
-        input.runs = { value: calculateRunValue_operator(source.nodeInstance, context) };
+        input.runs = calculateRunValue_operator(source.nodeInstance, context);
         return;
     }
 
@@ -78,82 +82,110 @@ const calculateRunValue_operator = (
     nodeInstance: PipescriptNodeInstance_Operator,
     context: RunContext,
 ) => {
-    const calculateArgs_index = (index: number) => {
+    const calculateArgs_index = (
+        index: number,
+    ): {
+        value: number;
+        dependencies: PipescriptNodePipeConnectionInstance[];
+    } => {
         const x = nodeInstance.inputs[index];
         if (x == null) {
-            return undefined;
+            return {
+                value: undefined as unknown as number,
+                dependencies: [x as PipescriptNodePipeConnectionInputInstance],
+            };
         }
         calculateRunValue_input(x, context);
-        return x.runs?.value as number;
+        return {
+            value: x.runs?.value as number,
+            dependencies: [x as PipescriptNodePipeConnectionInputInstance],
+        };
     };
 
     const operator: PipescriptBuiltinOperator = nodeInstance.operator;
 
     // lazy
-    if (operator === `conditional-ternary`) {
-        const condition = !!calculateArgs_index(0);
-        if (condition) {
-            return calculateArgs_index(1);
-        }
-        return calculateArgs_index(2);
-    }
+    const aResult = calculateArgs_index(0);
+    const a = aResult.value;
+    const dependencies = [...aResult.dependencies];
+
     if (operator === `&&`) {
-        const condition = !!calculateArgs_index(0);
-        if (condition) {
-            return calculateArgs_index(1);
+        if (a) {
+            const v = calculateArgs_index(1);
+            return {
+                value: v?.value,
+                dependencies: [...dependencies, ...v.dependencies],
+            };
         }
-        return condition;
+        return aResult;
     }
     if (operator === `||`) {
-        const condition = !!calculateArgs_index(0);
-        if (!condition) {
-            return calculateArgs_index(1);
+        if (!a) {
+            const v = calculateArgs_index(1);
+            return {
+                value: v?.value,
+                dependencies: [...dependencies, ...v.dependencies],
+            };
         }
-        return condition;
+        return aResult;
+    }
+    if (operator === `conditional-ternary`) {
+        if (a) {
+            const v = calculateArgs_index(1);
+            return {
+                value: v?.value,
+                dependencies: [...dependencies, ...v.dependencies],
+            };
+        }
+        const v = calculateArgs_index(2);
+        return {
+            value: v?.value,
+            dependencies: [...dependencies, ...v.dependencies],
+        };
     }
 
     // unary
-    const a = calculateArgs_index(0) as number;
-
     switch (operator) {
         case `=`:
-            return a;
+            return aResult;
         case `declaration`:
-            return a;
+            return aResult;
         case `!`:
-            return !a;
+            return { dependencies, value: !a };
         case `++`:
-            return a + 1;
+            return { dependencies, value: a + 1 };
         case `--`:
-            return a - 1;
+            return { dependencies, value: a - 1 };
     }
 
     // binary
-    const b = calculateArgs_index(1) as number;
+    const bResult = calculateArgs_index(1);
+    const b = bResult.value;
+    dependencies.push(...bResult.dependencies);
 
     switch (operator) {
         case `+`:
-            return a + b;
+            return { dependencies, value: a + b };
         case `-`:
-            return a - b;
+            return { dependencies, value: a - b };
         case `*`:
-            return a * b;
+            return { dependencies, value: a * b };
         case `/`:
-            return a / b;
+            return { dependencies, value: a / b };
         case `%`:
-            return a % b;
+            return { dependencies, value: a % b };
         case `<`:
-            return a < b;
+            return { dependencies, value: a < b };
         case `>`:
-            return a > b;
+            return { dependencies, value: a > b };
         case `<=`:
-            return a <= b;
+            return { dependencies, value: a <= b };
         case `>=`:
-            return a >= b;
+            return { dependencies, value: a >= b };
         case `==`:
-            return a === b;
+            return { dependencies, value: a === b };
         case `!=`:
-            return a !== b;
+            return { dependencies, value: a !== b };
     }
 
     const _never: never = undefined as typeof operator as never;

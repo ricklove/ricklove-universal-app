@@ -222,6 +222,7 @@ export type PipescriptNodePipeConnectionInstance = {
 
     runs?: {
         value: unknown;
+        dependencies: PipescriptNodePipeConnectionInstance[];
     };
 };
 
