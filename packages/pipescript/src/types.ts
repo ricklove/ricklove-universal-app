@@ -176,6 +176,7 @@ export type PipescriptPipeValue =
 
 // Instances
 export type PipescriptNodeInstance = {
+    key: string;
     node: PipescriptNode;
     workflow: PipescriptWorkflow;
     inputs: PipescriptNodePipeConnectionInputInstance[];
@@ -209,6 +210,7 @@ export type PipescriptNodePipeConnectionOutputInstance = PipescriptNodePipeConne
 };
 
 export type PipescriptNodePipeConnectionInstance = {
+    key: string;
     name: string;
     inflowPipe: undefined | PipescriptPipeValueInstance;
     outflowPipes: PipescriptPipeValueInstance[];
@@ -217,6 +219,7 @@ export type PipescriptNodePipeConnectionInstance = {
 };
 
 export type PipescriptPipeValueInstance = {
+    key: string;
     pipe: PipescriptPipeValue;
     source:
         | {

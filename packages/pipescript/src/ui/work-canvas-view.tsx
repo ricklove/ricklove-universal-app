@@ -4,10 +4,16 @@ import { View, Text, Pressable, PointerEvent } from 'react-native';
 import { Subject, delay } from 'rxjs';
 
 import { MouseButton, MoveableView } from './moveable-view';
-import { PipeEndpointsRegistry, PipeEndpointsRegistryType, WorkFlowView } from './work-flow-view';
-import { PipescriptWorkflow } from '../types';
+import { WorkFlowView } from './work-flow-view';
+import { PipescriptNodeInstance, PipescriptWorkflow } from '../types';
+import { NodeInstancesView } from './node-instance-view';
+import { loadRuntime } from '../analysis/load-data';
+import { PipeEndpointsRegistry, PipeEndpointsRegistryType } from './pipes';
 
 export const WorkCanvasView = ({ workflow }: { workflow: PipescriptWorkflow }) => {
+    const nodeInstancesRef = useRef(loadRuntime(workflow).rootNodeInstances);
+    const nodeInstances = nodeInstancesRef.current;
+
     const viewRef = useRef(null as null | View);
     const hostRef = useRef(new Subject<View>());
     const context = useRef<PipeEndpointsRegistryType>({
@@ -63,6 +69,9 @@ export const WorkCanvasView = ({ workflow }: { workflow: PipescriptWorkflow }) =
                     <PipeEndpointsRegistry.Provider value={context.current}>
                         {tab === `work-flow` && (
                             <WorkFlowView workflow={workflow} full />
+                        )}
+                        {tab === `node-instances` && (
+                            <NodeInstancesView nodeInstances={nodeInstances} full />
                         )}
                     </PipeEndpointsRegistry.Provider>
                 </View>

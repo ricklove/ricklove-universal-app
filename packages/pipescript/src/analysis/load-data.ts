@@ -96,6 +96,7 @@ const createNodeInstances = (
     // };
 
     const instance: PipescriptNodeInstance = {
+        key: `${context.allNodeInstances.length}`,
         node,
         workflow,
         inputs: [],
@@ -107,6 +108,7 @@ const createNodeInstances = (
 
     // Create connections (without pipes)
     instance.inputs = workflow.inputs.map(workflowInput => ({
+        key: `${context.allNodeInstances.length}:${workflowInput.name}:workflowInput`,
         nodeInstance: instance,
         kind: `workflow-input`,
         workflowInput,
@@ -115,6 +117,7 @@ const createNodeInstances = (
         outflowPipes: [],
     }));
     instance.outputs = workflow.outputs.map(workflowOutput => ({
+        key: `${context.allNodeInstances.length}:${workflowOutput.name}:workflowOutput`,
         nodeInstance: instance,
         kind: `workflow-output`,
         workflowOutput,
@@ -196,6 +199,7 @@ const loadNodeConnections_inflows = (nodeInstance: PipescriptNodeInstance) => {
         }
 
         input.inflowPipe = {
+            key: `${input.key}:pipe`,
             pipe: nodeInput,
             source,
             destination: {
@@ -267,6 +271,7 @@ const loadNodeConnections_inflows = (nodeInstance: PipescriptNodeInstance) => {
         }
 
         output.inflowPipe = {
+            key: `${output.key}:pipe`,
             pipe: workflowOutputPipe,
             source,
             destination: {
