@@ -11,7 +11,7 @@ import {
     PipescriptWorkflow,
     PipescriptWorkflowInput,
 } from '../types';
-import { calculateNodeRun, calculateOperator } from './calculate-operators';
+import { calculateNodeRun, calculateOperator } from './calculate-run';
 
 export const loadRuntime = (
     workflowRaw: PipescriptWorkflow,
