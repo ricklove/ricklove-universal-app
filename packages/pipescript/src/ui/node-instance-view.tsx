@@ -1,4 +1,4 @@
-import { PipescriptNodeInstance, PipescriptNodePipeConnectionInstance, PipescriptPipeValueInstance, PipescriptType, PipescriptVariable, PipescriptWorkflow, PipescriptWorkflowInput } from "../types";
+import { PipescriptNodeInstance, PipescriptNodePipeConnectionInputInstance, PipescriptNodePipeConnectionInstance, PipescriptPipeValueInstance, PipescriptType, PipescriptVariable, PipescriptWorkflow, PipescriptWorkflowInput } from "../types";
 import { useStableCallback } from '@ricklove-universal/cl/src/utils/stable-callback';
 import React, {
     createContext,
@@ -99,7 +99,9 @@ const NodeView = ({
                                     )}
                                     {workflow.body.kind === `operator` && (
                                         <React.Fragment>
-                                            <NodeConnection variable={{ name: workflow.body.operator }} connectionsIn={nodeInstance.inputs} connectionsOut={nodeInstance.outputs} />
+                                            <NodeConnection variable={{ name: workflow.body.operator }}
+                                            //  connectionsIn={nodeInstance.inputs} connectionsOut={nodeInstance.outputs}
+                                            />
                                         </React.Fragment>
                                     )}
                                 </View>
@@ -120,12 +122,16 @@ const NodeView = ({
     );
 }
 
-const getPipeKey = (pipeSide: PipescriptPipeValueInstance[`source`] | PipescriptPipeValueInstance[`destination`]) => {
+const getPipeConnectionKey = (connection: PipescriptNodePipeConnectionInstance, direction: `in` | `out`) => {
+    return `${connection.key}:${direction}`;
+}
+
+const getPipeKey = (pipeSide: PipescriptPipeValueInstance[`source`] | PipescriptPipeValueInstance[`destination`], direction: `in` | `out`) => {
     if (pipeSide.kind === `input`) {
-        return pipeSide.input.key;
+        return getPipeConnectionKey(pipeSide.input, direction);
     }
     if (pipeSide.kind === `output`) {
-        return pipeSide.output.key;
+        return getPipeConnectionKey(pipeSide.output, direction);
     }
     if (pipeSide.kind === `data`) {
         return undefined;
@@ -151,8 +157,8 @@ const PipeValueView = ({
         return <></>;
     }
 
-    const sourceId = getPipeKey(source);
-    const destinationId = getPipeKey(destination);
+    const sourceId = getPipeKey(source, `out`);
+    const destinationId = getPipeKey(destination, `in`);
     if (!sourceId || !destinationId) {
         return <></>;
     }
@@ -184,7 +190,7 @@ const NodeConnection = ({
             <View className='flex-column'>
                 {connectionsIn.map(x => (
                     <React.Fragment key={x.key}>
-                        <PipeEndpointView id={x.key} />
+                        <PipeEndpointView id={getPipeConnectionKey(x, `in`)} />
                         <PipeValueView pipeValue={x.inflowPipe} />
                     </React.Fragment>
                 ))}
@@ -205,7 +211,7 @@ const NodeConnection = ({
             <View className='flex-column'>
                 {connectionsOut.map(x => (
                     <React.Fragment key={x.key}>
-                        <PipeEndpointView id={x.key} />
+                        <PipeEndpointView id={getPipeConnectionKey(x, `out`)} />
                         {x.outflowPipes.map(outflowPipe => outflowPipe && (
                             <React.Fragment key={outflowPipe.key}>
                                 <PipeValueView pipeValue={outflowPipe} />

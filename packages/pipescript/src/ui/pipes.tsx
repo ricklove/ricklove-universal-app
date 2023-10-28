@@ -158,7 +158,7 @@ export const PipeView = ({
         init.next();
     }, [!destinationEndpoint, !sourceEndpoint]);
 
-    const debug = false;
+    const debug = true;
     const xDelta = position.destination.x - position.source.x;
     const yDelta = position.destination.y - position.source.y;
     const length = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
@@ -185,18 +185,17 @@ export const PipeView = ({
                         />
                     </View>
                 </View>
-
-                {debug && (
-                    <>
-                        <View className='absolute'>
-                            <View className='w-[1000px] text-[4px] rotate-45'>
-                                <Text className='text-white'>{`(${sourceId})=>(${destinationId})`}</Text>
-                                {/* <Text className='text-white'>{`(${position.source.x},${position.source.y})=>(${position.destination.x},${position.destination.y})`}</Text> */}
-                            </View>
-                        </View>
-                    </>
-                )}
             </View>
+            {debug && (
+                <>
+                    <View className='absolute translate-y-[100px] rotate-45'>
+                        <View className='w-[1000px] text-[4px] justify-center items-center'>
+                            <Text className='text-white'>{`(${sourceId})=>(${destinationId})`}</Text>
+                            {/* <Text className='text-white'>{`(${position.source.x},${position.source.y})=>(${position.destination.x},${position.destination.y})`}</Text> */}
+                        </View>
+                    </View>
+                </>
+            )}
         </View>
     );
 };
@@ -265,14 +264,14 @@ export const PipeEndpointView = ({ id }: { id: string; }) => {
                         marginTop: -size / 2,
                     }}
                 />
-                {debug && (
-                    <View className='absolute pt-1 rotate-90'>
-                        <Text
-                            className='text-blue-400'
-                        >{id}</Text>
-                    </View>
-                )}
             </View>
+            {debug && (
+                <View className='absolute translate-y-[100px] rotate-90'>
+                    <Text
+                        className='text-blue-400'
+                    >{id}</Text>
+                </View>
+            )}
         </View>
     );
 };
