@@ -90,14 +90,23 @@ export const MoveableView = ({
         const yPointer = e.clientY ?? 0;
         // console.log(`endDrag`, { xPointer, yPointer, e, position, contextScale });
 
+        const newX = (position.xDragStart ?? 0) + (xPointer - (position.xPointerDragStart ?? 0)) / contextScale;
+        const newY = (position.yDragStart ?? 0) + (yPointer - (position.yPointerDragStart ?? 0)) / contextScale;
+
         setPosition(s => ({
             ...s,
-            x: (s.xDragStart ?? 0) + (xPointer - (s.xPointerDragStart ?? 0)) / contextScale,
-            y: (s.yDragStart ?? 0) + (yPointer - (s.yPointerDragStart ?? 0)) / contextScale,
+            x: newX,
+            y: newY,
             dragPointerId: undefined,
             xPointerDragStart: undefined,
             yPointerDragStart: undefined,
         }));
+
+        onMove({
+            x: newX,
+            y: newY,
+            scale: 1,
+        });
     });
 
     const moveDrag = useStableCallback((e: MouseEvent, contextScale: number) => {

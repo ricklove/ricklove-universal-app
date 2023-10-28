@@ -120,9 +120,11 @@ const getOrCreateEndpointSubject = (registry: PipeEndpointsRegistryType, id: str
 export const PipeView = ({
     sourceId,
     destinationId,
+    side = `inflow`,
 }: {
     sourceId: undefined | string;
     destinationId: string;
+    side?: `inflow` | `outflow`
 }) => {
     const registry = useContext(PipeEndpointsRegistry);
 
@@ -148,7 +150,7 @@ export const PipeView = ({
         const init = new Subject<void>();
         combineLatest([sourceEndpoint, destinationEndpoint, init]).subscribe(
             ([source, destination]) => {
-                console.log(`PipeView draw`, { source, destination });
+                // console.log(`PipeView draw`, { source, destination });
                 setPosition({ source, destination });
             },
         );
@@ -159,8 +161,9 @@ export const PipeView = ({
     }, [!destinationEndpoint, !sourceEndpoint]);
 
     const debug = true;
-    const xDelta = position.destination.x - position.source.x;
-    const yDelta = position.destination.y - position.source.y;
+    const isOutflow = side === `outflow`;
+    const xDelta = (isOutflow ? -1 : 1) * (position.destination.x - position.source.x);
+    const yDelta = (isOutflow ? -1 : 1) * (position.destination.y - position.source.y);
     const length = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
     const angle = Math.atan2(yDelta, xDelta);
     return (
@@ -168,7 +171,7 @@ export const PipeView = ({
             <View className='w-0 h-0 absolute'>
                 <View
                     style={{
-                        transform: `translate(${-xDelta + 4}px,${-yDelta - 2}px)`,
+                        transform: `translate(${-xDelta + 4}px,${-yDelta - 2 + (isOutflow ? 4 : 0)}px)`,
                     }}
                 >
                     <View
@@ -177,7 +180,7 @@ export const PipeView = ({
                         }}
                     >
                         <View
-                            className='bg-red-400'
+                            className={`${isOutflow ? `bg-blue-400` : `bg-red-400`}`}
                             style={{
                                 height: 1,
                                 width: length,
@@ -214,24 +217,24 @@ export const PipeEndpointView = ({ id }: { id: string; }) => {
         const calculate = () => {
             const h = registry.hostView;
             if (!h) {
-                console.log(`PipeEndpointView useLayoutEffect - host NOT READY`, { registry });
+                // console.log(`PipeEndpointView useLayoutEffect - host NOT READY`, { registry });
                 return;
             }
             const t = targetRef.current;
             if (!t) {
-                console.log(`PipeEndpointView useLayoutEffect - component NOT READY`, { registry });
+                // console.log(`PipeEndpointView useLayoutEffect - component NOT READY`, { registry });
                 return;
             }
 
             t.measureLayout(h, (left, top, width, height) => {
-                console.log(`PipeEndpointView useLayoutEffect measureLayout NEXT`, {
-                    id,
-                    left,
-                    top,
-                    width,
-                    height,
-                    registry,
-                });
+                // console.log(`PipeEndpointView useLayoutEffect measureLayout NEXT`, {
+                //     id,
+                //     left,
+                //     top,
+                //     width,
+                //     height,
+                //     registry,
+                // });
                 const s = getOrCreateEndpointSubject(registry, id);
                 s.next({
                     x: left + moveContext.position.x,

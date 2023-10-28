@@ -48,6 +48,7 @@ const NodeView = ({
     });
     const moveNode = useStableCallback((value: { x: number; y: number; scale: number }) => {
         setPosition(value);
+        console.log(`NodeView`, { nodeInstance });
     });
 
     const workflow = nodeInstance.workflow;
@@ -148,8 +149,10 @@ const getPipeKey = (pipeSide: PipescriptPipeValueInstance[`source`] | Pipescript
 
 const PipeValueView = ({
     pipeValue,
+    side,
 }: {
     pipeValue: undefined | PipescriptPipeValueInstance;
+    side: `inflow` | `outflow`,
 }) => {
 
     const { source, destination } = pipeValue ?? {};
@@ -163,7 +166,7 @@ const PipeValueView = ({
         return <></>;
     }
 
-    return <PipeView sourceId={sourceId} destinationId={destinationId} />;
+    return <PipeView sourceId={sourceId} destinationId={destinationId} side={side} />
 }
 
 const NodeConnection = ({
@@ -191,7 +194,7 @@ const NodeConnection = ({
                 {connectionsIn.map(x => (
                     <React.Fragment key={x.key}>
                         <PipeEndpointView id={getPipeConnectionKey(x, `in`)} />
-                        <PipeValueView pipeValue={x.inflowPipe} />
+                        <PipeValueView pipeValue={x.inflowPipe} side={`inflow`} />
                     </React.Fragment>
                 ))}
             </View>
@@ -214,7 +217,7 @@ const NodeConnection = ({
                         <PipeEndpointView id={getPipeConnectionKey(x, `out`)} />
                         {x.outflowPipes.map(outflowPipe => outflowPipe && (
                             <React.Fragment key={outflowPipe.key}>
-                                <PipeValueView pipeValue={outflowPipe} />
+                                <PipeValueView pipeValue={outflowPipe} side={`outflow`} />
                             </React.Fragment>
                         ))}
                     </React.Fragment>

@@ -116,6 +116,7 @@
   "rootNodeInstances": [
     {
       "_id_32_": "",
+      "key": "0",
       "node": {
         "___ref": "_id_8_"
       },
@@ -126,6 +127,7 @@
       "outputs": [
         {
           "_id_35_": "",
+          "key": "1:answer:workflowOutput",
           "nodeInstance": {
             "___ref": "_id_32_"
           },
@@ -136,6 +138,7 @@
           "name": "answer",
           "inflowPipe": {
             "_id_36_": "",
+            "key": "1:answer:workflowOutput:pipe",
             "pipe": {
               "___ref": "_id_16_"
             },
@@ -144,6 +147,7 @@
               "kind": "output",
               "output": {
                 "_id_38_": "",
+                "key": "2:answer:workflowOutput",
                 "nodeInstance": {
                   "___ref": "_id_39_"
                 },
@@ -154,6 +158,7 @@
                 "name": "answer",
                 "inflowPipe": {
                   "_id_48_": "",
+                  "key": "2:answer:workflowOutput:pipe",
                   "pipe": {
                     "___ref": "_id_23_"
                   },
@@ -172,7 +177,11 @@
                     }
                   }
                 },
-                "outflowPipes": []
+                "outflowPipes": [
+                  {
+                    "___ref": "_id_36_"
+                  }
+                ]
               }
             },
             "destination": {
@@ -189,6 +198,7 @@
       "children": [
         {
           "_id_39_": "",
+          "key": "1",
           "node": {
             "___ref": "_id_27_"
           },
@@ -198,6 +208,7 @@
           "inputs": [
             {
               "_id_41_": "",
+              "key": "2:answer:workflowInput",
               "nodeInstance": {
                 "___ref": "_id_39_"
               },
@@ -208,6 +219,7 @@
               "name": "answer",
               "inflowPipe": {
                 "_id_42_": "",
+                "key": "2:answer:workflowInput:pipe",
                 "pipe": {
                   "___ref": "_id_29_"
                 },

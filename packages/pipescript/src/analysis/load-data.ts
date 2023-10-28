@@ -60,7 +60,7 @@ export const loadRuntime = (
         .flatMap(x => [...x.inputs.map(y => y.inflowPipe), ...x.outputs.map(y => y.inflowPipe)])
         .filter(x => x)
         .map(x => x!);
-    rootNodeInstances?.forEach(node => {
+    context.allNodeInstances.forEach(node => {
         loadNodeConnections_outflows(node, allInflowPipes);
     });
 

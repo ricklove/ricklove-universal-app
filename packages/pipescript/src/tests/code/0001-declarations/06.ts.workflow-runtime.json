@@ -118,6 +118,7 @@
   "rootNodeInstances": [
     {
       "_id_33_": "",
+      "key": "0",
       "node": {
         "___ref": "_id_8_"
       },
@@ -128,6 +129,7 @@
       "outputs": [
         {
           "_id_36_": "",
+          "key": "1:answerExport:workflowOutput",
           "nodeInstance": {
             "___ref": "_id_33_"
           },
@@ -142,6 +144,7 @@
       "children": [
         {
           "_id_39_": "",
+          "key": "1",
           "node": {
             "___ref": "_id_28_"
           },
@@ -151,6 +154,7 @@
           "inputs": [
             {
               "_id_41_": "",
+              "key": "2:answer:workflowInput",
               "nodeInstance": {
                 "___ref": "_id_39_"
               },
@@ -161,6 +165,7 @@
               "name": "answer",
               "inflowPipe": {
                 "_id_42_": "",
+                "key": "2:answer:workflowInput:pipe",
                 "pipe": {
                   "___ref": "_id_30_"
                 },
@@ -183,6 +188,7 @@
           "outputs": [
             {
               "_id_47_": "",
+              "key": "2:answer:workflowOutput",
               "nodeInstance": {
                 "___ref": "_id_39_"
               },
@@ -193,6 +199,7 @@
               "name": "answer",
               "inflowPipe": {
                 "_id_48_": "",
+                "key": "2:answer:workflowOutput:pipe",
                 "pipe": {
                   "___ref": "_id_24_"
                 },

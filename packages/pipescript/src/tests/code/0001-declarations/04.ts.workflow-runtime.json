@@ -118,6 +118,7 @@
   "rootNodeInstances": [
     {
       "_id_33_": "",
+      "key": "0",
       "node": {
         "___ref": "_id_8_"
       },
@@ -128,6 +129,7 @@
       "outputs": [
         {
           "_id_36_": "",
+          "key": "1:answer:workflowOutput",
           "nodeInstance": {
             "___ref": "_id_33_"
           },
@@ -138,6 +140,7 @@
           "name": "answer",
           "inflowPipe": {
             "_id_37_": "",
+            "key": "1:answer:workflowOutput:pipe",
             "pipe": {
               "___ref": "_id_16_"
             },
@@ -146,6 +149,7 @@
               "kind": "output",
               "output": {
                 "_id_39_": "",
+                "key": "2:answer:workflowOutput",
                 "nodeInstance": {
                   "___ref": "_id_40_"
                 },
@@ -156,6 +160,7 @@
                 "name": "answer",
                 "inflowPipe": {
                   "_id_49_": "",
+                  "key": "2:answer:workflowOutput:pipe",
                   "pipe": {
                     "___ref": "_id_24_"
                   },
@@ -174,7 +179,11 @@
                     }
                   }
                 },
-                "outflowPipes": []
+                "outflowPipes": [
+                  {
+                    "___ref": "_id_37_"
+                  }
+                ]
               }
             },
             "destination": {
@@ -191,6 +200,7 @@
       "children": [
         {
           "_id_40_": "",
+          "key": "1",
           "node": {
             "___ref": "_id_28_"
           },
@@ -200,6 +210,7 @@
           "inputs": [
             {
               "_id_42_": "",
+              "key": "2:answer:workflowInput",
               "nodeInstance": {
                 "___ref": "_id_40_"
               },
@@ -210,6 +221,7 @@
               "name": "answer",
               "inflowPipe": {
                 "_id_43_": "",
+                "key": "2:answer:workflowInput:pipe",
                 "pipe": {
                   "___ref": "_id_30_"
                 },
