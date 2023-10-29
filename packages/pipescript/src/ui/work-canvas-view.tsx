@@ -5,10 +5,10 @@ import { Subject, delay } from 'rxjs';
 
 import { MouseButton, MoveableView } from './moveable-view';
 import { NodeInstancesView } from './node-instance-view';
-import { PipeEndpointsRegistry, PipeEndpointsRegistryType } from './pipes';
+import { PipeEndpointsRegistryContext, createPipeEndpointsRegistry } from './pipes';
 import { WorkFlowView } from './work-flow-view';
 import { loadRuntime } from '../analysis/load-data';
-import { PipescriptNodeInstance, PipescriptWorkflow } from '../types';
+import { PipescriptWorkflow } from '../types';
 
 export const WorkCanvasView = ({ workflow }: { workflow: PipescriptWorkflow }) => {
     const nodeInstancesDatasetRef = useRef(loadRuntime(workflow).dataset);
@@ -16,11 +16,9 @@ export const WorkCanvasView = ({ workflow }: { workflow: PipescriptWorkflow }) =
 
     const viewRef = useRef(null as null | View);
     const hostRef = useRef(new Subject<View>());
-    const context = useRef<PipeEndpointsRegistryType>({
-        hostObservable: hostRef.current.pipe(delay(250)),
-        hostView: null,
-        endpoints: {},
-    });
+    const context = useRef(createPipeEndpointsRegistry());
+
+    const [pipes, setPipes] = useState(context.current.pipes.value);
 
     useLayoutEffect(() => {
         if (!viewRef.current) {
@@ -28,6 +26,14 @@ export const WorkCanvasView = ({ workflow }: { workflow: PipescriptWorkflow }) =
         }
         context.current.hostView = viewRef.current;
         hostRef.current.next(viewRef.current);
+
+        const sub = context.current.pipes.subscribe(v => {
+            setPipes(v);
+        });
+        setPipes(pipes);
+        return () => {
+            sub.unsubscribe();
+        };
     }, [!viewRef.current]);
 
     const tabs = [`work-flow`, `node-instances`] as const;
@@ -74,12 +80,12 @@ export const WorkCanvasView = ({ workflow }: { workflow: PipescriptWorkflow }) =
                 ))}
             >
                 <View ref={viewRef} className='w-full h-full justify-center items-center'>
-                    <PipeEndpointsRegistry.Provider value={context.current}>
+                    <PipeEndpointsRegistryContext.Provider value={context.current}>
                         {tab === `work-flow` && <WorkFlowView workflow={workflow} full />}
                         {tab === `node-instances` && (
                             <NodeInstancesView nodeInstances={nodeInstances} full />
                         )}
-                    </PipeEndpointsRegistry.Provider>
+                    </PipeEndpointsRegistryContext.Provider>
                 </View>
             </MoveableView>
         </View>

@@ -1,26 +1,9 @@
-import { useStableCallback } from '@ricklove-universal/cl/src/utils/stable-callback';
-import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useLayoutEffect,
-    useRef,
-    useState,
-} from 'react';
-import { View, Text, Pressable, PointerEvent } from 'react-native';
-import { BehaviorSubject, Observable, Subject, combineLatest, zip } from 'rxjs';
+import { createContext, useContext, useLayoutEffect, useRef, useState } from 'react';
+import { View, Text } from 'react-native';
+import { BehaviorSubject, Observable, Subject, combineLatest } from 'rxjs';
 
-import { MouseButton, MoveableContext, MoveableView } from './moveable-view';
-import {
-    PipescriptNode,
-    PipescriptNodePipeConnectionInstance,
-    PipescriptPipe,
-    PipescriptPipeValue,
-    PipescriptType,
-    PipescriptVariable,
-    PipescriptWorkflow,
-    PipescriptWorkflowInput,
-} from '../types';
+import { MoveableContext } from './moveable-view';
+import { PipescriptPipeValue, PipescriptWorkflow } from '../types';
 
 export const calculatePipeEndpointIdForNode = ({
     nodeId,
@@ -94,18 +77,20 @@ export const calculatePipeEndpointIdForPipeSource = ({
     return [];
 };
 
-export type PipeEndpointsRegistryType = {
-    hostObservable: Observable<View>;
-    hostView: null | View;
-    endpoints: {
+export const createPipeEndpointsRegistry = () => ({
+    hostObservable: new Subject() as Observable<View>,
+    hostView: null as null | View,
+    endpoints: {} as {
         [id: string]: undefined | Subject<{ x: number; y: number }>;
-    };
-};
-export const PipeEndpointsRegistry = createContext<PipeEndpointsRegistryType>({
-    hostObservable: new Subject(),
-    hostView: null,
-    endpoints: {},
+    },
+    pipes: new BehaviorSubject(
+        {} as {
+            [id: string]: undefined | { sourceId: string; destinationId: string };
+        },
+    ),
 });
+type PipeEndpointsRegistryType = ReturnType<typeof createPipeEndpointsRegistry>;
+export const PipeEndpointsRegistryContext = createContext(createPipeEndpointsRegistry());
 
 const getOrCreateEndpointSubject = (registry: PipeEndpointsRegistryType, id: string) => {
     return (
@@ -126,7 +111,23 @@ export const PipeView = ({
     destinationId: string;
     side?: `inflow` | `outflow`;
 }) => {
-    const registry = useContext(PipeEndpointsRegistry);
+    return (
+        <>
+            <View />
+        </>
+    );
+};
+
+const PipeViewLine = ({
+    sourceId,
+    destinationId,
+    side = `inflow`,
+}: {
+    sourceId: undefined | string;
+    destinationId: string;
+    side?: `inflow` | `outflow`;
+}) => {
+    const registry = useContext(PipeEndpointsRegistryContext);
 
     const destinationEndpoint = getOrCreateEndpointSubject(registry, destinationId);
     const sourceEndpoint = !sourceId ? undefined : getOrCreateEndpointSubject(registry, sourceId);
@@ -208,7 +209,7 @@ export const PipeView = ({
 export const PipeEndpointView = ({ id }: { id: string }) => {
     const size = 12;
 
-    const registry = useContext(PipeEndpointsRegistry);
+    const registry = useContext(PipeEndpointsRegistryContext);
     const moveContext = useContext(MoveableContext);
 
     const targetRef = useRef(null as null | View);

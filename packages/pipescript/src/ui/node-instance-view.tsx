@@ -1,33 +1,17 @@
 import { useStableCallback } from '@ricklove-universal/cl/src/utils/stable-callback';
-import React, {
-    createContext,
-    useContext,
-    useEffect,
-    useLayoutEffect,
-    useRef,
-    useState,
-} from 'react';
-import { View, Text, Pressable, PointerEvent, TextInput } from 'react-native';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { View, Text, Pressable, TextInput } from 'react-native';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 import { MouseButton, MoveableView } from './moveable-view';
-import {
-    PipeEndpointView,
-    PipeView,
-    calculatePipeEndpointIdForPipeSource,
-    calculatePipeEndpointIdForWorkflow,
-} from './pipes';
-import { WorkflowInputName, getTypeName } from './work-names';
+import { PipeEndpointView, PipeView } from './pipes';
+import { getTypeName } from './work-names';
 import { calculateRunValue_connectionOverride } from '../analysis/calculate-run';
 import {
     PipescriptNodeInstance,
-    PipescriptNodePipeConnectionInputInstance,
     PipescriptNodePipeConnectionInstance,
     PipescriptPipeValueInstance,
     PipescriptType,
-    PipescriptVariable,
-    PipescriptWorkflow,
-    PipescriptWorkflowInput,
 } from '../types';
 
 export const NodeInstancesView = ({
@@ -304,7 +288,7 @@ const NodeConnectionValue = ({
     const [hasOverride, setHasOverride] = useState(!!connection.runs?.override);
 
     useEffect(() => {
-        runValueContext.ValueChanged.subscribe(() => {
+        const sub = runValueContext.ValueChanged.subscribe(() => {
             console.log(`NodeConnectionValue: ValueChanged.subscribe`, {
                 value: connection.runs?.value,
                 connection,
@@ -312,6 +296,9 @@ const NodeConnectionValue = ({
             setRunValue(connection.runs?.value);
             setHasOverride(connection.runs?.override !== undefined);
         });
+        return () => {
+            sub.unsubscribe();
+        };
     }, []);
 
     const changeValue = (value: unknown) => {
