@@ -20,7 +20,13 @@ import {
     PipescriptWorkflow,
     PipescriptWorkflowInput,
 } from '../types';
-import { PipeEndpointView, PipeView, calculatePipeEndpointIdForNode, calculatePipeEndpointIdForPipeSource, calculatePipeEndpointIdForWorkflow } from './pipes';
+import {
+    PipeEndpointView,
+    PipeView,
+    calculatePipeEndpointIdForNode,
+    calculatePipeEndpointIdForPipeSource,
+    calculatePipeEndpointIdForWorkflow,
+} from './pipes';
 import { WorkflowInputName, getTypeName } from './work-names';
 
 export const WorkFlowView = ({
@@ -85,31 +91,35 @@ export const WorkFlowView = ({
                             {workflow.body.kind === `operator` && (
                                 <React.Fragment>
                                     <View className='p-2 flex-row items-center'>
-                                        <Text className='pl-1 text-blue-400'>{workflow.body.operator}</Text>
+                                        <Text className='pl-1 text-blue-400'>
+                                            {workflow.body.operator}
+                                        </Text>
                                         <Text className='pl-1' />
                                         <View className=''>
-                                            {[calculatePipeEndpointIdForWorkflow({
-                                                workflowUri: workflow.workflowUri,
-                                                direction: `out`,
-                                                name: `operator`,
-                                            })].map(operatorEndpointId => (
+                                            {[
+                                                calculatePipeEndpointIdForWorkflow({
+                                                    workflowUri: workflow.workflowUri,
+                                                    direction: `out`,
+                                                    name: `operator`,
+                                                }),
+                                            ].map(operatorEndpointId => (
                                                 <React.Fragment key={operatorEndpointId}>
-                                                    <PipeEndpointView
-                                                        id={operatorEndpointId}
-                                                    />
+                                                    <PipeEndpointView id={operatorEndpointId} />
                                                     {workflow.inputs.map(inPipe => (
                                                         <React.Fragment key={inPipe.name}>
                                                             <PipeView
                                                                 destinationId={operatorEndpointId}
-                                                                sourceId={calculatePipeEndpointIdForWorkflow({
-                                                                    workflowUri: workflow.workflowUri,
-                                                                    direction: `in`,
-                                                                    name: inPipe.name,
-                                                                })}
+                                                                sourceId={calculatePipeEndpointIdForWorkflow(
+                                                                    {
+                                                                        workflowUri:
+                                                                            workflow.workflowUri,
+                                                                        direction: `in`,
+                                                                        name: inPipe.name,
+                                                                    },
+                                                                )}
                                                             />
                                                         </React.Fragment>
-                                                    ))
-                                                    }
+                                                    ))}
                                                 </React.Fragment>
                                             ))}
                                         </View>

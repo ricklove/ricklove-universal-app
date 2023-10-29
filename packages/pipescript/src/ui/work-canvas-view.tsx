@@ -31,7 +31,7 @@ export const WorkCanvasView = ({ workflow }: { workflow: PipescriptWorkflow }) =
     }, [!viewRef.current]);
 
     const tabs = [`work-flow`, `node-instances`] as const;
-    const [tab, setTab] = useState(`work-flow` as typeof tabs[number]);
+    const [tab, setTab] = useState(`work-flow` as (typeof tabs)[number]);
 
     return (
         <View className='bg-slate-900 w-full h-full overflow-hidden'>
@@ -54,10 +54,18 @@ export const WorkCanvasView = ({ workflow }: { workflow: PipescriptWorkflow }) =
                         {tabs.map(x => (
                             <React.Fragment key={x}>
                                 <Pressable onPress={() => setTab(x)}>
-                                    <View className={`p-1 m-1 border-solid border-[1px] border-gray-800 ${tab === x ? `` : `opacity-50`}`}>
+                                    <View
+                                        className={`p-1 m-1 border-solid border-[1px] border-gray-800 ${
+                                            tab === x ? `` : `opacity-50`
+                                        }`}
+                                    >
                                         <Text
-                                            className={`text-gray-800 ${tab === x ? `` : `opacity-50`}`}
-                                        >{x}</Text>
+                                            className={`text-gray-800 ${
+                                                tab === x ? `` : `opacity-50`
+                                            }`}
+                                        >
+                                            {x}
+                                        </Text>
                                     </View>
                                 </Pressable>
                             </React.Fragment>
@@ -67,9 +75,7 @@ export const WorkCanvasView = ({ workflow }: { workflow: PipescriptWorkflow }) =
             >
                 <View ref={viewRef} className='w-full h-full justify-center items-center'>
                     <PipeEndpointsRegistry.Provider value={context.current}>
-                        {tab === `work-flow` && (
-                            <WorkFlowView workflow={workflow} full />
-                        )}
+                        {tab === `work-flow` && <WorkFlowView workflow={workflow} full />}
                         {tab === `node-instances` && (
                             <NodeInstancesView nodeInstances={nodeInstances} full />
                         )}

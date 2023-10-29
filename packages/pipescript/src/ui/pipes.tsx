@@ -124,7 +124,7 @@ export const PipeView = ({
 }: {
     sourceId: undefined | string;
     destinationId: string;
-    side?: `inflow` | `outflow`
+    side?: `inflow` | `outflow`;
 }) => {
     const registry = useContext(PipeEndpointsRegistry);
 
@@ -171,7 +171,9 @@ export const PipeView = ({
             <View className='w-0 h-0 absolute'>
                 <View
                     style={{
-                        transform: `translate(${-xDelta + 4}px,${-yDelta - 2 + (isOutflow ? 4 : 0)}px)`,
+                        transform: `translate(${-xDelta + 4}px,${
+                            -yDelta - 2 + (isOutflow ? 4 : 0)
+                        }px)`,
                     }}
                 >
                     <View
@@ -203,7 +205,7 @@ export const PipeView = ({
     );
 };
 
-export const PipeEndpointView = ({ id }: { id: string; }) => {
+export const PipeEndpointView = ({ id }: { id: string }) => {
     const size = 12;
 
     const registry = useContext(PipeEndpointsRegistry);
@@ -270,9 +272,7 @@ export const PipeEndpointView = ({ id }: { id: string; }) => {
             </View>
             {debug && (
                 <View className='absolute translate-y-[100px] rotate-90'>
-                    <Text
-                        className='text-blue-400'
-                    >{id}</Text>
+                    <Text className='text-blue-400'>{id}</Text>
                 </View>
             )}
         </View>

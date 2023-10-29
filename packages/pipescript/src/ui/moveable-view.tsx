@@ -90,8 +90,12 @@ export const MoveableView = ({
         const yPointer = e.clientY ?? 0;
         // console.log(`endDrag`, { xPointer, yPointer, e, position, contextScale });
 
-        const newX = (position.xDragStart ?? 0) + (xPointer - (position.xPointerDragStart ?? 0)) / contextScale;
-        const newY = (position.yDragStart ?? 0) + (yPointer - (position.yPointerDragStart ?? 0)) / contextScale;
+        const newX =
+            (position.xDragStart ?? 0)
+            + (xPointer - (position.xPointerDragStart ?? 0)) / contextScale;
+        const newY =
+            (position.yDragStart ?? 0)
+            + (yPointer - (position.yPointerDragStart ?? 0)) / contextScale;
 
         setPosition(s => ({
             ...s,
@@ -177,16 +181,11 @@ export const MoveableView = ({
         <MoveableContext.Consumer>
             {({ position: contextScale }) => (
                 <>
-                    <View
-                        className='flex-col flex-1'
-                    >
+                    <View className='flex-col flex-1'>
                         {wholeCanvas && (
-                            <View
-                                className='flex-col'
-                            >
+                            <View className='flex-col'>
                                 {HeaderComponent && (
-                                    <View
-                                        className='bg-white'>
+                                    <View className='bg-white'>
                                         <HeaderComponent />
                                     </View>
                                 )}
@@ -199,9 +198,7 @@ export const MoveableView = ({
                             /> */}
                             </View>
                         )}
-                        <View
-                            className={`flex-1 ${wholeCanvas ? `overflow-hidden` : ``}`}
-                        >
+                        <View className={`flex-1 ${wholeCanvas ? `overflow-hidden` : ``}`}>
                             <Pressable
                                 className={outerClassName}
                                 ref={hostRef}
@@ -224,9 +221,8 @@ export const MoveableView = ({
                         </View>
                     </View>
                 </>
-            )
-            }
-        </MoveableContext.Consumer >
+            )}
+        </MoveableContext.Consumer>
     );
 };
 
