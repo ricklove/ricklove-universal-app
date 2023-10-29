@@ -112,6 +112,7 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
                                         connection={nodeInstance.inputs.find(
                                             x => x.workflowInput === input,
                                         )}
+                                        hideOutput={nodeInstance.workflow.body.kind !== `nodes`}
                                     />
                                 </React.Fragment>
                             ))}
@@ -151,6 +152,7 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
                                         connection={nodeInstance.outputs.find(
                                             x => x.workflowOutput === output,
                                         )}
+                                        hideInput={nodeInstance.workflow.body.kind !== `nodes`}
                                     />
                                 </React.Fragment>
                             ))}
