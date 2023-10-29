@@ -113,7 +113,7 @@ const NodeView = ({
                                 </View>
                                 <View className='flex-row'>
                                     {nodeInstance.children.length && (
-                                        <View className={`flex-col`}>
+                                        <View className={`flex-row`}>
                                             {nodeInstance.children.map(x => (
                                                 <React.Fragment key={x.key}>
                                                     <NodeView
@@ -205,51 +205,58 @@ const NodeConnection = ({
 }) => {
 
     return (
-        <View className='flex-row justify-start items-center'>
-            <View className='flex-column'>
-                {connection && (
-                    <React.Fragment key={connection.key}>
-                        <View className='flex-row justify-start items-center'>
-                            <View className={`absolute right-10`}>
-                                {connection.inflowPipe?.pipe.kind === `data` && (
-                                    <Text className='text-purple-400 px-1'>
-                                        {connection.inflowPipe?.pipe.json}
-                                    </Text>
-                                )}
+        <View className='flex-column'>
+            <View className='flex-row justify-start items-center'>
+                <View className='flex-column'>
+                    {connection && (
+                        <React.Fragment key={connection.key}>
+                            <View className='flex-row justify-start items-center'>
+                                <View className={`absolute right-[40px]`}>
+                                    {connection.inflowPipe?.pipe.kind === `data` && (
+                                        <Text className='text-purple-400 px-1'>
+                                            {connection.inflowPipe?.pipe.json}
+                                        </Text>
+                                    )}
+                                </View>
+                                <PipeEndpointView id={getPipeConnectionKey(connection, `in`)} />
+                                <PipeValueView pipeValue={connection.inflowPipe} side={`inflow`} />
                             </View>
-                            <PipeEndpointView id={getPipeConnectionKey(connection, `in`)} />
-                            <PipeValueView pipeValue={connection.inflowPipe} side={`inflow`} />
-                            <View className='pl-1' />
-                            <NodeConnectionValue connection={connection} />
-                        </View>
-                    </React.Fragment>
+                        </React.Fragment>
+                    )}
+                </View>
+                <View className='pl-1' />
+                <Text
+                    className={`text-blue-300 ${variable.ignored ? `line-through opacity-50` : ``}`}
+                >{`${variable.name}`}</Text>
+                {variable.type && (
+                    <>
+                        <Text className='text-white'>:</Text>
+                        <Text className='pl-1 text-green-800'>{`${getTypeName(
+                            variable.type,
+                        )}`}</Text>
+                    </>
                 )}
+                <View className='pl-1' />
+                <View className='flex-column'>
+                    {connection && (
+                        <React.Fragment key={connection.key}>
+                            <PipeEndpointView id={getPipeConnectionKey(connection, `out`)} />
+                            {connection.outflowPipes.map(outflowPipe => outflowPipe && (
+                                <React.Fragment key={outflowPipe.key}>
+                                    <PipeValueView pipeValue={outflowPipe} side={`outflow`} />
+                                </React.Fragment>
+                            ))}
+                        </React.Fragment>
+                    )}
+                </View>
             </View>
-            <View className='pl-1' />
-            <Text
-                className={`text-blue-300 ${variable.ignored ? `line-through opacity-50` : ``}`}
-            >{`${variable.name}`}</Text>
-            {variable.type && (
+            {connection && (
                 <>
-                    <Text className='text-white'>:</Text>
-                    <Text className='pl-1 text-green-800'>{`${getTypeName(
-                        variable.type,
-                    )}`}</Text>
+                    <View className='flex-row'>
+                        <NodeConnectionValue connection={connection} />
+                    </View>
                 </>
             )}
-            <View className='pl-1' />
-            <View className='flex-column'>
-                {connection && (
-                    <React.Fragment key={connection.key}>
-                        <PipeEndpointView id={getPipeConnectionKey(connection, `out`)} />
-                        {connection.outflowPipes.map(outflowPipe => outflowPipe && (
-                            <React.Fragment key={outflowPipe.key}>
-                                <PipeValueView pipeValue={outflowPipe} side={`outflow`} />
-                            </React.Fragment>
-                        ))}
-                    </React.Fragment>
-                )}
-            </View>
         </View>
     );
 }
