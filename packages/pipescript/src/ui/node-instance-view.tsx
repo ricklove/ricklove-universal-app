@@ -102,7 +102,7 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
                 <View className='flex-col relative bg-slate-950/75 border-blue-100 border-solid border-[1px] m-[-1px] rounded p-1'>
                     <Text className='text-yellow-400 self-center'>{`${nodeInstance.workflow.name} #${nodeInstance.key}`}</Text>
 
-                    <View className='flex-row flex-1'>
+                    <View className='flex-col flex-1'>
                         <View className='flex-col justify-start items-start'>
                             {workflow.inputs.map(input => (
                                 <React.Fragment key={input.name}>
@@ -123,15 +123,15 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
                                         ⛏
                                     </Text>
                                 </View>
-                                <View className='flex-row'>
+                                <View className='flex-row flex-wrap'>
                                     {nodeInstance.children.length && (
-                                        <View className='flex-row'>
+                                        <>
                                             {nodeInstance.children.map(x => (
                                                 <React.Fragment key={x.key}>
                                                     <NodeView nodeInstance={x} />
                                                 </React.Fragment>
                                             ))}
-                                        </View>
+                                        </>
                                     )}
                                     {workflow.body.kind === `operator` && (
                                         <>
@@ -217,6 +217,8 @@ const PipeValueView = ({
 const NodeConnection = ({
     variable,
     connection,
+    hideInput,
+    hideOutput,
 }: {
     variable: {
         name: string;
@@ -231,16 +233,9 @@ const NodeConnection = ({
         <View className='flex-column'>
             <View className='flex-row justify-start items-center'>
                 <View className='flex-column'>
-                    {connection && (
+                    {!hideInput && connection && (
                         <React.Fragment key={connection.key}>
                             <View className='flex-row justify-start items-center'>
-                                <View className='absolute right-[40px]'>
-                                    {connection.inflowPipe?.pipe.kind === `data` && (
-                                        <Text className='text-purple-400 px-1'>
-                                            {connection.inflowPipe?.pipe.json}
-                                        </Text>
-                                    )}
-                                </View>
                                 <PipeEndpointView id={getPipeConnectionKey(connection, `in`)} />
                                 <PipeValueView pipeValue={connection.inflowPipe} side='inflow' />
                             </View>
@@ -261,7 +256,7 @@ const NodeConnection = ({
                 )}
                 <View className='pl-1' />
                 <View className='flex-column'>
-                    {connection && (
+                    {!hideOutput && connection && (
                         <React.Fragment key={connection.key}>
                             <PipeEndpointView id={getPipeConnectionKey(connection, `out`)} />
                             {connection.outflowPipes.map(
@@ -278,9 +273,14 @@ const NodeConnection = ({
             </View>
             {connection && (
                 <>
-                    <View className='flex-row'>
-                        <NodeConnectionValue connection={connection} />
-                    </View>
+                    <NodeConnectionValue connection={connection} />
+                    {connection.inflowPipe?.pipe.kind === `data` && (
+                        <View className='m-[1px] bg-purple-100 opacity-50'>
+                            <Text className='px-1 min-w-[60px] text-purple-400'>
+                                {connection.inflowPipe?.pipe.json}
+                            </Text>
+                        </View>
+                    )}
                 </>
             )}
         </View>
@@ -397,9 +397,9 @@ const ValueEditor = ({
     onChange: (value: unknown) => void;
     onCancel: () => void;
 }) => {
-    const [value, setValue] = useState(valueRaw);
+    const [value, setValue] = useState(JSON.stringify(valueRaw));
     const save = useStableCallback(() => {
-        onChange(value);
+        onChange(JSON.parse(value));
     });
     const clear = useStableCallback(() => {
         onChange(undefined);
@@ -410,11 +410,7 @@ const ValueEditor = ({
 
     return (
         <View className='absolute flex-col bg-gray-100 p-2 rounded z-10'>
-            <TextInput
-                className='bg-white'
-                value={JSON.stringify(value)}
-                onChangeText={x => setValue(JSON.parse(x))}
-            />
+            <TextInput className='bg-white' value={value} onChangeText={x => setValue(x)} />
             <View className='flex-row justify-between'>
                 <Pressable onPress={cancel}>
                     <View className='bg-gray-200 p-1 m-1'>

@@ -172,7 +172,7 @@ export const PipeView = ({
                 <View
                     style={{
                         transform: `translate(${-xDelta + 4}px,${
-                            -yDelta - 2 + (isOutflow ? 4 : 0)
+                            -yDelta - 2 + (isOutflow ? 2 : 0)
                         }px)`,
                     }}
                 >
