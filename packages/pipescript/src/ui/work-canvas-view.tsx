@@ -4,11 +4,11 @@ import { View, Text, Pressable, PointerEvent } from 'react-native';
 import { Subject, delay } from 'rxjs';
 
 import { MouseButton, MoveableView } from './moveable-view';
-import { WorkFlowView } from './work-flow-view';
-import { PipescriptNodeInstance, PipescriptWorkflow } from '../types';
 import { NodeInstancesView } from './node-instance-view';
-import { loadRuntime } from '../analysis/load-data';
 import { PipeEndpointsRegistry, PipeEndpointsRegistryType } from './pipes';
+import { WorkFlowView } from './work-flow-view';
+import { loadRuntime } from '../analysis/load-data';
+import { PipescriptNodeInstance, PipescriptWorkflow } from '../types';
 
 export const WorkCanvasView = ({ workflow }: { workflow: PipescriptWorkflow }) => {
     const nodeInstancesDatasetRef = useRef(loadRuntime(workflow).dataset);

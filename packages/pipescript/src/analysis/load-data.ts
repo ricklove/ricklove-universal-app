@@ -1,3 +1,4 @@
+import { calculateRun } from './calculate-run';
 import {
     PipescriptNode,
     PipescriptNodeInstance,
@@ -7,7 +8,6 @@ import {
     PipescriptPipeValueInstance,
     PipescriptWorkflow,
 } from '../types';
-import { calculateRun } from './calculate-run';
 
 export const loadRuntime = (
     workflowRaw: PipescriptWorkflow,
@@ -224,7 +224,7 @@ const loadNodeConnections_inflows = (nodeInstance: PipescriptNodeInstance) => {
             source,
             destination: {
                 kind: `input`,
-                input: input,
+                input,
             },
         };
     });
@@ -296,7 +296,7 @@ const loadNodeConnections_inflows = (nodeInstance: PipescriptNodeInstance) => {
             source,
             destination: {
                 kind: `output`,
-                output: output,
+                output,
             },
         };
     });

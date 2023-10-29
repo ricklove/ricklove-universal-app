@@ -8,6 +8,6 @@ module.exports = {
         '@typescript-eslint/quotes': [`error`, `backtick`],
         // 'jsx-quotes': [`error`, `prefer-single`],
         // 'import-quotes/import-quotes': [`error`, `single`],
-        'no-useless-return': false,
+        'no-useless-return': `off`,
     },
 };

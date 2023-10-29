@@ -12,6 +12,14 @@ import { BehaviorSubject, Observable, Subject, combineLatest, zip } from 'rxjs';
 
 import { MouseButton, MoveableContext, MoveableView } from './moveable-view';
 import {
+    PipeEndpointView,
+    PipeView,
+    calculatePipeEndpointIdForNode,
+    calculatePipeEndpointIdForPipeSource,
+    calculatePipeEndpointIdForWorkflow,
+} from './pipes';
+import { WorkflowInputName, getTypeName } from './work-names';
+import {
     PipescriptNode,
     PipescriptPipe,
     PipescriptPipeValue,
@@ -20,14 +28,6 @@ import {
     PipescriptWorkflow,
     PipescriptWorkflowInput,
 } from '../types';
-import {
-    PipeEndpointView,
-    PipeView,
-    calculatePipeEndpointIdForNode,
-    calculatePipeEndpointIdForPipeSource,
-    calculatePipeEndpointIdForWorkflow,
-} from './pipes';
-import { WorkflowInputName, getTypeName } from './work-names';
 
 export const WorkFlowView = ({
     workflow,
@@ -89,7 +89,7 @@ export const WorkFlowView = ({
                                 </React.Fragment>
                             ))}
                             {workflow.body.kind === `operator` && (
-                                <React.Fragment>
+                                <>
                                     <View className='p-2 flex-row items-center'>
                                         <Text className='pl-1 text-blue-400'>
                                             {workflow.body.operator}
@@ -124,7 +124,7 @@ export const WorkFlowView = ({
                                             ))}
                                         </View>
                                     </View>
-                                </React.Fragment>
+                                </>
                             )}
                         </View>
                     </View>

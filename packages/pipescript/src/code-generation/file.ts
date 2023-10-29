@@ -25,29 +25,29 @@ const indent = (text: string, depth: number = 1) => {
 const operatorExpressions = [
     // assignment
     ...([`declaration`, `=`] as const).map(operator => ({
-        operator: operator,
+        operator,
         template: (argNames: string[]) => `${argNames[0]}`,
     })),
     // prefix unary
     ...([`!`] as const).map(operator => ({
-        operator: operator,
+        operator,
         template: (argNames: string[]) => `${operator}${argNames[0]}`,
     })),
     // postfix unary
     ...([`++`, `--`] as const).map(operator => ({
-        operator: operator,
+        operator,
         template: (argNames: string[]) => `${argNames[0]}${operator}`,
     })),
     // binary
-    ...([`+`, `-`, `*`, `/`, `%`, `&&`, `||`, '==', '!=', '<', '>', '<=', '>='] as const).map(
+    ...([`+`, `-`, `*`, `/`, `%`, `&&`, `||`, `==`, `!=`, `<`, `>`, `<=`, `>=`] as const).map(
         operator => ({
-            operator: operator,
+            operator,
             template: (argNames: string[]) => `${argNames[0]} ${operator} ${argNames[1]}`,
         }),
     ),
     // custom
     ...([`conditional-ternary`] as const).map(operator => ({
-        operator: operator,
+        operator,
         template: (argNames: string[]) => `${argNames[0]} ? ${argNames[1]} : ${argNames[2]}`,
     })),
 ] satisfies {
@@ -174,7 +174,7 @@ const convertWorkflowToFunctionDeclaration = (
         const outputsExpression =
             outputsItems.length > 1
                 ? `{ ${outputsItems.join(`, `)} }`
-                : !!outputsItems.length
+                : outputsItems.length
                 ? `${outputsItems[0]}`
                 : `/* missing output item */ _unknown`;
         return `const ${outputsExpression} = ${funCall};`;

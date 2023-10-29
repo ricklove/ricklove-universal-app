@@ -47,7 +47,7 @@ export const calculateRunValue_connectionOverride = (
     if (!connection.runs) {
         connection.runs = {
             override: value,
-            value: value,
+            value,
             dependencies: [],
         };
     }

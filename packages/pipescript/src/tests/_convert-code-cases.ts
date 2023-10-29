@@ -1,9 +1,9 @@
 import { readdir, stat } from 'fs/promises';
 import { join } from 'path';
 
+import { loadRuntime } from '../analysis/load-data';
 import { convertWorkflowToTypescriptFile } from '../code-generation/file';
 import { convertTypescriptToPipescript } from '../core';
-import { loadRuntime } from '../analysis/load-data';
 
 async function getAllFiles(directoryPath: string): Promise<string[]> {
     const info = await stat(directoryPath);

@@ -1,13 +1,3 @@
-import {
-    PipescriptNodeInstance,
-    PipescriptNodePipeConnectionInputInstance,
-    PipescriptNodePipeConnectionInstance,
-    PipescriptPipeValueInstance,
-    PipescriptType,
-    PipescriptVariable,
-    PipescriptWorkflow,
-    PipescriptWorkflowInput,
-} from '../types';
 import { useStableCallback } from '@ricklove-universal/cl/src/utils/stable-callback';
 import React, {
     createContext,
@@ -18,6 +8,8 @@ import React, {
     useState,
 } from 'react';
 import { View, Text, Pressable, PointerEvent, TextInput } from 'react-native';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+
 import { MouseButton, MoveableView } from './moveable-view';
 import {
     PipeEndpointView,
@@ -26,8 +18,17 @@ import {
     calculatePipeEndpointIdForWorkflow,
 } from './pipes';
 import { WorkflowInputName, getTypeName } from './work-names';
-import { BehaviorSubject, Subject, Subscription } from 'rxjs';
 import { calculateRunValue_connectionOverride } from '../analysis/calculate-run';
+import {
+    PipescriptNodeInstance,
+    PipescriptNodePipeConnectionInputInstance,
+    PipescriptNodePipeConnectionInstance,
+    PipescriptPipeValueInstance,
+    PipescriptType,
+    PipescriptVariable,
+    PipescriptWorkflow,
+    PipescriptWorkflowInput,
+} from '../types';
 
 export const NodeInstancesView = ({
     nodeInstances,
@@ -40,7 +41,7 @@ export const NodeInstancesView = ({
 }) => {
     return (
         <RunValueContext.Provider value={createRunValue()}>
-            <View testID={`NodeInstancesView:View`} className={`flex-row`}>
+            <View testID='NodeInstancesView:View' className='flex-row'>
                 {nodeInstances.map(x => (
                     <React.Fragment key={x.key}>
                         <NodeView nodeInstance={x} />
@@ -64,7 +65,7 @@ const RootComponentsView = () => {
     }, []);
 
     return (
-        <View testID={`RootComponentsView:View`} className={`flex-row`}>
+        <View testID='RootComponentsView:View' className='flex-row'>
             {[...Object.entries(rootComponents)].map(([k, V]) => (
                 <React.Fragment key={k}>
                     <V />
@@ -88,7 +89,7 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
     const workflow = nodeInstance.workflow;
 
     return (
-        <View className={`p-1`}>
+        <View className='p-1'>
             <MoveableView
                 position={{
                     x: position.x,
@@ -98,9 +99,7 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
                 onMove={moveNode}
                 mouseButton={MouseButton.Middle}
             >
-                <View
-                    className={`flex-col relative bg-slate-950/75 border-blue-100 border-solid border-[1px] m-[-1px] rounded p-1`}
-                >
+                <View className='flex-col relative bg-slate-950/75 border-blue-100 border-solid border-[1px] m-[-1px] rounded p-1'>
                     <Text className='text-yellow-400 self-center'>{`${nodeInstance.workflow.name} #${nodeInstance.key}`}</Text>
 
                     <View className='flex-row flex-1'>
@@ -126,7 +125,7 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
                                 </View>
                                 <View className='flex-row'>
                                     {nodeInstance.children.length && (
-                                        <View className={`flex-row`}>
+                                        <View className='flex-row'>
                                             {nodeInstance.children.map(x => (
                                                 <React.Fragment key={x.key}>
                                                     <NodeView nodeInstance={x} />
@@ -135,11 +134,11 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
                                         </View>
                                     )}
                                     {workflow.body.kind === `operator` && (
-                                        <React.Fragment>
-                                            <Text className={`text-blue-600`}>
+                                        <>
+                                            <Text className='text-blue-600'>
                                                 {workflow.body.operator}
                                             </Text>
-                                        </React.Fragment>
+                                        </>
                                     )}
                                 </View>
                             </View>
@@ -235,7 +234,7 @@ const NodeConnection = ({
                     {connection && (
                         <React.Fragment key={connection.key}>
                             <View className='flex-row justify-start items-center'>
-                                <View className={`absolute right-[40px]`}>
+                                <View className='absolute right-[40px]'>
                                     {connection.inflowPipe?.pipe.kind === `data` && (
                                         <Text className='text-purple-400 px-1'>
                                             {connection.inflowPipe?.pipe.json}
@@ -243,7 +242,7 @@ const NodeConnection = ({
                                     )}
                                 </View>
                                 <PipeEndpointView id={getPipeConnectionKey(connection, `in`)} />
-                                <PipeValueView pipeValue={connection.inflowPipe} side={`inflow`} />
+                                <PipeValueView pipeValue={connection.inflowPipe} side='inflow' />
                             </View>
                         </React.Fragment>
                     )}
@@ -269,10 +268,7 @@ const NodeConnection = ({
                                 outflowPipe =>
                                     outflowPipe && (
                                         <React.Fragment key={outflowPipe.key}>
-                                            <PipeValueView
-                                                pipeValue={outflowPipe}
-                                                side={`outflow`}
-                                            />
+                                            <PipeValueView pipeValue={outflowPipe} side='outflow' />
                                         </React.Fragment>
                                     ),
                             )}
@@ -413,9 +409,9 @@ const ValueEditor = ({
     });
 
     return (
-        <View className={`absolute flex-col bg-gray-100 p-2 rounded z-10`}>
+        <View className='absolute flex-col bg-gray-100 p-2 rounded z-10'>
             <TextInput
-                className={`bg-white`}
+                className='bg-white'
                 value={JSON.stringify(value)}
                 onChangeText={x => setValue(JSON.parse(x))}
             />
