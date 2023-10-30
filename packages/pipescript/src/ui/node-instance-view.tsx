@@ -101,12 +101,8 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
                             ))}
                         </View>
                         <View className='flex-1'>
-                            <View className='flex-col justify-center items-center'>
-                                <View className='justify-center items-center'>
-                                    <Text className='text-white animate-bounce text-[8px] absolute top-2'>
-                                        ⛏
-                                    </Text>
-                                </View>
+                            <View className='flex-row'>
+                                <View className='flex-1' />
                                 <View className='flex-row flex-wrap'>
                                     {nodeInstance.children.length && (
                                         <>
@@ -124,6 +120,9 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
                                             </Text>
                                         </>
                                     )}
+                                </View>
+                                <View className='flex-1 justify-start items-end'>
+                                    <Text className='text-white text-[10px]'>⛏</Text>
                                 </View>
                             </View>
                         </View>
