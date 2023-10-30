@@ -314,7 +314,7 @@
                 ],
                 "runs": {
                   "_id_96_": "",
-                  "nameInScope": "a_1",
+                  "nameInScope": "a",
                   "value": 42,
                   "dependencies": [
                     {
@@ -402,7 +402,7 @@
                 ],
                 "runs": {
                   "_id_90_": "",
-                  "nameInScope": "b_2",
+                  "nameInScope": "b",
                   "value": 42,
                   "dependencies": [
                     {

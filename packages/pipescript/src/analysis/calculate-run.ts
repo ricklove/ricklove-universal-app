@@ -77,8 +77,9 @@ export const calculateRunValue_connectionOverride = (
 const calculateRun_names = (dataset: PipescriptNodeInstanceDataset) => {
     const contexts = new Map<PipescriptNodeInstance, RunContext>();
 
+    const global = {} as PipescriptNodeInstance;
     dataset.allNodeInstances.forEach(x => {
-        const parent = x.parent ?? x;
+        const parent = x.parent ?? global;
         const context =
             contexts.get(parent)
             ?? contexts

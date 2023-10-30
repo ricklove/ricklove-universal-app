@@ -1,7 +1,7 @@
 function file_ts() {
-    const a_1 = 42;
-    const value = a_1 + a_1;
-    const a_3 = a_1;
+    const a = 42;
+    const value = a + a;
+    const a_3 = a;
     const value_4 = a_3 + 2;
     const a_5 = a_3;
     const value_6 = 42 - a_5;

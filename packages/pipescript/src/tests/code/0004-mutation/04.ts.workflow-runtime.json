@@ -434,7 +434,7 @@
               ],
               "runs": {
                 "_id_97_": "",
-                "nameInScope": "a_1",
+                "nameInScope": "a",
                 "value": 42,
                 "dependencies": [
                   {

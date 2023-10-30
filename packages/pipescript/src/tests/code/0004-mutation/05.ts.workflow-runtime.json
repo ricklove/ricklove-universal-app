@@ -340,7 +340,7 @@
                 ],
                 "runs": {
                   "_id_109_": "",
-                  "nameInScope": "b_3",
+                  "nameInScope": "b",
                   "value": 43,
                   "dependencies": [
                     {
@@ -678,7 +678,7 @@
               ],
               "runs": {
                 "_id_135_": "",
-                "nameInScope": "a_1",
+                "nameInScope": "a",
                 "value": 42,
                 "dependencies": [
                   {

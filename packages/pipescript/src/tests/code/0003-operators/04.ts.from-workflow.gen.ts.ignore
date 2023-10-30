@@ -5,6 +5,6 @@ function file_ts() {
     const value_4 = a * value_3;
     const value_5 = a + value_4;
     const value_6 = value_5 + 7;
-    const b_7 = value_6;
+    const b = value_6;
     return b;
 }

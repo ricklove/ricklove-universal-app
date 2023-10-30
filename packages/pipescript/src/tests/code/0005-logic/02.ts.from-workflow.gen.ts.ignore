@@ -10,8 +10,8 @@ function file_ts() {
         return { b_4, a_4 };
     }
     const a = 42;
-    const b_2 = undefined;
+    const b = undefined;
     const value = a > 40;
-    const { b_4, a_4 } = file_ts_if_body(value, b_2, a);
+    const { b_4, a_4 } = file_ts_if_body(value, b, a);
     return b;
 }
