@@ -228,7 +228,43 @@
             "___ref": "_id_30_"
           },
           "children": [],
-          "operator": "declaration"
+          "operator": "declaration",
+          "runs": [
+            {
+              "_id_52_": "",
+              "key": "3054584180594115",
+              "inputs": [
+                {
+                  "_id_54_": "",
+                  "name": "answer",
+                  "value": 42
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_57_": "",
+                  "name": "answer",
+                  "value": 42
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "runs": [
+        {
+          "_id_62_": "",
+          "key": "7526427346151989",
+          "inputs": [],
+          "inner": [
+            {
+              "_id_65_": "",
+              "name": "answer",
+              "value": 42
+            }
+          ],
+          "outputs": []
         }
       ]
     }

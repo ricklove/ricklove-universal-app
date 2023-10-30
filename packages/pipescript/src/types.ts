@@ -183,6 +183,22 @@ export type PipescriptNodeInstanceDataset = {
     rootNodeInstances: PipescriptNodeInstance[];
 };
 
+export type PipescriptNodeInstanceRun = {
+    key: string;
+    inputs: {
+        name: string;
+        value: unknown;
+    }[];
+    inner: {
+        name: string;
+        value: unknown;
+    }[];
+    outputs: {
+        name: string;
+        value: unknown;
+    }[];
+};
+
 export type PipescriptNodeInstance = {
     dataset: PipescriptNodeInstanceDataset;
     key: string;
@@ -194,6 +210,8 @@ export type PipescriptNodeInstance = {
     parent: undefined | PipescriptNodeInstance;
     children: PipescriptNodeInstance[];
     operator?: PipescriptBuiltinOperator;
+
+    runs?: PipescriptNodeInstanceRun[];
 };
 
 export type PipescriptNodeInstance_Operator = {

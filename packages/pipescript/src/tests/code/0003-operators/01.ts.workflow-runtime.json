@@ -393,7 +393,7 @@
                               }
                             ],
                             "runs": {
-                              "_id_121_": "",
+                              "_id_128_": "",
                               "nameInScope": "value",
                               "value": 84,
                               "dependencies": [
@@ -417,7 +417,7 @@
                       },
                       "outflowPipes": [],
                       "runs": {
-                        "_id_119_": "",
+                        "_id_126_": "",
                         "nameInScope": "b",
                         "value": 84,
                         "dependencies": [
@@ -570,7 +570,7 @@
                       },
                       "outflowPipes": [],
                       "runs": {
-                        "_id_125_": "",
+                        "_id_140_": "",
                         "nameInScope": "left",
                         "value": 42,
                         "dependencies": [
@@ -628,7 +628,7 @@
                 }
               ],
               "runs": {
-                "_id_127_": "",
+                "_id_142_": "",
                 "nameInScope": "a",
                 "value": 42,
                 "dependencies": [
@@ -643,7 +643,28 @@
             "___ref": "_id_59_"
           },
           "children": [],
-          "operator": "declaration"
+          "operator": "declaration",
+          "runs": [
+            {
+              "_id_146_": "",
+              "key": "2291118307109192",
+              "inputs": [
+                {
+                  "_id_148_": "",
+                  "name": "a",
+                  "value": 42
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_151_": "",
+                  "name": "a",
+                  "value": 42
+                }
+              ]
+            }
+          ]
         },
         {
           "_id_81_": "",
@@ -674,7 +695,33 @@
             "___ref": "_id_59_"
           },
           "children": [],
-          "operator": "+"
+          "operator": "+",
+          "runs": [
+            {
+              "_id_132_": "",
+              "key": "5414925220091203",
+              "inputs": [
+                {
+                  "_id_134_": "",
+                  "name": "left",
+                  "value": 42
+                },
+                {
+                  "_id_135_": "",
+                  "name": "right",
+                  "value": 42
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_138_": "",
+                  "name": "value",
+                  "value": 84
+                }
+              ]
+            }
+          ]
         },
         {
           "_id_100_": "",
@@ -702,7 +749,58 @@
             "___ref": "_id_59_"
           },
           "children": [],
-          "operator": "declaration"
+          "operator": "declaration",
+          "runs": [
+            {
+              "_id_119_": "",
+              "key": "5687936183292662",
+              "inputs": [
+                {
+                  "_id_121_": "",
+                  "name": "b",
+                  "value": 84
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_124_": "",
+                  "name": "b",
+                  "value": 84
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "runs": [
+        {
+          "_id_156_": "",
+          "key": "1307559153432395",
+          "inputs": [],
+          "inner": [
+            {
+              "_id_159_": "",
+              "name": "a",
+              "value": 42
+            },
+            {
+              "_id_160_": "",
+              "name": "value",
+              "value": 84
+            },
+            {
+              "_id_161_": "",
+              "name": "b",
+              "value": 84
+            }
+          ],
+          "outputs": [
+            {
+              "_id_163_": "",
+              "name": "b"
+            }
+          ]
         }
       ]
     }

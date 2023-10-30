@@ -5,6 +5,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 
 import { MouseButton, MoveableView } from './moveable-view';
 import { PipeEndpointView, PipeView } from './pipes';
+import { ValueEditor } from './value-view';
 import { getTypeName } from './work-names';
 import { calculateRunValue_connectionOverride } from '../analysis/calculate-run';
 import {
@@ -311,115 +312,12 @@ const NodeConnectionValue = ({
 
     return (
         <>
-            <ValueEditorContainer
+            <ValueEditor
                 id={connection.key}
                 value={runValue}
                 hasOverride={hasOverride}
                 onChange={changeValue}
             />
         </>
-    );
-};
-
-const ValueEditorContainer = ({
-    id,
-    value,
-    hasOverride,
-    onChange,
-}: {
-    id: string;
-    value: unknown;
-    hasOverride: boolean;
-    onChange: (value: unknown) => void;
-}) => {
-    const runValueContext = useContext(RunValueContext);
-
-    const changeValue = useStableCallback((v: unknown) => {
-        toggleEdit(false);
-        onChange(v);
-    });
-
-    const toggleEdit = useStableCallback((visible: boolean) => {
-        console.log(`ValueEditor: toggleEdit`, { visible });
-        const newShowEdit = visible;
-
-        const components = runValueContext.Components.value;
-        if (newShowEdit) {
-            components[id] = () => (
-                <ValueEditor
-                    id={id}
-                    value={value}
-                    onChange={changeValue}
-                    onCancel={() => toggleEdit(false)}
-                />
-            );
-        } else {
-            delete components[id];
-        }
-        runValueContext.Components.next(components);
-    });
-
-    return (
-        <>
-            <Pressable onPressIn={() => toggleEdit(true)}>
-                <View className={`m-[1px] ${hasOverride ? `bg-green-100 ` : `bg-purple-100`}`}>
-                    <Text
-                        className={`px-1 min-w-[60px] ${
-                            hasOverride ? `text-green-600` : `text-purple-600`
-                        }`}
-                    >
-                        {JSON.stringify(value)}
-                    </Text>
-                </View>
-            </Pressable>
-        </>
-    );
-};
-
-const ValueEditor = ({
-    id,
-    value: valueRaw,
-    onChange,
-    onCancel,
-}: {
-    id: string;
-    value: unknown;
-    onChange: (value: unknown) => void;
-    onCancel: () => void;
-}) => {
-    const [value, setValue] = useState(JSON.stringify(valueRaw));
-    const save = useStableCallback(() => {
-        onChange(JSON.parse(value));
-    });
-    const clear = useStableCallback(() => {
-        onChange(undefined);
-    });
-    const cancel = useStableCallback(() => {
-        onCancel();
-    });
-
-    return (
-        <View className='absolute flex-col bg-gray-100 p-2 rounded z-10'>
-            <TextInput className='bg-white' value={value} onChangeText={x => setValue(x)} />
-            <View className='flex-row justify-between'>
-                <Pressable onPress={cancel}>
-                    <View className='bg-gray-200 p-1 m-1'>
-                        <Text>Cancel</Text>
-                    </View>
-                </Pressable>
-
-                <Pressable onPress={clear}>
-                    <View className='bg-red-200 p-1 m-1'>
-                        <Text>Clear</Text>
-                    </View>
-                </Pressable>
-
-                <Pressable onPress={save}>
-                    <View className='bg-blue-200 p-1 m-1'>
-                        <Text>Save</Text>
-                    </View>
-                </Pressable>
-            </View>
-        </View>
     );
 };

@@ -292,7 +292,48 @@
             "___ref": "_id_33_"
           },
           "children": [],
-          "operator": "declaration"
+          "operator": "declaration",
+          "runs": [
+            {
+              "_id_62_": "",
+              "key": "3054584180594115",
+              "inputs": [
+                {
+                  "_id_64_": "",
+                  "name": "answer",
+                  "value": 42
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_67_": "",
+                  "name": "answer",
+                  "value": 42
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "runs": [
+        {
+          "_id_72_": "",
+          "key": "2493605032774638",
+          "inputs": [],
+          "inner": [
+            {
+              "_id_75_": "",
+              "name": "answer",
+              "value": 42
+            }
+          ],
+          "outputs": [
+            {
+              "_id_77_": "",
+              "name": "answer"
+            }
+          ]
         }
       ]
     }

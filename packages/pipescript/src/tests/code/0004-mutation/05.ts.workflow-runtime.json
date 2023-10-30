@@ -401,7 +401,7 @@
                               }
                             ],
                             "runs": {
-                              "_id_115_": "",
+                              "_id_122_": "",
                               "nameInScope": "old",
                               "value": 43,
                               "dependencies": [
@@ -422,7 +422,7 @@
                       },
                       "outflowPipes": [],
                       "runs": {
-                        "_id_113_": "",
+                        "_id_120_": "",
                         "nameInScope": "b",
                         "value": 43,
                         "dependencies": [
@@ -456,7 +456,7 @@
           }
         },
         {
-          "_id_125_": "",
+          "_id_132_": "",
           "key": "1:a:workflowOutput",
           "nodeInstance": {
             "___ref": "_id_60_"
@@ -467,16 +467,16 @@
           },
           "name": "a",
           "inflowPipe": {
-            "_id_122_": "",
+            "_id_129_": "",
             "key": "1:a:workflowOutput:pipe",
             "pipe": {
               "___ref": "_id_19_"
             },
             "source": {
-              "_id_123_": "",
+              "_id_130_": "",
               "kind": "output",
               "output": {
-                "_id_117_": "",
+                "_id_124_": "",
                 "key": "3:a:workflowOutput",
                 "nodeInstance": {
                   "___ref": "_id_82_"
@@ -487,33 +487,33 @@
                 },
                 "name": "a",
                 "inflowPipe": {
-                  "_id_118_": "",
+                  "_id_125_": "",
                   "key": "3:a:workflowOutput:pipe",
                   "pipe": {
                     "___ref": "_id_38_"
                   },
                   "source": {
-                    "_id_119_": "",
+                    "_id_126_": "",
                     "kind": "operator-output",
                     "nodeInstance": {
                       "___ref": "_id_82_"
                     }
                   },
                   "destination": {
-                    "_id_120_": "",
+                    "_id_127_": "",
                     "kind": "output",
                     "output": {
-                      "___ref": "_id_117_"
+                      "___ref": "_id_124_"
                     }
                   }
                 },
                 "outflowPipes": [
                   {
-                    "___ref": "_id_122_"
+                    "___ref": "_id_129_"
                   }
                 ],
                 "runs": {
-                  "_id_129_": "",
+                  "_id_136_": "",
                   "nameInScope": "a_2",
                   "value": 43,
                   "dependencies": [
@@ -533,7 +533,7 @@
                       },
                       "outflowPipes": [],
                       "runs": {
-                        "_id_133_": "",
+                        "_id_148_": "",
                         "nameInScope": "old",
                         "value": 42,
                         "dependencies": [
@@ -548,20 +548,20 @@
               }
             },
             "destination": {
-              "_id_124_": "",
+              "_id_131_": "",
               "kind": "output",
               "output": {
-                "___ref": "_id_125_"
+                "___ref": "_id_132_"
               }
             }
           },
           "outflowPipes": [],
           "runs": {
-            "_id_127_": "",
+            "_id_134_": "",
             "nameInScope": "a",
             "dependencies": [
               {
-                "___ref": "_id_117_"
+                "___ref": "_id_124_"
               }
             ]
           }
@@ -677,7 +677,7 @@
                 }
               ],
               "runs": {
-                "_id_135_": "",
+                "_id_150_": "",
                 "nameInScope": "a",
                 "value": 42,
                 "dependencies": [
@@ -692,7 +692,28 @@
             "___ref": "_id_60_"
           },
           "children": [],
-          "operator": "declaration"
+          "operator": "declaration",
+          "runs": [
+            {
+              "_id_154_": "",
+              "key": "2291118307109192",
+              "inputs": [
+                {
+                  "_id_156_": "",
+                  "name": "a",
+                  "value": 42
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_159_": "",
+                  "name": "a",
+                  "value": 42
+                }
+              ]
+            }
+          ]
         },
         {
           "_id_82_": "",
@@ -716,14 +737,40 @@
               "___ref": "_id_85_"
             },
             {
-              "___ref": "_id_117_"
+              "___ref": "_id_124_"
             }
           ],
           "parent": {
             "___ref": "_id_60_"
           },
           "children": [],
-          "operator": "++"
+          "operator": "++",
+          "runs": [
+            {
+              "_id_140_": "",
+              "key": "2107380085748880",
+              "inputs": [
+                {
+                  "_id_142_": "",
+                  "name": "old",
+                  "value": 42
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_145_": "",
+                  "name": "old",
+                  "value": 43
+                },
+                {
+                  "_id_146_": "",
+                  "name": "a_2",
+                  "value": 43
+                }
+              ]
+            }
+          ]
         },
         {
           "_id_94_": "",
@@ -751,7 +798,67 @@
             "___ref": "_id_60_"
           },
           "children": [],
-          "operator": "declaration"
+          "operator": "declaration",
+          "runs": [
+            {
+              "_id_113_": "",
+              "key": "6539339633124695",
+              "inputs": [
+                {
+                  "_id_115_": "",
+                  "name": "b",
+                  "value": 43
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_118_": "",
+                  "name": "b",
+                  "value": 43
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "runs": [
+        {
+          "_id_164_": "",
+          "key": "666000206768997",
+          "inputs": [],
+          "inner": [
+            {
+              "_id_167_": "",
+              "name": "a",
+              "value": 42
+            },
+            {
+              "_id_168_": "",
+              "name": "old",
+              "value": 43
+            },
+            {
+              "_id_169_": "",
+              "name": "a_2",
+              "value": 43
+            },
+            {
+              "_id_170_": "",
+              "name": "b",
+              "value": 43
+            }
+          ],
+          "outputs": [
+            {
+              "_id_172_": "",
+              "name": "b"
+            },
+            {
+              "_id_173_": "",
+              "name": "a"
+            }
+          ]
         }
       ]
     }

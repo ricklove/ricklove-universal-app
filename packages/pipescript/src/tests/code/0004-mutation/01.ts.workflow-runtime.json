@@ -294,7 +294,7 @@
                       },
                       "outflowPipes": [],
                       "runs": {
-                        "_id_96_": "",
+                        "_id_104_": "",
                         "nameInScope": "old",
                         "value": 42,
                         "dependencies": [
@@ -438,7 +438,7 @@
                 }
               ],
               "runs": {
-                "_id_98_": "",
+                "_id_106_": "",
                 "nameInScope": "a",
                 "value": 42,
                 "dependencies": [
@@ -453,7 +453,28 @@
             "___ref": "_id_48_"
           },
           "children": [],
-          "operator": "declaration"
+          "operator": "declaration",
+          "runs": [
+            {
+              "_id_110_": "",
+              "key": "2291118307109192",
+              "inputs": [
+                {
+                  "_id_112_": "",
+                  "name": "a",
+                  "value": 42
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_115_": "",
+                  "name": "a",
+                  "value": 42
+                }
+              ]
+            }
+          ]
         },
         {
           "_id_70_": "",
@@ -519,7 +540,58 @@
             "___ref": "_id_48_"
           },
           "children": [],
-          "operator": "="
+          "operator": "=",
+          "runs": [
+            {
+              "_id_96_": "",
+              "key": "505600846395528",
+              "inputs": [
+                {
+                  "_id_98_": "",
+                  "name": "old",
+                  "value": 42
+                },
+                {
+                  "_id_99_": "",
+                  "name": "value",
+                  "value": 43
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_102_": "",
+                  "name": "a_2",
+                  "value": 42
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "runs": [
+        {
+          "_id_120_": "",
+          "key": "8682038142034515",
+          "inputs": [],
+          "inner": [
+            {
+              "_id_123_": "",
+              "name": "a",
+              "value": 42
+            },
+            {
+              "_id_124_": "",
+              "name": "a_2",
+              "value": 42
+            }
+          ],
+          "outputs": [
+            {
+              "_id_126_": "",
+              "name": "a"
+            }
+          ]
         }
       ]
     }

@@ -682,7 +682,7 @@
                               }
                             ],
                             "runs": {
-                              "_id_253_": "",
+                              "_id_260_": "",
                               "nameInScope": "value_6",
                               "value": -5159,
                               "dependencies": [
@@ -744,7 +744,7 @@
                                           }
                                         ],
                                         "runs": {
-                                          "_id_259_": "",
+                                          "_id_274_": "",
                                           "nameInScope": "value_5",
                                           "value": -5166,
                                           "dependencies": [
@@ -832,7 +832,7 @@
                                                       }
                                                     ],
                                                     "runs": {
-                                                      "_id_265_": "",
+                                                      "_id_288_": "",
                                                       "nameInScope": "value_4",
                                                       "value": -5208,
                                                       "dependencies": [
@@ -879,7 +879,7 @@
                                               },
                                               "outflowPipes": [],
                                               "runs": {
-                                                "_id_263_": "",
+                                                "_id_286_": "",
                                                 "nameInScope": "right",
                                                 "value": -5208,
                                                 "dependencies": [
@@ -903,7 +903,7 @@
                                   },
                                   "outflowPipes": [],
                                   "runs": {
-                                    "_id_257_": "",
+                                    "_id_272_": "",
                                     "nameInScope": "left",
                                     "value": -5166,
                                     "dependencies": [
@@ -965,7 +965,7 @@
                       },
                       "outflowPipes": [],
                       "runs": {
-                        "_id_251_": "",
+                        "_id_258_": "",
                         "nameInScope": "b",
                         "value": -5159,
                         "dependencies": [
@@ -1118,7 +1118,7 @@
                       },
                       "outflowPipes": [],
                       "runs": {
-                        "_id_281_": "",
+                        "_id_328_": "",
                         "nameInScope": "left",
                         "value": 42,
                         "dependencies": [
@@ -1174,7 +1174,7 @@
                 }
               ],
               "runs": {
-                "_id_283_": "",
+                "_id_330_": "",
                 "nameInScope": "a",
                 "value": 42,
                 "dependencies": [
@@ -1189,7 +1189,28 @@
             "___ref": "_id_115_"
           },
           "children": [],
-          "operator": "declaration"
+          "operator": "declaration",
+          "runs": [
+            {
+              "_id_334_": "",
+              "key": "2291118307109192",
+              "inputs": [
+                {
+                  "_id_336_": "",
+                  "name": "a",
+                  "value": 42
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_339_": "",
+                  "name": "a",
+                  "value": 42
+                }
+              ]
+            }
+          ]
         },
         {
           "_id_137_": "",
@@ -1312,7 +1333,7 @@
                       },
                       "outflowPipes": [],
                       "runs": {
-                        "_id_275_": "",
+                        "_id_314_": "",
                         "nameInScope": "right",
                         "value": 126,
                         "dependencies": [
@@ -1326,7 +1347,7 @@
                 }
               ],
               "runs": {
-                "_id_277_": "",
+                "_id_316_": "",
                 "nameInScope": "value",
                 "value": 126,
                 "dependencies": [
@@ -1344,7 +1365,33 @@
             "___ref": "_id_115_"
           },
           "children": [],
-          "operator": "*"
+          "operator": "*",
+          "runs": [
+            {
+              "_id_320_": "",
+              "key": "6885974735924839",
+              "inputs": [
+                {
+                  "_id_322_": "",
+                  "name": "left",
+                  "value": 42
+                },
+                {
+                  "_id_323_": "",
+                  "name": "right",
+                  "value": 3
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_326_": "",
+                  "name": "value",
+                  "value": 126
+                }
+              ]
+            }
+          ]
         },
         {
           "_id_156_": "",
@@ -1467,7 +1514,7 @@
                       },
                       "outflowPipes": [],
                       "runs": {
-                        "_id_269_": "",
+                        "_id_300_": "",
                         "nameInScope": "right",
                         "value": -124,
                         "dependencies": [
@@ -1481,7 +1528,7 @@
                 }
               ],
               "runs": {
-                "_id_271_": "",
+                "_id_302_": "",
                 "nameInScope": "value_3",
                 "value": -124,
                 "dependencies": [
@@ -1499,7 +1546,33 @@
             "___ref": "_id_115_"
           },
           "children": [],
-          "operator": "-"
+          "operator": "-",
+          "runs": [
+            {
+              "_id_306_": "",
+              "key": "592157863834325",
+              "inputs": [
+                {
+                  "_id_308_": "",
+                  "name": "left",
+                  "value": 2
+                },
+                {
+                  "_id_309_": "",
+                  "name": "right",
+                  "value": 126
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_312_": "",
+                  "name": "value_3",
+                  "value": -124
+                }
+              ]
+            }
+          ]
         },
         {
           "_id_175_": "",
@@ -1530,7 +1603,33 @@
             "___ref": "_id_115_"
           },
           "children": [],
-          "operator": "*"
+          "operator": "*",
+          "runs": [
+            {
+              "_id_292_": "",
+              "key": "1958833320166181",
+              "inputs": [
+                {
+                  "_id_294_": "",
+                  "name": "left",
+                  "value": 42
+                },
+                {
+                  "_id_295_": "",
+                  "name": "right",
+                  "value": -124
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_298_": "",
+                  "name": "value_4",
+                  "value": -5208
+                }
+              ]
+            }
+          ]
         },
         {
           "_id_194_": "",
@@ -1561,7 +1660,33 @@
             "___ref": "_id_115_"
           },
           "children": [],
-          "operator": "+"
+          "operator": "+",
+          "runs": [
+            {
+              "_id_278_": "",
+              "key": "1390557162566614",
+              "inputs": [
+                {
+                  "_id_280_": "",
+                  "name": "left",
+                  "value": 42
+                },
+                {
+                  "_id_281_": "",
+                  "name": "right",
+                  "value": -5208
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_284_": "",
+                  "name": "value_5",
+                  "value": -5166
+                }
+              ]
+            }
+          ]
         },
         {
           "_id_213_": "",
@@ -1592,7 +1717,33 @@
             "___ref": "_id_115_"
           },
           "children": [],
-          "operator": "+"
+          "operator": "+",
+          "runs": [
+            {
+              "_id_264_": "",
+              "key": "6347707699009116",
+              "inputs": [
+                {
+                  "_id_266_": "",
+                  "name": "left",
+                  "value": -5166
+                },
+                {
+                  "_id_267_": "",
+                  "name": "right",
+                  "value": 7
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_270_": "",
+                  "name": "value_6",
+                  "value": -5159
+                }
+              ]
+            }
+          ]
         },
         {
           "_id_232_": "",
@@ -1620,7 +1771,78 @@
             "___ref": "_id_115_"
           },
           "children": [],
-          "operator": "declaration"
+          "operator": "declaration",
+          "runs": [
+            {
+              "_id_251_": "",
+              "key": "63072456937569",
+              "inputs": [
+                {
+                  "_id_253_": "",
+                  "name": "b",
+                  "value": -5159
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_256_": "",
+                  "name": "b",
+                  "value": -5159
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "runs": [
+        {
+          "_id_344_": "",
+          "key": "7725814670911598",
+          "inputs": [],
+          "inner": [
+            {
+              "_id_347_": "",
+              "name": "a",
+              "value": 42
+            },
+            {
+              "_id_348_": "",
+              "name": "value",
+              "value": 126
+            },
+            {
+              "_id_349_": "",
+              "name": "value_3",
+              "value": -124
+            },
+            {
+              "_id_350_": "",
+              "name": "value_4",
+              "value": -5208
+            },
+            {
+              "_id_351_": "",
+              "name": "value_5",
+              "value": -5166
+            },
+            {
+              "_id_352_": "",
+              "name": "value_6",
+              "value": -5159
+            },
+            {
+              "_id_353_": "",
+              "name": "b",
+              "value": -5159
+            }
+          ],
+          "outputs": [
+            {
+              "_id_355_": "",
+              "name": "b"
+            }
+          ]
         }
       ]
     }

@@ -142,7 +142,7 @@
       "inputs": [],
       "outputs": [
         {
-          "_id_56_": "",
+          "_id_63_": "",
           "key": "1:answerExport:workflowOutput",
           "nodeInstance": {
             "___ref": "_id_33_"
@@ -154,7 +154,7 @@
           "name": "answerExport",
           "outflowPipes": [],
           "runs": {
-            "_id_58_": "",
+            "_id_65_": "",
             "nameInScope": "answerExport",
             "dependencies": []
           }
@@ -263,7 +263,48 @@
             "___ref": "_id_33_"
           },
           "children": [],
-          "operator": "declaration"
+          "operator": "declaration",
+          "runs": [
+            {
+              "_id_55_": "",
+              "key": "3054584180594115",
+              "inputs": [
+                {
+                  "_id_57_": "",
+                  "name": "answer",
+                  "value": 42
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_60_": "",
+                  "name": "answer",
+                  "value": 42
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "runs": [
+        {
+          "_id_69_": "",
+          "key": "5256583075183504",
+          "inputs": [],
+          "inner": [
+            {
+              "_id_72_": "",
+              "name": "answer",
+              "value": 42
+            }
+          ],
+          "outputs": [
+            {
+              "_id_74_": "",
+              "name": "answerExport"
+            }
+          ]
         }
       ]
     }

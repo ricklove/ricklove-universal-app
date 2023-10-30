@@ -733,7 +733,7 @@
                                     },
                                     "outflowPipes": [],
                                     "runs": {
-                                      "_id_269_": "",
+                                      "_id_285_": "",
                                       "nameInScope": "right",
                                       "value": 42,
                                       "dependencies": [
@@ -750,7 +750,7 @@
                               }
                             ],
                             "runs": {
-                              "_id_271_": "",
+                              "_id_287_": "",
                               "nameInScope": "a_5",
                               "value": 42,
                               "dependencies": [
@@ -839,7 +839,7 @@
                                                 },
                                                 "outflowPipes": [],
                                                 "runs": {
-                                                  "_id_281_": "",
+                                                  "_id_313_": "",
                                                   "nameInScope": "left",
                                                   "value": 42,
                                                   "dependencies": [
@@ -856,7 +856,7 @@
                                           }
                                         ],
                                         "runs": {
-                                          "_id_283_": "",
+                                          "_id_315_": "",
                                           "nameInScope": "a_3",
                                           "value": 42,
                                           "dependencies": [
@@ -1054,7 +1054,7 @@
                       },
                       "outflowPipes": [],
                       "runs": {
-                        "_id_293_": "",
+                        "_id_341_": "",
                         "nameInScope": "left",
                         "value": 42,
                         "dependencies": [
@@ -1156,7 +1156,7 @@
                 }
               ],
               "runs": {
-                "_id_295_": "",
+                "_id_343_": "",
                 "nameInScope": "a",
                 "value": 42,
                 "dependencies": [
@@ -1171,7 +1171,28 @@
             "___ref": "_id_120_"
           },
           "children": [],
-          "operator": "declaration"
+          "operator": "declaration",
+          "runs": [
+            {
+              "_id_347_": "",
+              "key": "2291118307109192",
+              "inputs": [
+                {
+                  "_id_349_": "",
+                  "name": "a",
+                  "value": 42
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_352_": "",
+                  "name": "a",
+                  "value": 42
+                }
+              ]
+            }
+          ]
         },
         {
           "_id_142_": "",
@@ -1259,7 +1280,7 @@
                       },
                       "outflowPipes": [],
                       "runs": {
-                        "_id_287_": "",
+                        "_id_327_": "",
                         "nameInScope": "value",
                         "value": 84,
                         "dependencies": [
@@ -1273,7 +1294,7 @@
                 }
               ],
               "runs": {
-                "_id_289_": "",
+                "_id_329_": "",
                 "nameInScope": "value",
                 "value": 84,
                 "dependencies": [
@@ -1291,7 +1312,33 @@
             "___ref": "_id_120_"
           },
           "children": [],
-          "operator": "+"
+          "operator": "+",
+          "runs": [
+            {
+              "_id_333_": "",
+              "key": "5414925220091203",
+              "inputs": [
+                {
+                  "_id_335_": "",
+                  "name": "left",
+                  "value": 42
+                },
+                {
+                  "_id_336_": "",
+                  "name": "right",
+                  "value": 42
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_339_": "",
+                  "name": "value",
+                  "value": 84
+                }
+              ]
+            }
+          ]
         },
         {
           "_id_161_": "",
@@ -1322,7 +1369,33 @@
             "___ref": "_id_120_"
           },
           "children": [],
-          "operator": "="
+          "operator": "=",
+          "runs": [
+            {
+              "_id_319_": "",
+              "key": "4025016745218840",
+              "inputs": [
+                {
+                  "_id_321_": "",
+                  "name": "old",
+                  "value": 42
+                },
+                {
+                  "_id_322_": "",
+                  "name": "value",
+                  "value": 84
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_325_": "",
+                  "name": "a_3",
+                  "value": 42
+                }
+              ]
+            }
+          ]
         },
         {
           "_id_180_": "",
@@ -1445,7 +1518,7 @@
                       },
                       "outflowPipes": [],
                       "runs": {
-                        "_id_275_": "",
+                        "_id_299_": "",
                         "nameInScope": "value",
                         "value": 44,
                         "dependencies": [
@@ -1459,7 +1532,7 @@
                 }
               ],
               "runs": {
-                "_id_277_": "",
+                "_id_301_": "",
                 "nameInScope": "value_4",
                 "value": 44,
                 "dependencies": [
@@ -1477,7 +1550,33 @@
             "___ref": "_id_120_"
           },
           "children": [],
-          "operator": "+"
+          "operator": "+",
+          "runs": [
+            {
+              "_id_305_": "",
+              "key": "3284096507936579",
+              "inputs": [
+                {
+                  "_id_307_": "",
+                  "name": "left",
+                  "value": 42
+                },
+                {
+                  "_id_308_": "",
+                  "name": "right",
+                  "value": 2
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_311_": "",
+                  "name": "value_4",
+                  "value": 44
+                }
+              ]
+            }
+          ]
         },
         {
           "_id_199_": "",
@@ -1508,7 +1607,33 @@
             "___ref": "_id_120_"
           },
           "children": [],
-          "operator": "="
+          "operator": "=",
+          "runs": [
+            {
+              "_id_291_": "",
+              "key": "8843954043803618",
+              "inputs": [
+                {
+                  "_id_293_": "",
+                  "name": "old",
+                  "value": 42
+                },
+                {
+                  "_id_294_": "",
+                  "name": "value",
+                  "value": 44
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_297_": "",
+                  "name": "a_5",
+                  "value": 42
+                }
+              ]
+            }
+          ]
         },
         {
           "_id_218_": "",
@@ -1631,7 +1756,7 @@
                       },
                       "outflowPipes": [],
                       "runs": {
-                        "_id_263_": "",
+                        "_id_271_": "",
                         "nameInScope": "value",
                         "value": 0,
                         "dependencies": [
@@ -1645,7 +1770,7 @@
                 }
               ],
               "runs": {
-                "_id_265_": "",
+                "_id_273_": "",
                 "nameInScope": "value_6",
                 "value": 0,
                 "dependencies": [
@@ -1663,7 +1788,33 @@
             "___ref": "_id_120_"
           },
           "children": [],
-          "operator": "-"
+          "operator": "-",
+          "runs": [
+            {
+              "_id_277_": "",
+              "key": "4239457177956897",
+              "inputs": [
+                {
+                  "_id_279_": "",
+                  "name": "left",
+                  "value": 42
+                },
+                {
+                  "_id_280_": "",
+                  "name": "right",
+                  "value": 42
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_283_": "",
+                  "name": "value_6",
+                  "value": 0
+                }
+              ]
+            }
+          ]
         },
         {
           "_id_237_": "",
@@ -1694,7 +1845,83 @@
             "___ref": "_id_120_"
           },
           "children": [],
-          "operator": "="
+          "operator": "=",
+          "runs": [
+            {
+              "_id_263_": "",
+              "key": "6502051826248444",
+              "inputs": [
+                {
+                  "_id_265_": "",
+                  "name": "old",
+                  "value": 42
+                },
+                {
+                  "_id_266_": "",
+                  "name": "value",
+                  "value": 0
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_269_": "",
+                  "name": "a_7",
+                  "value": 42
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "runs": [
+        {
+          "_id_357_": "",
+          "key": "5009371909592602",
+          "inputs": [],
+          "inner": [
+            {
+              "_id_360_": "",
+              "name": "a",
+              "value": 42
+            },
+            {
+              "_id_361_": "",
+              "name": "value",
+              "value": 84
+            },
+            {
+              "_id_362_": "",
+              "name": "a_3",
+              "value": 42
+            },
+            {
+              "_id_363_": "",
+              "name": "value_4",
+              "value": 44
+            },
+            {
+              "_id_364_": "",
+              "name": "a_5",
+              "value": 42
+            },
+            {
+              "_id_365_": "",
+              "name": "value_6",
+              "value": 0
+            },
+            {
+              "_id_366_": "",
+              "name": "a_7",
+              "value": 42
+            }
+          ],
+          "outputs": [
+            {
+              "_id_368_": "",
+              "name": "a"
+            }
+          ]
         }
       ]
     }

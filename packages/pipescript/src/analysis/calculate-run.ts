@@ -1,3 +1,4 @@
+import { hashCode } from './hash';
 import {
     PipescriptBuiltinOperator,
     PipescriptNodeInstance,
@@ -23,6 +24,36 @@ export const calculateRun = (
     });
 
     calculateRun_names(dataset);
+    recordRun(dataset);
+};
+const recordRun = (dataset: PipescriptNodeInstanceDataset) => {
+    dataset.allNodeInstances.forEach(node => {
+        const runValue = {
+            inputs: node.inputs.map(x => ({
+                name: x.runs?.nameInScope ?? x.name,
+                value: x.runs?.value,
+            })),
+            inner: node.children.flatMap(c =>
+                c.outputs.map(x => ({
+                    name: x.runs?.nameInScope ?? x.name,
+                    value: x.runs?.value,
+                })),
+            ),
+            outputs: node.outputs.map(x => ({
+                name: x.runs?.nameInScope ?? x.name,
+                value: x.runs?.value,
+            })),
+        };
+        const key = `${hashCode(runValue)}`;
+        node.runs = node.runs ?? [];
+        if (node.runs.some(x => x.key === key)) {
+            return;
+        }
+        node.runs.push({
+            key,
+            ...runValue,
+        });
+    });
 };
 
 export const calculateRunValue_nodeOutput = (node: PipescriptNodeInstance, context: RunContext) => {

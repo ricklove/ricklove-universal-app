@@ -196,7 +196,7 @@
             "___ref": "_id_50_"
           },
           {
-            "___ref": "_id_75_"
+            "___ref": "_id_82_"
           }
         ],
         "rootNodeInstances": {
@@ -213,7 +213,7 @@
       "inputs": [],
       "outputs": [
         {
-          "_id_93_": "",
+          "_id_100_": "",
           "key": "1:notAnswer:workflowOutput",
           "nodeInstance": {
             "___ref": "_id_47_"
@@ -224,19 +224,19 @@
           },
           "name": "notAnswer",
           "inflowPipe": {
-            "_id_90_": "",
+            "_id_97_": "",
             "key": "1:notAnswer:workflowOutput:pipe",
             "pipe": {
               "___ref": "_id_16_"
             },
             "source": {
-              "_id_91_": "",
+              "_id_98_": "",
               "kind": "output",
               "output": {
-                "_id_85_": "",
+                "_id_92_": "",
                 "key": "3:notAnswer:workflowOutput",
                 "nodeInstance": {
-                  "___ref": "_id_75_"
+                  "___ref": "_id_82_"
                 },
                 "kind": "workflow-output",
                 "workflowOutput": {
@@ -244,58 +244,58 @@
                 },
                 "name": "notAnswer",
                 "inflowPipe": {
-                  "_id_86_": "",
+                  "_id_93_": "",
                   "key": "3:notAnswer:workflowOutput:pipe",
                   "pipe": {
                     "___ref": "_id_35_"
                   },
                   "source": {
-                    "_id_87_": "",
+                    "_id_94_": "",
                     "kind": "operator-output",
                     "nodeInstance": {
-                      "___ref": "_id_75_"
+                      "___ref": "_id_82_"
                     }
                   },
                   "destination": {
-                    "_id_88_": "",
+                    "_id_95_": "",
                     "kind": "output",
                     "output": {
-                      "___ref": "_id_85_"
+                      "___ref": "_id_92_"
                     }
                   }
                 },
                 "outflowPipes": [
                   {
-                    "___ref": "_id_90_"
+                    "___ref": "_id_97_"
                   }
                 ],
                 "runs": {
-                  "_id_97_": "",
+                  "_id_104_": "",
                   "nameInScope": "notAnswer",
                   "value": 43,
                   "dependencies": [
                     {
-                      "___ref": "_id_77_"
+                      "___ref": "_id_84_"
                     }
                   ]
                 }
               }
             },
             "destination": {
-              "_id_92_": "",
+              "_id_99_": "",
               "kind": "output",
               "output": {
-                "___ref": "_id_93_"
+                "___ref": "_id_100_"
               }
             }
           },
           "outflowPipes": [],
           "runs": {
-            "_id_95_": "",
+            "_id_102_": "",
             "nameInScope": "notAnswer",
             "dependencies": [
               {
-                "___ref": "_id_85_"
+                "___ref": "_id_92_"
               }
             ]
           }
@@ -451,10 +451,31 @@
             "___ref": "_id_47_"
           },
           "children": [],
-          "operator": "declaration"
+          "operator": "declaration",
+          "runs": [
+            {
+              "_id_76_": "",
+              "key": "3054584180594115",
+              "inputs": [
+                {
+                  "_id_78_": "",
+                  "name": "answer",
+                  "value": 42
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_81_": "",
+                  "name": "answer",
+                  "value": 42
+                }
+              ]
+            }
+          ]
         },
         {
-          "_id_75_": "",
+          "_id_82_": "",
           "dataset": {
             "___ref": "_id_48_"
           },
@@ -467,10 +488,10 @@
           },
           "inputs": [
             {
-              "_id_77_": "",
+              "_id_84_": "",
               "key": "3:notAnswer:workflowInput",
               "nodeInstance": {
-                "___ref": "_id_75_"
+                "___ref": "_id_82_"
               },
               "kind": "workflow-input",
               "workflowInput": {
@@ -478,27 +499,27 @@
               },
               "name": "notAnswer",
               "inflowPipe": {
-                "_id_78_": "",
+                "_id_85_": "",
                 "key": "3:notAnswer:workflowInput:pipe",
                 "pipe": {
                   "___ref": "_id_44_"
                 },
                 "source": {
-                  "_id_79_": "",
+                  "_id_86_": "",
                   "kind": "data",
                   "json": "43"
                 },
                 "destination": {
-                  "_id_80_": "",
+                  "_id_87_": "",
                   "kind": "input",
                   "input": {
-                    "___ref": "_id_77_"
+                    "___ref": "_id_84_"
                   }
                 }
               },
               "outflowPipes": [],
               "runs": {
-                "_id_82_": "",
+                "_id_89_": "",
                 "nameInScope": "notAnswer",
                 "value": 43,
                 "dependencies": []
@@ -507,14 +528,64 @@
           ],
           "outputs": [
             {
-              "___ref": "_id_85_"
+              "___ref": "_id_92_"
             }
           ],
           "parent": {
             "___ref": "_id_47_"
           },
           "children": [],
-          "operator": "declaration"
+          "operator": "declaration",
+          "runs": [
+            {
+              "_id_108_": "",
+              "key": "8729556501457391",
+              "inputs": [
+                {
+                  "_id_110_": "",
+                  "name": "notAnswer",
+                  "value": 43
+                }
+              ],
+              "inner": [],
+              "outputs": [
+                {
+                  "_id_113_": "",
+                  "name": "notAnswer",
+                  "value": 43
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "runs": [
+        {
+          "_id_118_": "",
+          "key": "1621287710993478",
+          "inputs": [],
+          "inner": [
+            {
+              "_id_121_": "",
+              "name": "answer",
+              "value": 42
+            },
+            {
+              "_id_122_": "",
+              "name": "notAnswer",
+              "value": 43
+            }
+          ],
+          "outputs": [
+            {
+              "_id_124_": "",
+              "name": "notAnswer"
+            },
+            {
+              "_id_125_": "",
+              "name": "answer"
+            }
+          ]
         }
       ]
     }
