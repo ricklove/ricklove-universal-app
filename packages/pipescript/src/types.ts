@@ -227,6 +227,7 @@ export type PipescriptNodePipeConnectionInstance = {
     nodeInstance: PipescriptNodeInstance;
 
     runs?: {
+        nameInScope: string;
         value: unknown;
         override?: unknown;
         dependencies: PipescriptNodePipeConnectionInstance[];

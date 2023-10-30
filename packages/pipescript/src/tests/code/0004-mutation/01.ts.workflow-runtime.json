@@ -275,6 +275,7 @@
                 ],
                 "runs": {
                   "_id_92_": "",
+                  "nameInScope": "a_2",
                   "value": 42,
                   "dependencies": [
                     {
@@ -294,6 +295,7 @@
                       "outflowPipes": [],
                       "runs": {
                         "_id_96_": "",
+                        "nameInScope": "old",
                         "value": 42,
                         "dependencies": [
                           {
@@ -317,6 +319,7 @@
           "outflowPipes": [],
           "runs": {
             "_id_90_": "",
+            "nameInScope": "a",
             "dependencies": [
               {
                 "___ref": "_id_80_"
@@ -372,6 +375,7 @@
               "outflowPipes": [],
               "runs": {
                 "_id_58_": "",
+                "nameInScope": "a",
                 "value": 42,
                 "dependencies": []
               }
@@ -435,6 +439,7 @@
               ],
               "runs": {
                 "_id_98_": "",
+                "nameInScope": "a_1",
                 "value": 42,
                 "dependencies": [
                   {
@@ -499,6 +504,7 @@
               "outflowPipes": [],
               "runs": {
                 "_id_77_": "",
+                "nameInScope": "value",
                 "value": 43,
                 "dependencies": []
               }

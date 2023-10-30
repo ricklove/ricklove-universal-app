@@ -10,7 +10,7 @@ import {
 // TODO: handle cycles
 
 type RunContext = {
-    visited: Set<unknown>;
+    visited: Set<Omit<PipescriptNodePipeConnectionInstance, `outflowPipes`>>;
     lazy: boolean;
 };
 
@@ -21,6 +21,8 @@ export const calculateRun = (
     dataset.rootNodeInstances.forEach(node => {
         calculateRunValue_nodeOutput(node, context);
     });
+
+    calculateRun_names(dataset);
 };
 
 export const calculateRunValue_nodeOutput = (node: PipescriptNodeInstance, context: RunContext) => {
@@ -45,11 +47,7 @@ export const calculateRunValue_connectionOverride = (
     context: RunContext = { visited: new Set(), lazy: false },
 ) => {
     if (!connection.runs) {
-        connection.runs = {
-            override: value,
-            value,
-            dependencies: [],
-        };
+        connection.runs = createRun(connection, context);
     }
     const { runs } = connection;
     runs.override = value;
@@ -76,6 +74,57 @@ export const calculateRunValue_connectionOverride = (
     updateDependents(connection);
 };
 
+const calculateRun_names = (dataset: PipescriptNodeInstanceDataset) => {
+    const contexts = new Map<PipescriptNodeInstance, RunContext>();
+
+    dataset.allNodeInstances.forEach(x => {
+        const parent = x.parent ?? x;
+        const context =
+            contexts.get(parent)
+            ?? contexts
+                .set(parent, {
+                    visited: new Set(),
+                    lazy: false,
+                })
+                .get(parent)!;
+        x.outputs.forEach(o => {
+            context.visited.add(o);
+
+            if (!o.runs) {
+                o.runs = createRun(o, context);
+            }
+            o.runs.nameInScope = getUniqueName(o, context);
+        });
+    });
+};
+
+const getUniqueName = (
+    connection: Omit<PipescriptNodePipeConnectionInstance, `outflowPipes`>,
+    context: RunContext,
+) => {
+    let n = connection.name;
+
+    while ([...context.visited].some(x => x !== connection && x.name === n)) {
+        n = `${n}_${connection.nodeInstance.key}`;
+    }
+
+    return n;
+};
+
+const createRun = (
+    connection: Omit<PipescriptNodePipeConnectionInstance, `outflowPipes`>,
+    context: RunContext,
+): Required<PipescriptNodePipeConnectionInstance>[`runs`] => {
+    // const nameInScope = getUniqueName(connection, context);
+    const nameInScope = connection.name;
+    return {
+        nameInScope,
+        override: undefined,
+        value: undefined,
+        dependencies: [],
+    };
+};
+
 const calculateRunValue_input = (
     input: Omit<PipescriptNodePipeConnectionInstance, `outflowPipes`>,
     context: RunContext,
@@ -89,7 +138,7 @@ const calculateRunValue_input = (
         return;
     }
 
-    input.runs = undefined;
+    input.runs = createRun(input, context);
 
     const inflowPipe = input.inflowPipe;
     if (!inflowPipe) {
@@ -98,21 +147,33 @@ const calculateRunValue_input = (
     const { source } = inflowPipe;
     if (source.kind === `data`) {
         input.runs = {
+            ...input.runs,
             value: JSON.parse(source.json),
             dependencies: [],
         };
         return;
     }
     if (source.kind === `input`) {
-        input.runs = { value: source.input.runs?.value, dependencies: [source.input] };
+        input.runs = {
+            ...input.runs,
+            value: source.input.runs?.value,
+            dependencies: [source.input],
+        };
         return;
     }
     if (source.kind === `output`) {
-        input.runs = { value: source.output.runs?.value, dependencies: [source.output] };
+        input.runs = {
+            ...input.runs,
+            value: source.output.runs?.value,
+            dependencies: [source.output],
+        };
         return;
     }
     if (source.kind === `operator-output`) {
-        input.runs = calculateRunValue_operator(source.nodeInstance, context);
+        input.runs = {
+            ...input.runs,
+            ...calculateRunValue_operator(source.nodeInstance, context),
+        };
         return;
     }
 

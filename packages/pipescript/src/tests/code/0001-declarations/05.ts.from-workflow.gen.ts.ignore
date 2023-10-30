@@ -1,5 +1,5 @@
 function file_ts() {
-    const answer = 42;
-    const notAnswer = 43;
+    const answer_1 = 42;
+    const notAnswer_2 = 43;
     return { notAnswer, answer };
 }

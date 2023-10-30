@@ -1,6 +1,6 @@
 function file_ts() {
     const a = 42;
     const value = a * 2;
-    const b = value;
-    return { b };
+    const b_3 = value;
+    return b;
 }

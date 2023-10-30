@@ -200,6 +200,7 @@
                 ],
                 "runs": {
                   "_id_58_": "",
+                  "nameInScope": "answer_1",
                   "value": 42,
                   "dependencies": [
                     {
@@ -220,6 +221,7 @@
           "outflowPipes": [],
           "runs": {
             "_id_56_": "",
+            "nameInScope": "answer",
             "dependencies": [
               {
                 "___ref": "_id_46_"
@@ -275,6 +277,7 @@
               "outflowPipes": [],
               "runs": {
                 "_id_43_": "",
+                "nameInScope": "answer",
                 "value": 42,
                 "dependencies": []
               }

@@ -1,4 +1,4 @@
 function file_ts() {
-    const answer = 42;
-    return { answer };
+    const answer_1 = 42;
+    return answer;
 }

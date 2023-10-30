@@ -331,6 +331,7 @@
                 ],
                 "runs": {
                   "_id_113_": "",
+                  "nameInScope": "a_3",
                   "dependencies": [
                     {
                       "_id_90_": "",
@@ -391,6 +392,7 @@
                             ],
                             "runs": {
                               "_id_119_": "",
+                              "nameInScope": "a_2",
                               "dependencies": [
                                 {
                                   "___ref": "_id_71_"
@@ -410,6 +412,7 @@
                       "outflowPipes": [],
                       "runs": {
                         "_id_117_": "",
+                        "nameInScope": "old",
                         "dependencies": [
                           {
                             "___ref": "_id_82_"
@@ -432,6 +435,7 @@
           "outflowPipes": [],
           "runs": {
             "_id_111_": "",
+            "nameInScope": "a",
             "dependencies": [
               {
                 "___ref": "_id_101_"
@@ -500,6 +504,7 @@
                       "outflowPipes": [],
                       "runs": {
                         "_id_123_": "",
+                        "nameInScope": "old",
                         "dependencies": [
                           {
                             "___ref": "_id_66_"
@@ -509,7 +514,12 @@
                     }
                   }
                 }
-              ]
+              ],
+              "runs": {
+                "_id_125_": "",
+                "nameInScope": "a_1",
+                "dependencies": []
+              }
             }
           ],
           "parent": {
@@ -567,6 +577,7 @@
               "outflowPipes": [],
               "runs": {
                 "_id_79_": "",
+                "nameInScope": "value",
                 "value": 42,
                 "dependencies": []
               }
@@ -632,6 +643,7 @@
               "outflowPipes": [],
               "runs": {
                 "_id_98_": "",
+                "nameInScope": "value",
                 "value": 43,
                 "dependencies": []
               }

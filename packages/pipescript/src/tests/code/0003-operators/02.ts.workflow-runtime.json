@@ -388,6 +388,7 @@
                 ],
                 "runs": {
                   "_id_144_": "",
+                  "nameInScope": "c_4",
                   "value": 85,
                   "dependencies": [
                     {
@@ -449,6 +450,8 @@
                             ],
                             "runs": {
                               "_id_150_": "",
+                              "nameInScope": "value",
+                              "value": 85,
                               "dependencies": [
                                 {
                                   "___ref": "_id_91_"
@@ -456,8 +459,7 @@
                                 {
                                   "___ref": "_id_94_"
                                 }
-                              ],
-                              "value": 85
+                              ]
                             }
                           }
                         },
@@ -472,6 +474,7 @@
                       "outflowPipes": [],
                       "runs": {
                         "_id_148_": "",
+                        "nameInScope": "c",
                         "value": 85,
                         "dependencies": [
                           {
@@ -495,6 +498,7 @@
           "outflowPipes": [],
           "runs": {
             "_id_142_": "",
+            "nameInScope": "c",
             "dependencies": [
               {
                 "___ref": "_id_132_"
@@ -550,6 +554,7 @@
               "outflowPipes": [],
               "runs": {
                 "_id_80_": "",
+                "nameInScope": "a",
                 "value": 42,
                 "dependencies": []
               }
@@ -622,6 +627,7 @@
                       "outflowPipes": [],
                       "runs": {
                         "_id_154_": "",
+                        "nameInScope": "left",
                         "value": 42,
                         "dependencies": [
                           {
@@ -635,6 +641,7 @@
               ],
               "runs": {
                 "_id_156_": "",
+                "nameInScope": "a",
                 "value": 42,
                 "dependencies": [
                   {
@@ -696,6 +703,7 @@
               "outflowPipes": [],
               "runs": {
                 "_id_105_": "",
+                "nameInScope": "b",
                 "value": 43,
                 "dependencies": []
               }
@@ -768,6 +776,7 @@
                       "outflowPipes": [],
                       "runs": {
                         "_id_117_": "",
+                        "nameInScope": "right",
                         "value": 43,
                         "dependencies": [
                           {
@@ -781,6 +790,7 @@
               ],
               "runs": {
                 "_id_113_": "",
+                "nameInScope": "b",
                 "value": 43,
                 "dependencies": [
                   {

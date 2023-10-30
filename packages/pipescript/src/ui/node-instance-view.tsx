@@ -256,6 +256,10 @@ const NodeConnection = ({
             </View>
             {connection && (
                 <>
+                    {connection.runs?.nameInScope
+                        && connection.runs?.nameInScope !== connection.name && (
+                            <Text className='text-blue-300'>{`${connection.runs.nameInScope}`}</Text>
+                        )}
                     <NodeConnectionValue connection={connection} />
                     {connection.inflowPipe?.pipe.kind === `data` && (
                         <View className='m-[1px] bg-purple-100 opacity-50'>

@@ -1,10 +1,6 @@
 import { PipescriptRuntimeContext, loadRuntime } from '../analysis/load-data';
 import {
     PipescriptBuiltinOperator,
-    PipescriptNode,
-    PipescriptNodeInstance,
-    PipescriptPipe,
-    PipescriptPipeValue,
     PipescriptType,
     PipescriptVariable,
     PipescriptWorkflow,
@@ -152,12 +148,10 @@ const convertWorkflowToFunctionDeclaration = (
                 return source.json;
             }
             if (source.kind === `input`) {
-                // TODO: prevent name conflicts in the function scope - this should be done in the nodeInstance
-                return source.input.name;
+                return source.input.runs?.nameInScope ?? source.input.name;
             }
             if (source.kind === `output`) {
-                // TODO: prevent name conflicts in the function scope - this should be done in the nodeInstance
-                return source.output.name;
+                return source.output.runs?.nameInScope ?? source.output.name;
             }
             if (source.kind === `operator-output`) {
                 // TODO: this should not be possible
@@ -168,31 +162,52 @@ const convertWorkflowToFunctionDeclaration = (
         });
         const funCall = fun.getCallExpression(args);
         const outputsItems = nodeInstance.outputs.map(x => {
-            // TODO: prevent name conflicts in the function scope - this should be done in the nodeInstance
-            return x.name;
+            return x.runs?.nameInScope ?? x.name;
         });
         const outputsExpression =
-            outputsItems.length > 1
-                ? `{ ${outputsItems.join(`, `)} }`
-                : outputsItems.length
+            outputsItems.length === 1
                 ? `${outputsItems[0]}`
+                : outputsItems.length
+                ? `{ ${outputsItems.join(`, `)} }`
                 : `/* missing output item */ _unknown`;
         return `const ${outputsExpression} = ${funCall};`;
     });
+
+    const workflowNodeInstance = builder.allNodeInstances.find(
+        x => x.node.workflowUri === workflow.workflowUri,
+    );
+    const getName_workflowInput = (workflowInput: PipescriptWorkflowInput) => {
+        return workflowNodeInstance?.inputs.find(x => x.workflowInput === workflowInput)?.runs
+            ?.nameInScope;
+    };
+    const getName_workflowOutput = (workflowOutput: PipescriptWorkflowOutput) => {
+        return workflowNodeInstance?.outputs.find(x => x.workflowOutput === workflowOutput)?.runs
+            ?.nameInScope;
+    };
 
     const returnStatement = (() => {
         if (!workflow.outputs.length) {
             return undefined;
         }
 
-        // if (workflow.outputs.length === 1) {
-        //     return `return ${workflow.outputs.map(x => x.name).join(`, `)};`;
-        // }
+        const returnItems = workflow.outputs.map(x => ({
+            name: `${getName_workflowOutput(x) ?? x.name}`,
+            rename: `${getName_workflowOutput(x) ?? x.name}`,
+            // rename: `${x.name}`,
+        }));
 
-        return `return { ${workflow.outputs.map(x => x.name).join(`, `)} };`;
+        if (workflow.outputs.length === 1) {
+            return `return ${returnItems[0].name};`;
+        }
+
+        return `return { ${returnItems
+            .map(x => (x.name === x.rename ? `${x.name}` : `${x.rename}: ${x.name}`))
+            .join(`, `)} };`;
     })();
 
-    const parameters = workflow.inputs.map(x => generateDeclaration(x));
+    const parameters = workflow.inputs.map(workflowInput =>
+        generateDeclaration(workflowInput, getName_workflowInput(workflowInput)),
+    );
     const parametersCode =
         parameters.join(`, `).length > 40
             ? `\n${indent(`${parameters.join(`,\n`)},`)}\n`
@@ -213,8 +228,8 @@ const getFunctionName = (workflow: PipescriptWorkflow) => {
     return functionName;
 };
 
-const generateDeclaration = (x: PipescriptVariable): string => {
-    return `${x.name}${x.type.nullable ? `?` : ``}: ${generateType(x.type)}${
+const generateDeclaration = (x: PipescriptVariable, nameInScope?: string): string => {
+    return `${nameInScope ?? x.name}${x.type.nullable ? `?` : ``}: ${generateType(x.type)}${
         x.type.array ? `[]` : ``
     }`;
 };

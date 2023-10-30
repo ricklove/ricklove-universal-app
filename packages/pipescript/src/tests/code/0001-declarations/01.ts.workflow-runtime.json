@@ -172,6 +172,7 @@
               "outflowPipes": [],
               "runs": {
                 "_id_40_": "",
+                "nameInScope": "answer",
                 "value": 42,
                 "dependencies": []
               }
@@ -213,6 +214,7 @@
               "outflowPipes": [],
               "runs": {
                 "_id_48_": "",
+                "nameInScope": "answer",
                 "value": 42,
                 "dependencies": [
                   {

@@ -270,6 +270,8 @@
                 ],
                 "runs": {
                   "_id_91_": "",
+                  "nameInScope": "a_2",
+                  "value": 43,
                   "dependencies": [
                     {
                       "_id_68_": "",
@@ -288,6 +290,7 @@
                       "outflowPipes": [],
                       "runs": {
                         "_id_95_": "",
+                        "nameInScope": "old",
                         "value": 42,
                         "dependencies": [
                           {
@@ -296,8 +299,7 @@
                         ]
                       }
                     }
-                  ],
-                  "value": 43
+                  ]
                 }
               }
             },
@@ -312,6 +314,7 @@
           "outflowPipes": [],
           "runs": {
             "_id_89_": "",
+            "nameInScope": "a",
             "dependencies": [
               {
                 "___ref": "_id_79_"
@@ -367,6 +370,7 @@
               "outflowPipes": [],
               "runs": {
                 "_id_57_": "",
+                "nameInScope": "a",
                 "value": 42,
                 "dependencies": []
               }
@@ -430,6 +434,7 @@
               ],
               "runs": {
                 "_id_97_": "",
+                "nameInScope": "a_1",
                 "value": 42,
                 "dependencies": [
                   {
@@ -498,12 +503,13 @@
               "outflowPipes": [],
               "runs": {
                 "_id_77_": "",
+                "nameInScope": "old",
+                "value": 43,
                 "dependencies": [
                   {
                     "___ref": "_id_68_"
                   }
-                ],
-                "value": 43
+                ]
               }
             },
             {

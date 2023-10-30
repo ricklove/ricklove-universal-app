@@ -300,6 +300,7 @@
                         "outflowPipes": [],
                         "runs": {
                           "_id_94_": "",
+                          "nameInScope": "b",
                           "value": 42,
                           "dependencies": [
                             {
@@ -313,6 +314,7 @@
                 ],
                 "runs": {
                   "_id_96_": "",
+                  "nameInScope": "a_1",
                   "value": 42,
                   "dependencies": [
                     {
@@ -333,6 +335,7 @@
           "outflowPipes": [],
           "runs": {
             "_id_69_": "",
+            "nameInScope": "a",
             "dependencies": [
               {
                 "___ref": "_id_59_"
@@ -399,6 +402,7 @@
                 ],
                 "runs": {
                   "_id_90_": "",
+                  "nameInScope": "b_2",
                   "value": 42,
                   "dependencies": [
                     {
@@ -419,6 +423,7 @@
           "outflowPipes": [],
           "runs": {
             "_id_88_": "",
+            "nameInScope": "b",
             "dependencies": [
               {
                 "___ref": "_id_78_"
@@ -474,6 +479,7 @@
               "outflowPipes": [],
               "runs": {
                 "_id_56_": "",
+                "nameInScope": "a",
                 "value": 42,
                 "dependencies": []
               }

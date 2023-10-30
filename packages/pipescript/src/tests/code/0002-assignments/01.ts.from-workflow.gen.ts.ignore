@@ -1,5 +1,5 @@
 function file_ts() {
     const a = 42;
-    const b = a;
-    return { b };
+    const b_2 = a;
+    return b;
 }

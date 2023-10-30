@@ -15,7 +15,7 @@ export const WorkCanvasView = ({ workflow }: { workflow: PipescriptWorkflow }) =
     const nodeInstances = nodeInstancesDatasetRef.current.rootNodeInstances;
 
     const tabs = [`work-flow`, `node-instances`] as const;
-    const [tab, setTab] = useState(`work-flow` as (typeof tabs)[number]);
+    const [tab, setTab] = useState(`node-instances` as (typeof tabs)[number]);
 
     return (
         <View className='bg-slate-900 w-full h-full overflow-hidden'>
