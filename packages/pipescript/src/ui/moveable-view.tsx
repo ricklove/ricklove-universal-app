@@ -179,7 +179,7 @@ export const MoveableView = ({
 
     return (
         <MoveableContext.Consumer>
-            {({ position: contextScale }) => (
+            {({ position: containerPosition }) => (
                 <>
                     <View className='flex-col flex-1'>
                         {wholeCanvas && (
@@ -202,18 +202,29 @@ export const MoveableView = ({
                             <Pressable
                                 className={outerClassName}
                                 ref={hostRef}
-                                onPointerDown={e => wholeCanvas && startDrag(e, contextScale.scale)}
-                                onPointerUp={e => endDrag(e, contextScale.scale)}
-                                onPointerMove={e => moveDrag(e, contextScale.scale)}
+                                onPointerDown={e =>
+                                    wholeCanvas && startDrag(e, containerPosition.scale)
+                                }
+                                onPointerUp={e => endDrag(e, containerPosition.scale)}
+                                onPointerMove={e => moveDrag(e, containerPosition.scale)}
                             >
                                 <Pressable
                                     className={`${innerClassName}`}
                                     style={{
                                         transform: `translate(${position.x}px, ${position.y}px) scale(${position.scale})`,
                                     }}
-                                    onPointerDown={e => startDrag(e, contextScale.scale)}
+                                    onPointerDown={e => startDrag(e, containerPosition.scale)}
                                 >
-                                    <MoveableContext.Provider value={{ position, wholeCanvas }}>
+                                    <MoveableContext.Provider
+                                        value={{
+                                            position: {
+                                                x: position.x + containerPosition.x,
+                                                y: position.y + containerPosition.y,
+                                                scale: position.scale * containerPosition.scale,
+                                            },
+                                            wholeCanvas,
+                                        }}
+                                    >
                                         {children}
                                     </MoveableContext.Provider>
                                 </Pressable>

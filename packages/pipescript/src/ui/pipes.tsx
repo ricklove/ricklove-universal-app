@@ -1,4 +1,11 @@
-import { createContext, useContext, useLayoutEffect, useRef, useState } from 'react';
+import React, {
+    createContext,
+    useContext,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    useState,
+} from 'react';
 import { View, Text } from 'react-native';
 import { BehaviorSubject, Observable, Subject, combineLatest } from 'rxjs';
 
@@ -85,7 +92,9 @@ export const createPipeEndpointsRegistry = () => ({
     },
     pipes: new BehaviorSubject(
         {} as {
-            [id: string]: undefined | { sourceId: string; destinationId: string };
+            [id: string]:
+                | undefined
+                | { sourceId: string; destinationId: string; side?: `inflow` | `outflow` };
         },
     ),
 });
@@ -111,10 +120,49 @@ export const PipeView = ({
     destinationId: string;
     side?: `inflow` | `outflow`;
 }) => {
+    const { pipes: pipesSubject } = useContext(PipeEndpointsRegistryContext);
+    useEffect(() => {
+        const key = `${sourceId}=>${destinationId}::${side}`;
+        const old = pipesSubject.value;
+        old[key] = !sourceId
+            ? undefined
+            : {
+                  sourceId,
+                  destinationId,
+                  side,
+              };
+        pipesSubject.next(old);
+
+        return () => {
+            const old = pipesSubject.value;
+            old[key] = undefined;
+            pipesSubject.next(old);
+        };
+    }, [sourceId, destinationId, side]);
+
+    return <></>;
+};
+
+export const PipeViewHost = () => {
+    const { pipes: pipesSubject } = useContext(PipeEndpointsRegistryContext);
+    const [pipes, setPipes] = useState(pipesSubject.value);
+    useEffect(() => {
+        const sub = pipesSubject.subscribe(x => {
+            setPipes({ ...x });
+        });
+        return () => {
+            sub.unsubscribe();
+        };
+    }, []);
+
     return (
-        <>
-            <View />
-        </>
+        <View testID='PipeViewHost' className='absolute z-10 opacity-75'>
+            {[...Object.entries(pipes)]
+                .filter(([k, v]) => !!v)
+                .map(([k, v]) => (
+                    <React.Fragment key={k}>{v && <PipeViewLine {...v} />}</React.Fragment>
+                ))}
+        </View>
     );
 };
 
@@ -149,31 +197,41 @@ const PipeViewLine = ({
             return;
         }
         const init = new Subject<void>();
-        combineLatest([sourceEndpoint, destinationEndpoint, init]).subscribe(
+        const sub = combineLatest([sourceEndpoint, destinationEndpoint, init]).subscribe(
             ([source, destination]) => {
-                // console.log(`PipeView draw`, { source, destination });
+                console.log(`PipeView draw`, { source, destination });
                 setPosition({ source, destination });
             },
         );
 
         // initial
-        console.log(`initial`);
+        console.log(`initial`, { sourceEndpoint, destinationEndpoint });
         init.next();
+
+        return () => {
+            sub.unsubscribe();
+        };
     }, [!destinationEndpoint, !sourceEndpoint]);
 
     const debug = false;
     const isOutflow = side === `outflow`;
-    const xDelta = (isOutflow ? -1 : 1) * (position.destination.x - position.source.x);
-    const yDelta = (isOutflow ? -1 : 1) * (position.destination.y - position.source.y);
+    const xDelta = position.destination.x - position.source.x;
+    const yDelta = position.destination.y - position.source.y;
     const length = Math.sqrt(xDelta * xDelta + yDelta * yDelta);
     const angle = Math.atan2(yDelta, xDelta);
     return (
-        <View className='w-0 h-0 justify-center items-center'>
+        <View
+            testID={`PipeViewLine
+            ${sourceId}
+            =>${destinationId}
+            ${side}`}
+            className='w-0 h-0 justify-center items-center'
+        >
             <View className='w-0 h-0 absolute'>
                 <View
                     style={{
-                        transform: `translate(${-xDelta + 4}px,${
-                            -yDelta - 2 + (isOutflow ? 2 : 0)
+                        transform: `translate(${position.source.x + 4}px,${
+                            position.source.y - 2 + (isOutflow ? 2 : 0)
                         }px)`,
                     }}
                 >
@@ -215,29 +273,29 @@ export const PipeEndpointView = ({ id }: { id: string }) => {
     const targetRef = useRef(null as null | View);
 
     useLayoutEffect(() => {
-        // console.log(`PipeEndpointView useLayoutEffect`, { registry });
+        console.log(`PipeEndpointView useLayoutEffect`, { registry });
 
         const calculate = () => {
             const h = registry.hostView;
             if (!h) {
-                // console.log(`PipeEndpointView useLayoutEffect - host NOT READY`, { registry });
+                console.log(`PipeEndpointView useLayoutEffect - host NOT READY`, { registry });
                 return;
             }
             const t = targetRef.current;
             if (!t) {
-                // console.log(`PipeEndpointView useLayoutEffect - component NOT READY`, { registry });
+                console.log(`PipeEndpointView useLayoutEffect - component NOT READY`, { registry });
                 return;
             }
 
             t.measureLayout(h, (left, top, width, height) => {
-                // console.log(`PipeEndpointView useLayoutEffect measureLayout NEXT`, {
-                //     id,
-                //     left,
-                //     top,
-                //     width,
-                //     height,
-                //     registry,
-                // });
+                console.log(`PipeEndpointView useLayoutEffect measureLayout NEXT`, {
+                    id,
+                    left,
+                    top,
+                    width,
+                    height,
+                    registry,
+                });
                 const s = getOrCreateEndpointSubject(registry, id);
                 s.next({
                     x: left + moveContext.position.x,
