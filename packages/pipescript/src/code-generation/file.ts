@@ -89,6 +89,23 @@ export const convertWorkflowToTypescriptFile = (
 
 const SIMPLIFY_SINGLE_RETURN = true;
 
+export const create_getCallExpression = (workflow: PipescriptWorkflow) => {
+    const functionName = getFunctionName(workflow);
+
+    if (workflow.body.kind === `operator`) {
+        const { operator } = workflow.body;
+        const fun = operatorExpressions.find(f => f.operator === operator);
+        if (!fun) {
+            return () => `/* missing operator ${operator}*/`;
+        }
+        return fun.template;
+    }
+
+    return (args: string[]) => {
+        return `${functionName}(${args.join(`, `)})`;
+    };
+};
+
 export const convertWorkflowToFunctionDeclaration = (
     workflow: PipescriptWorkflow,
     dataset: PipescriptNodeInstanceDataset,
@@ -100,26 +117,9 @@ export const convertWorkflowToFunctionDeclaration = (
         return;
     }
 
-    const functionName = getFunctionName(workflow);
-
-    const create_getCallExpression = () => {
-        if (workflow.body.kind === `operator`) {
-            const { operator } = workflow.body;
-            const fun = operatorExpressions.find(f => f.operator === operator);
-            if (!fun) {
-                return () => `/* missing operator ${operator}*/`;
-            }
-            return fun.template;
-        }
-
-        return (args: string[]) => {
-            return `${functionName}(${args.join(`, `)})`;
-        };
-    };
-
     const declaration: Builder[`declaredWorkflows`][number] = {
         workflow,
-        getCallExpression: create_getCallExpression(),
+        getCallExpression: create_getCallExpression(workflow),
     };
     builder.declaredWorkflows.push(declaration);
 
@@ -217,6 +217,7 @@ export const convertWorkflowToFunctionDeclaration = (
             ? `\n${indent(`${parameters.join(`,\n`)},`)}\n`
             : parameters.join(`, `);
 
+    const functionName = getFunctionName(workflow);
     const content = `function ${functionName}(${parametersCode}) {
 ${indent(nestedFunctionDeclarations.map(x => x.content).join(`\n\n`))}${indent(
         [...statements, returnStatement].filter(x => x).join(`\n`),

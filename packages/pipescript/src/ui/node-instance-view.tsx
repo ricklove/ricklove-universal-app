@@ -142,7 +142,7 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
                             ))}
                         </View>
                     </View>
-                    {workflow.body.kind === `nodes` && <Footer nodeInstance={nodeInstance} />}
+                    <Footer nodeInstance={nodeInstance} />
                 </View>
             </MoveableView>
         </View>
@@ -150,8 +150,12 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
 };
 
 const Footer = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) => {
-    const tabs = [`sheet`, `code`, `both`] as const;
-    const [tab, setTab] = useState(`sheet` as (typeof tabs)[number]);
+    const tabs = [`none`, `sheet`, `code`, `both`] as const;
+    const [tab, setTab] = useState(
+        nodeInstance.workflow.body.kind === `operator`
+            ? `code`
+            : (`sheet` as (typeof tabs)[number]),
+    );
 
     return (
         <>

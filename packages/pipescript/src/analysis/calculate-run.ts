@@ -1,5 +1,8 @@
 import { hashCode } from './hash';
-import { convertWorkflowToFunctionDeclaration } from '../code-generation/file';
+import {
+    convertWorkflowToFunctionDeclaration,
+    create_getCallExpression,
+} from '../code-generation/file';
 import {
     PipescriptBuiltinOperator,
     PipescriptNodeInstance,
@@ -48,10 +51,34 @@ const recordRun = (dataset: PipescriptNodeInstanceDataset) => {
         const key = `${hashCode(runValue)}`;
         node.runs = node.runs ?? [];
         if (node.runs.some(x => x.key === key)) {
-            return;
+            // delete old to move last to the top
+            node.runs.splice(
+                node.runs.findIndex(x => x.key === key),
+                1,
+            );
+            // don't add new
+            // return;
         }
 
-        const code = convertWorkflowToFunctionDeclaration(node.workflow, node.dataset);
+        const code =
+            node.workflow.body.kind === `operator`
+                ? {
+                      content: `${create_getCallExpression(node.workflow)(
+                          node.workflow.inputs.map(workflowInput => {
+                              const nodeInput = node.inputs.find(
+                                  x => x.workflowInput === workflowInput,
+                              );
+
+                              const valueRaw = nodeInput?.runs?.value;
+                              const value =
+                                  typeof valueRaw !== `object` ? `${valueRaw}` : undefined;
+
+                              const name = nodeInput?.runs?.nameInScope ?? workflowInput.name;
+                              return value ? `${name}(${value})` : name;
+                          }),
+                      )}`,
+                  }
+                : convertWorkflowToFunctionDeclaration(node.workflow, node.dataset);
         node.runs.unshift({
             key,
             code: code?.content,
