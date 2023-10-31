@@ -1,10 +1,10 @@
 function file_ts() {
-    const a = 42;
-    const value = a + a;
-    const a_3 = a;
+    const a_1 = 42;
+    const value_2 = a_1 + a_1;
+    const a_3 = value_2;
     const value_4 = a_3 + 2;
-    const a_5 = a_3;
-    const value_6 = 42 - a_5;
-    const a_7 = a_5;
+    const a_5 = value_4;
+    const value = 42 - a_5;
+    const a = value;
     return a;
 }

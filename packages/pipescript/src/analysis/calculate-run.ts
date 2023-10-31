@@ -114,8 +114,31 @@ export const calculateRunValue_connectionOverride = (
 const calculateRun_names = (dataset: PipescriptNodeInstanceDataset) => {
     const contexts = new Map<PipescriptNodeInstance, RunContext>();
 
-    const global = {} as PipescriptNodeInstance;
+    const global = { outputs: [] } as unknown as PipescriptNodeInstance;
+
+    const allNodesSorted = [] as PipescriptNodeInstance[];
+
+    const addNodeRecursive = (parent: PipescriptNodeInstance) => {
+        if (allNodesSorted.includes(parent)) {
+            return;
+        }
+
+        allNodesSorted.push(parent);
+        [...parent.children].reverse().forEach(x => addNodeRecursive(x));
+        parent.inputs.forEach(x => {
+            if (x.inflowPipe?.source.kind === `input`) {
+                addNodeRecursive(x.inflowPipe.source.input.nodeInstance);
+            }
+        });
+    };
+    dataset.rootNodeInstances.forEach(x => {
+        addNodeRecursive(x);
+    });
     dataset.allNodeInstances.forEach(x => {
+        addNodeRecursive(x);
+    });
+
+    allNodesSorted.forEach(x => {
         const parent = x.parent ?? global;
         const context =
             contexts.get(parent)

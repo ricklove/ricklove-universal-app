@@ -1,6 +1,6 @@
 function file_ts() {
-    const a = undefined;
-    const a_2 = a;
-    const a_3 = a_2;
+    const a_1 = undefined;
+    const a_2 = 42;
+    const a = 43;
     return a;
 }

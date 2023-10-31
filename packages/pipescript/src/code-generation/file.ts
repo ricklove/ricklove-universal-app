@@ -87,6 +87,8 @@ export const convertWorkflowToTypescriptFile = (
     };
 };
 
+const SIMPLIFY_SINGLE_RETURN = true;
+
 export const convertWorkflowToFunctionDeclaration = (
     workflow: PipescriptWorkflow,
     dataset: PipescriptNodeInstanceDataset,
@@ -167,7 +169,7 @@ export const convertWorkflowToFunctionDeclaration = (
             return x.runs?.nameInScope ?? x.name;
         });
         const outputsExpression =
-            outputsItems.length === 1
+            SIMPLIFY_SINGLE_RETURN && outputsItems.length === 1
                 ? `${outputsItems[0]}`
                 : outputsItems.length
                 ? `{ ${outputsItems.join(`, `)} }`
@@ -198,7 +200,7 @@ export const convertWorkflowToFunctionDeclaration = (
             // rename: `${x.name}`,
         }));
 
-        if (workflow.outputs.length === 1) {
+        if (SIMPLIFY_SINGLE_RETURN && workflow.outputs.length === 1) {
             return `return ${returnItems[0].name};`;
         }
 

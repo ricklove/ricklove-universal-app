@@ -514,7 +514,7 @@
                 ],
                 "runs": {
                   "_id_136_": "",
-                  "nameInScope": "a_2",
+                  "nameInScope": "a",
                   "value": 43,
                   "dependencies": [
                     {
@@ -678,7 +678,7 @@
               ],
               "runs": {
                 "_id_150_": "",
-                "nameInScope": "a",
+                "nameInScope": "a_1",
                 "value": 42,
                 "dependencies": [
                   {
@@ -696,7 +696,7 @@
           "runs": [
             {
               "_id_154_": "",
-              "key": "2291118307109192",
+              "key": "8838209498893720",
               "inputs": [
                 {
                   "_id_156_": "",
@@ -708,7 +708,7 @@
               "outputs": [
                 {
                   "_id_159_": "",
-                  "name": "a",
+                  "name": "a_1",
                   "value": 42
                 }
               ]
@@ -748,7 +748,7 @@
           "runs": [
             {
               "_id_140_": "",
-              "key": "2107380085748880",
+              "key": "744219669899812",
               "inputs": [
                 {
                   "_id_142_": "",
@@ -765,7 +765,7 @@
                 },
                 {
                   "_id_146_": "",
-                  "name": "a_2",
+                  "name": "a",
                   "value": 43
                 }
               ]
@@ -825,13 +825,13 @@
       "runs": [
         {
           "_id_164_": "",
-          "key": "666000206768997",
-          "code": "function file_ts() {\n    const a = 42;\n    const { old, a_2 } = a++;\n    const b = old;\n    return { b, a };\n}",
+          "key": "1412400857235229",
+          "code": "function file_ts() {\n    const a_1 = 42;\n    const { old, a } = a_1++;\n    const b = old;\n    return { b, a };\n}",
           "inputs": [],
           "inner": [
             {
               "_id_167_": "",
-              "name": "a",
+              "name": "a_1",
               "value": 42
             },
             {
@@ -841,7 +841,7 @@
             },
             {
               "_id_169_": "",
-              "name": "a_2",
+              "name": "a",
               "value": 43
             },
             {

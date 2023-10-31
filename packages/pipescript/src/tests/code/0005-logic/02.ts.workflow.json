@@ -173,19 +173,19 @@
               "name": "file.ts/if-body/b=",
               "inputs": [
                 {
+                  "name": "value",
+                  "type": {
+                    "kind": "simple",
+                    "type": "int"
+                  }
+                },
+                {
                   "name": "old",
                   "type": {
                     "kind": "simple",
                     "type": "number"
                   },
                   "ignored": true
-                },
-                {
-                  "name": "value",
-                  "type": {
-                    "kind": "simple",
-                    "type": "int"
-                  }
                 }
               ],
               "outputs": [
@@ -280,19 +280,19 @@
                   "name": "file.ts/if-body/if-body/b=",
                   "inputs": [
                     {
+                      "name": "value",
+                      "type": {
+                        "kind": "simple",
+                        "type": "int"
+                      }
+                    },
+                    {
                       "name": "old",
                       "type": {
                         "kind": "simple",
                         "type": "number"
                       },
                       "ignored": true
-                    },
-                    {
-                      "name": "value",
-                      "type": {
-                        "kind": "simple",
-                        "type": "int"
-                      }
                     }
                   ],
                   "outputs": [
@@ -321,14 +321,14 @@
                     "workflowUri": "file.ts/if-body/if-body/b=",
                     "inputPipes": [
                       {
-                        "name": "old",
-                        "kind": "workflow-input",
-                        "workflowInputName": "b"
-                      },
-                      {
                         "name": "value",
                         "kind": "data",
                         "json": "46"
+                      },
+                      {
+                        "name": "old",
+                        "kind": "workflow-input",
+                        "workflowInputName": "b"
                       }
                     ]
                   }
@@ -344,14 +344,14 @@
                 "workflowUri": "file.ts/if-body/b=",
                 "inputPipes": [
                   {
-                    "name": "old",
-                    "kind": "workflow-input",
-                    "workflowInputName": "b"
-                  },
-                  {
                     "name": "value",
                     "kind": "data",
                     "json": "43"
+                  },
+                  {
+                    "name": "old",
+                    "kind": "workflow-input",
+                    "workflowInputName": "b"
                   }
                 ]
               },

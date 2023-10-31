@@ -270,7 +270,7 @@
                 ],
                 "runs": {
                   "_id_91_": "",
-                  "nameInScope": "a_2",
+                  "nameInScope": "a",
                   "value": 43,
                   "dependencies": [
                     {
@@ -434,7 +434,7 @@
               ],
               "runs": {
                 "_id_105_": "",
-                "nameInScope": "a",
+                "nameInScope": "a_1",
                 "value": 42,
                 "dependencies": [
                   {
@@ -452,7 +452,7 @@
           "runs": [
             {
               "_id_109_": "",
-              "key": "2291118307109192",
+              "key": "8838209498893720",
               "inputs": [
                 {
                   "_id_111_": "",
@@ -464,7 +464,7 @@
               "outputs": [
                 {
                   "_id_114_": "",
-                  "name": "a",
+                  "name": "a_1",
                   "value": 42
                 }
               ]
@@ -545,7 +545,7 @@
           "runs": [
             {
               "_id_95_": "",
-              "key": "2107380085748880",
+              "key": "744219669899812",
               "inputs": [
                 {
                   "_id_97_": "",
@@ -562,7 +562,7 @@
                 },
                 {
                   "_id_101_": "",
-                  "name": "a_2",
+                  "name": "a",
                   "value": 43
                 }
               ]
@@ -573,13 +573,13 @@
       "runs": [
         {
           "_id_119_": "",
-          "key": "7700649887773762",
-          "code": "function file_ts() {\n    const a = 42;\n    const { old, a_2 } = a++;\n    return a;\n}",
+          "key": "6910853261138355",
+          "code": "function file_ts() {\n    const a_1 = 42;\n    const { old, a } = a_1++;\n    return a;\n}",
           "inputs": [],
           "inner": [
             {
               "_id_122_": "",
-              "name": "a",
+              "name": "a_1",
               "value": 42
             },
             {
@@ -589,7 +589,7 @@
             },
             {
               "_id_124_": "",
-              "name": "a_2",
+              "name": "a",
               "value": 43
             }
           ],

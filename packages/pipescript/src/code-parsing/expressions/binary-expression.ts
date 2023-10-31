@@ -51,13 +51,13 @@ export const parseBinaryExpression = (
             name: expressionWorkflowUri,
             inputs: [
                 {
+                    name: `value`,
+                    type: expressionType_right,
+                },
+                {
                     name: `old`,
                     type: expressionType_left,
                     ignored: true,
-                },
-                {
-                    name: `value`,
-                    type: expressionType_right,
                 },
             ],
             outputs: [
@@ -80,12 +80,12 @@ export const parseBinaryExpression = (
             workflowUri: expressionWorkflowUri,
             inputPipes: [
                 {
-                    name: `old`,
-                    ...expressionValue_left,
-                },
-                {
                     name: `value`,
                     ...expressionValue_right,
+                },
+                {
+                    name: `old`,
+                    ...expressionValue_left,
                 },
             ],
         };

@@ -270,20 +270,20 @@
       "inputs": [
         {
           "_id_58_": "",
+          "name": "value",
+          "type": {
+            "_id_59_": "",
+            "kind": "simple",
+            "type": "int"
+          }
+        },
+        {
+          "_id_60_": "",
           "name": "old",
           "type": {
             "___ref": "_id_47_"
           },
           "ignored": true
-        },
-        {
-          "_id_59_": "",
-          "name": "value",
-          "type": {
-            "_id_60_": "",
-            "kind": "simple",
-            "type": "int"
-          }
         }
       ],
       "outputs": [
@@ -409,20 +409,20 @@
       "inputs": [
         {
           "_id_87_": "",
+          "name": "value",
+          "type": {
+            "_id_88_": "",
+            "kind": "simple",
+            "type": "int"
+          }
+        },
+        {
+          "_id_89_": "",
           "name": "old",
           "type": {
             "___ref": "_id_80_"
           },
           "ignored": true
-        },
-        {
-          "_id_88_": "",
-          "name": "value",
-          "type": {
-            "_id_89_": "",
-            "kind": "simple",
-            "type": "int"
-          }
         }
       ],
       "outputs": [
@@ -528,15 +528,15 @@
       "inputPipes": [
         {
           "_id_105_": "",
-          "name": "old",
-          "kind": "workflow-input",
-          "workflowInputName": "b"
-        },
-        {
-          "_id_106_": "",
           "name": "value",
           "kind": "data",
           "json": "43"
+        },
+        {
+          "_id_106_": "",
+          "name": "old",
+          "kind": "workflow-input",
+          "workflowInputName": "b"
         }
       ]
     },
@@ -588,15 +588,15 @@
       "inputPipes": [
         {
           "_id_99_": "",
-          "name": "old",
-          "kind": "workflow-input",
-          "workflowInputName": "b"
-        },
-        {
-          "_id_100_": "",
           "name": "value",
           "kind": "data",
           "json": "46"
+        },
+        {
+          "_id_100_": "",
+          "name": "old",
+          "kind": "workflow-input",
+          "workflowInputName": "b"
         }
       ]
     }
@@ -637,7 +637,7 @@
             "inputs": [
               {
                 "_id_237_": "",
-                "key": "6:old:workflowInput",
+                "key": "6:value:workflowInput",
                 "nodeInstance": {
                   "___ref": "_id_235_"
                 },
@@ -645,19 +645,17 @@
                 "workflowInput": {
                   "___ref": "_id_58_"
                 },
-                "name": "old",
+                "name": "value",
                 "inflowPipe": {
                   "_id_238_": "",
-                  "key": "6:old:workflowInput:pipe",
+                  "key": "6:value:workflowInput:pipe",
                   "pipe": {
                     "___ref": "_id_105_"
                   },
                   "source": {
                     "_id_239_": "",
-                    "kind": "input",
-                    "input": {
-                      "___ref": "_id_237_"
-                    }
+                    "kind": "data",
+                    "json": "43"
                   },
                   "destination": {
                     "_id_240_": "",
@@ -667,42 +665,37 @@
                     }
                   }
                 },
-                "outflowPipes": [
-                  {
-                    "___ref": "_id_238_"
-                  }
-                ],
+                "outflowPipes": [],
                 "runs": {
                   "_id_242_": "",
-                  "nameInScope": "old",
-                  "dependencies": [
-                    {
-                      "___ref": "_id_237_"
-                    }
-                  ]
+                  "nameInScope": "value",
+                  "value": 43,
+                  "dependencies": []
                 }
               },
               {
                 "_id_244_": "",
-                "key": "6:value:workflowInput",
+                "key": "6:old:workflowInput",
                 "nodeInstance": {
                   "___ref": "_id_235_"
                 },
                 "kind": "workflow-input",
                 "workflowInput": {
-                  "___ref": "_id_59_"
+                  "___ref": "_id_60_"
                 },
-                "name": "value",
+                "name": "old",
                 "inflowPipe": {
                   "_id_245_": "",
-                  "key": "6:value:workflowInput:pipe",
+                  "key": "6:old:workflowInput:pipe",
                   "pipe": {
                     "___ref": "_id_106_"
                   },
                   "source": {
                     "_id_246_": "",
-                    "kind": "data",
-                    "json": "43"
+                    "kind": "input",
+                    "input": {
+                      "___ref": "_id_244_"
+                    }
                   },
                   "destination": {
                     "_id_247_": "",
@@ -712,12 +705,19 @@
                     }
                   }
                 },
-                "outflowPipes": [],
+                "outflowPipes": [
+                  {
+                    "___ref": "_id_245_"
+                  }
+                ],
                 "runs": {
                   "_id_249_": "",
-                  "nameInScope": "value",
-                  "value": 43,
-                  "dependencies": []
+                  "nameInScope": "old",
+                  "dependencies": [
+                    {
+                      "___ref": "_id_244_"
+                    }
+                  ]
                 }
               }
             ],
@@ -789,6 +789,7 @@
                         "runs": {
                           "_id_276_": "",
                           "nameInScope": "right",
+                          "value": 43,
                           "dependencies": [
                             {
                               "___ref": "_id_234_"
@@ -832,6 +833,7 @@
                         "runs": {
                           "_id_270_": "",
                           "nameInScope": "b",
+                          "value": 43,
                           "dependencies": [
                             {
                               "___ref": "_id_234_"
@@ -844,7 +846,8 @@
                 ],
                 "runs": {
                   "_id_272_": "",
-                  "nameInScope": "b",
+                  "nameInScope": "b_5",
+                  "value": 43,
                   "dependencies": [
                     {
                       "___ref": "_id_237_"
@@ -861,23 +864,24 @@
             "runs": [
               {
                 "_id_254_": "",
-                "key": "1294668824857067",
+                "key": "3785978552345531",
                 "inputs": [
                   {
                     "_id_256_": "",
-                    "name": "old"
+                    "name": "value",
+                    "value": 43
                   },
                   {
                     "_id_257_": "",
-                    "name": "value",
-                    "value": 43
+                    "name": "old"
                   }
                 ],
                 "inner": [],
                 "outputs": [
                   {
                     "_id_260_": "",
-                    "name": "b"
+                    "name": "b_5",
+                    "value": 43
                   }
                 ]
               }
@@ -1049,7 +1053,7 @@
             "runs": [
               {
                 "_id_281_": "",
-                "key": "2822536792947150",
+                "key": "8934844606743370",
                 "inputs": [
                   {
                     "_id_283_": "",
@@ -1057,7 +1061,8 @@
                   },
                   {
                     "_id_284_": "",
-                    "name": "right"
+                    "name": "right",
+                    "value": 43
                   }
                 ],
                 "inner": [],
@@ -1152,10 +1157,11 @@
                       "runs": {
                         "_id_325_": "",
                         "nameInScope": "b",
+                        "value": 46,
                         "dependencies": [
                           {
                             "_id_302_": "",
-                            "key": "9:old:workflowInput",
+                            "key": "9:value:workflowInput",
                             "nodeInstance": {
                               "___ref": "_id_300_"
                             },
@@ -1163,19 +1169,17 @@
                             "workflowInput": {
                               "___ref": "_id_87_"
                             },
-                            "name": "old",
+                            "name": "value",
                             "inflowPipe": {
                               "_id_303_": "",
-                              "key": "9:old:workflowInput:pipe",
+                              "key": "9:value:workflowInput:pipe",
                               "pipe": {
                                 "___ref": "_id_99_"
                               },
                               "source": {
                                 "_id_304_": "",
-                                "kind": "input",
-                                "input": {
-                                  "___ref": "_id_302_"
-                                }
+                                "kind": "data",
+                                "json": "46"
                               },
                               "destination": {
                                 "_id_305_": "",
@@ -1185,19 +1189,12 @@
                                 }
                               }
                             },
-                            "outflowPipes": [
-                              {
-                                "___ref": "_id_303_"
-                              }
-                            ],
+                            "outflowPipes": [],
                             "runs": {
                               "_id_307_": "",
-                              "nameInScope": "old",
-                              "dependencies": [
-                                {
-                                  "___ref": "_id_302_"
-                                }
-                              ]
+                              "nameInScope": "value",
+                              "value": 46,
+                              "dependencies": []
                             }
                           }
                         ]
@@ -1268,7 +1265,7 @@
                         ],
                         "runs": {
                           "_id_357_": "",
-                          "nameInScope": "b_4",
+                          "nameInScope": "b",
                           "dependencies": [
                             {
                               "___ref": "_id_215_"
@@ -1281,7 +1278,7 @@
                 ],
                 "runs": {
                   "_id_346_": "",
-                  "nameInScope": "b_7",
+                  "nameInScope": "b",
                   "dependencies": [
                     {
                       "___ref": "_id_317_"
@@ -1301,8 +1298,8 @@
             "runs": [
               {
                 "_id_337_": "",
-                "key": "1481463422311191",
-                "code": "function file_ts_if_body_if_body(condition: bool, b: number) {\n    const b = old;\n    return b_7;\n}",
+                "key": "1859040525755565",
+                "code": "function file_ts_if_body_if_body(condition: bool, b: number) {\n    const b = 46;\n    return b;\n}",
                 "inputs": [
                   {
                     "_id_339_": "",
@@ -1311,19 +1308,21 @@
                   },
                   {
                     "_id_340_": "",
-                    "name": "b"
+                    "name": "b",
+                    "value": 43
                   }
                 ],
                 "inner": [
                   {
                     "_id_342_": "",
-                    "name": "b"
+                    "name": "b",
+                    "value": 46
                   }
                 ],
                 "outputs": [
                   {
                     "_id_344_": "",
-                    "name": "b_7"
+                    "name": "b"
                   }
                 ]
               }
@@ -1347,25 +1346,27 @@
               },
               {
                 "_id_309_": "",
-                "key": "9:value:workflowInput",
+                "key": "9:old:workflowInput",
                 "nodeInstance": {
                   "___ref": "_id_300_"
                 },
                 "kind": "workflow-input",
                 "workflowInput": {
-                  "___ref": "_id_88_"
+                  "___ref": "_id_89_"
                 },
-                "name": "value",
+                "name": "old",
                 "inflowPipe": {
                   "_id_310_": "",
-                  "key": "9:value:workflowInput:pipe",
+                  "key": "9:old:workflowInput:pipe",
                   "pipe": {
                     "___ref": "_id_100_"
                   },
                   "source": {
                     "_id_311_": "",
-                    "kind": "data",
-                    "json": "46"
+                    "kind": "input",
+                    "input": {
+                      "___ref": "_id_309_"
+                    }
                   },
                   "destination": {
                     "_id_312_": "",
@@ -1375,12 +1376,19 @@
                     }
                   }
                 },
-                "outflowPipes": [],
+                "outflowPipes": [
+                  {
+                    "___ref": "_id_310_"
+                  }
+                ],
                 "runs": {
                   "_id_314_": "",
-                  "nameInScope": "value",
-                  "value": 46,
-                  "dependencies": []
+                  "nameInScope": "old",
+                  "dependencies": [
+                    {
+                      "___ref": "_id_309_"
+                    }
+                  ]
                 }
               }
             ],
@@ -1397,23 +1405,24 @@
             "runs": [
               {
                 "_id_329_": "",
-                "key": "5673137623173986",
+                "key": "3366325348031474",
                 "inputs": [
                   {
                     "_id_331_": "",
-                    "name": "old"
+                    "name": "value",
+                    "value": 46
                   },
                   {
                     "_id_332_": "",
-                    "name": "value",
-                    "value": 46
+                    "name": "old"
                   }
                 ],
                 "inner": [],
                 "outputs": [
                   {
                     "_id_335_": "",
-                    "name": "b"
+                    "name": "b",
+                    "value": 46
                   }
                 ]
               }
@@ -1654,7 +1663,7 @@
                               "outflowPipes": [],
                               "runs": {
                                 "_id_207_": "",
-                                "nameInScope": "a_4",
+                                "nameInScope": "a",
                                 "dependencies": [
                                   {
                                     "___ref": "_id_197_"
@@ -1681,7 +1690,7 @@
               ],
               "runs": {
                 "_id_390_": "",
-                "nameInScope": "a",
+                "nameInScope": "a_1",
                 "value": 42,
                 "dependencies": [
                   {
@@ -1699,7 +1708,7 @@
           "runs": [
             {
               "_id_394_": "",
-              "key": "2291118307109192",
+              "key": "8838209498893720",
               "inputs": [
                 {
                   "_id_396_": "",
@@ -1711,7 +1720,7 @@
               "outputs": [
                 {
                   "_id_399_": "",
-                  "name": "a",
+                  "name": "a_1",
                   "value": 42
                 }
               ]
@@ -1790,7 +1799,7 @@
               ],
               "runs": {
                 "_id_191_": "",
-                "nameInScope": "b",
+                "nameInScope": "b_2",
                 "dependencies": []
               }
             }
@@ -1803,13 +1812,13 @@
           "runs": [
             {
               "_id_185_": "",
-              "key": "3213908847975103",
+              "key": "2925985404483353",
               "inputs": [],
               "inner": [],
               "outputs": [
                 {
                   "_id_189_": "",
-                  "name": "b"
+                  "name": "b_2"
                 }
               ]
             }
@@ -2044,8 +2053,8 @@
           "runs": [
             {
               "_id_361_": "",
-              "key": "1094952460947164",
-              "code": "function file_ts_if_body(condition: bool, b: number, a: number) {\n    function file_ts_if_body_if_body(condition: bool, b: number) {\n        const b = old;\n        return b_7;\n    }\n    const b = old;\n    const value = left > b;\n    const b_7 = file_ts_if_body_if_body(value, b);\n    return { b_4, a_4 };\n}",
+              "key": "3117679194449569",
+              "code": "function file_ts_if_body(condition: bool, b: number, a: number) {\n    function file_ts_if_body_if_body(condition: bool, b: number) {\n        const b = 46;\n        return b;\n    }\n    const b_5 = 43;\n    const value = left > b_5;\n    const b = file_ts_if_body_if_body(value, b_5);\n    return { b, a };\n}",
               "inputs": [
                 {
                   "_id_363_": "",
@@ -2065,7 +2074,8 @@
               "inner": [
                 {
                   "_id_367_": "",
-                  "name": "b"
+                  "name": "b_5",
+                  "value": 43
                 },
                 {
                   "_id_368_": "",
@@ -2074,17 +2084,17 @@
                 },
                 {
                   "_id_369_": "",
-                  "name": "b_7"
+                  "name": "b"
                 }
               ],
               "outputs": [
                 {
                   "_id_371_": "",
-                  "name": "b_4"
+                  "name": "b"
                 },
                 {
                   "_id_372_": "",
-                  "name": "a_4"
+                  "name": "a"
                 }
               ]
             }
@@ -2094,18 +2104,18 @@
       "runs": [
         {
           "_id_404_": "",
-          "key": "7664211400036707",
-          "code": "function file_ts() {\n    function file_ts_if_body(condition: bool, b: number, a: number) {\n        function file_ts_if_body_if_body(condition: bool, b: number) {\n            const b = old;\n            return b_7;\n        }\n        const b = old;\n        const value = left > b;\n        const b_7 = file_ts_if_body_if_body(value, b);\n        return { b_4, a_4 };\n    }\n    const a = 42;\n    const b = undefined;\n    const value = a > 40;\n    const { b_4, a_4 } = file_ts_if_body(value, b, a);\n    return b;\n}",
+          "key": "7612181184191884",
+          "code": "function file_ts() {\n    function file_ts_if_body(condition: bool, b: number, a: number) {\n        function file_ts_if_body_if_body(condition: bool, b: number) {\n            const b = 46;\n            return b;\n        }\n        const b_5 = 43;\n        const value = left > b_5;\n        const b = file_ts_if_body_if_body(value, b_5);\n        return { b, a };\n    }\n    const a_1 = 42;\n    const b_2 = undefined;\n    const value = a_1 > 40;\n    const { b, a } = file_ts_if_body(value, b_2, a_1);\n    return b;\n}",
           "inputs": [],
           "inner": [
             {
               "_id_407_": "",
-              "name": "a",
+              "name": "a_1",
               "value": 42
             },
             {
               "_id_408_": "",
-              "name": "b"
+              "name": "b_2"
             },
             {
               "_id_409_": "",
@@ -2114,11 +2124,11 @@
             },
             {
               "_id_410_": "",
-              "name": "b_4"
+              "name": "b"
             },
             {
               "_id_411_": "",
-              "name": "a_4"
+              "name": "a"
             }
           ],
           "outputs": [

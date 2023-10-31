@@ -683,7 +683,7 @@
                             ],
                             "runs": {
                               "_id_260_": "",
-                              "nameInScope": "value_6",
+                              "nameInScope": "value",
                               "value": -5159,
                               "dependencies": [
                                 {
@@ -1348,7 +1348,7 @@
               ],
               "runs": {
                 "_id_316_": "",
-                "nameInScope": "value",
+                "nameInScope": "value_2",
                 "value": 126,
                 "dependencies": [
                   {
@@ -1369,7 +1369,7 @@
           "runs": [
             {
               "_id_320_": "",
-              "key": "6885974735924839",
+              "key": "3700019127287712",
               "inputs": [
                 {
                   "_id_322_": "",
@@ -1386,7 +1386,7 @@
               "outputs": [
                 {
                   "_id_326_": "",
-                  "name": "value",
+                  "name": "value_2",
                   "value": 126
                 }
               ]
@@ -1721,7 +1721,7 @@
           "runs": [
             {
               "_id_264_": "",
-              "key": "6347707699009116",
+              "key": "1024911423841098",
               "inputs": [
                 {
                   "_id_266_": "",
@@ -1738,7 +1738,7 @@
               "outputs": [
                 {
                   "_id_270_": "",
-                  "name": "value_6",
+                  "name": "value",
                   "value": -5159
                 }
               ]
@@ -1798,8 +1798,8 @@
       "runs": [
         {
           "_id_344_": "",
-          "key": "7725814670911598",
-          "code": "function file_ts() {\n    const a = 42;\n    const value = a * 3;\n    const value_3 = 2 - value;\n    const value_4 = a * value_3;\n    const value_5 = a + value_4;\n    const value_6 = value_5 + 7;\n    const b = value_6;\n    return b;\n}",
+          "key": "7324520546305681",
+          "code": "function file_ts() {\n    const a = 42;\n    const value_2 = a * 3;\n    const value_3 = 2 - value_2;\n    const value_4 = a * value_3;\n    const value_5 = a + value_4;\n    const value = value_5 + 7;\n    const b = value;\n    return b;\n}",
           "inputs": [],
           "inner": [
             {
@@ -1809,7 +1809,7 @@
             },
             {
               "_id_348_": "",
-              "name": "value",
+              "name": "value_2",
               "value": 126
             },
             {
@@ -1829,7 +1829,7 @@
             },
             {
               "_id_352_": "",
-              "name": "value_6",
+              "name": "value",
               "value": -5159
             },
             {

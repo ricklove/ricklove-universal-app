@@ -67,19 +67,19 @@
           "name": "file.ts/a=",
           "inputs": [
             {
+              "name": "value",
+              "type": {
+                "kind": "simple",
+                "type": "int"
+              }
+            },
+            {
               "name": "old",
               "type": {
                 "kind": "simple",
                 "type": "number"
               },
               "ignored": true
-            },
-            {
-              "name": "value",
-              "type": {
-                "kind": "simple",
-                "type": "int"
-              }
             }
           ],
           "outputs": [
@@ -119,15 +119,15 @@
             "workflowUri": "file.ts/a=",
             "inputPipes": [
               {
+                "name": "value",
+                "kind": "data",
+                "json": "43"
+              },
+              {
                 "name": "old",
                 "kind": "node",
                 "sourceNodeId": "file.ts:1",
                 "sourceNodeOutputName": "a"
-              },
-              {
-                "name": "value",
-                "kind": "data",
-                "json": "43"
               }
             ]
           }
