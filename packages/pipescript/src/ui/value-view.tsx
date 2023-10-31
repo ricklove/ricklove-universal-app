@@ -51,13 +51,31 @@ export const ValueEditor = ({
     );
 };
 
-export type ValueViewerMode = undefined | `override`;
+export type ValueViewerMode = undefined | `override` | `input` | `output` | `inner`;
 export const ValueViewer = ({ value, mode }: { value: unknown; mode?: ValueViewerMode }) => {
     return (
         <>
-            <View className={`m-[1px] ${mode ? `bg-green-100 ` : `bg-purple-100`}`}>
+            <View
+                className={`m-[1px] ${
+                    mode === `override`
+                        ? `bg-green-100`
+                        : mode === `input`
+                        ? `bg-green-100`
+                        : mode === `output`
+                        ? `bg-green-100`
+                        : `bg-gray-100`
+                }`}
+            >
                 <Text
-                    className={`px-1 min-w-[60px] ${mode ? `text-green-600` : `text-purple-600`}`}
+                    className={`px-1 min-w-[60px] ${
+                        mode === `override`
+                            ? `text-green-600`
+                            : mode === `input`
+                            ? `text-green-600`
+                            : mode === `output`
+                            ? `text-green-600`
+                            : `text-gray-600`
+                    }`}
                 >
                     {JSON.stringify(value)}
                 </Text>

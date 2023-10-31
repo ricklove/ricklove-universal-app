@@ -1,4 +1,4 @@
-import { jsonStringify_safe } from '../tests/_convert-code-cases';
+import { jsonStringify_safe } from '../utils/json';
 
 // https://stackoverflow.com/a/52171480/567524
 const cyrb53 = (str: string, seed = 0) => {

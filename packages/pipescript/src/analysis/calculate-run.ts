@@ -103,6 +103,8 @@ export const calculateRunValue_connectionOverride = (
     };
 
     updateDependents(connection);
+    calculateRun_names(connection.nodeInstance.dataset);
+    recordRun(connection.nodeInstance.dataset);
 };
 
 const calculateRun_names = (dataset: PipescriptNodeInstanceDataset) => {

@@ -3,20 +3,19 @@ import { View, Text, ScrollView } from 'react-native';
 
 import { ValueViewer, ValueViewerMode } from './value-view';
 
-export const SheetView = ({
-    data,
-}: {
-    data: {
-        header: { name: string; mode: ValueViewerMode }[];
-        rows: { cells: unknown[] }[];
-    };
-}) => {
+export type SheetViewData = {
+    header: { name: string; mode: ValueViewerMode }[];
+    rows: { cells: unknown[] }[];
+};
+export const SheetView = ({ data }: { data: SheetViewData }) => {
     return (
-        <View className='flex-col'>
+        <View testID='SheetView' className='flex-col'>
             <View className='flex-row'>
                 {data.header.map(x => (
                     <React.Fragment key={x.name}>
-                        <Text>{x.name}</Text>
+                        <View className='flex-1'>
+                            <Text>{x.name}</Text>
+                        </View>
                     </React.Fragment>
                 ))}
             </View>
@@ -26,7 +25,9 @@ export const SheetView = ({
                         <View className='flex-row'>
                             {r.cells.map((x, j) => (
                                 <React.Fragment key={j}>
-                                    <ValueViewer value={x} mode={data.header[j].mode} />
+                                    <View className='flex-1'>
+                                        <ValueViewer value={x} mode={data.header[j].mode} />
+                                    </View>
                                 </React.Fragment>
                             ))}
                         </View>

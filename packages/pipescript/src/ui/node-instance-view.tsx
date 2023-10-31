@@ -5,7 +5,8 @@ import { BehaviorSubject, Subject } from 'rxjs';
 
 import { MouseButton, MoveableView } from './moveable-view';
 import { PipeEndpointView, PipeView } from './pipes';
-import { ValueEditor } from './value-view';
+import { SheetView, SheetViewData } from './sheet';
+import { ValueEditor, ValueViewerMode } from './value-view';
 import { getTypeName } from './work-names';
 import { calculateRunValue_connectionOverride } from '../analysis/calculate-run';
 import {
@@ -141,9 +142,66 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
                             ))}
                         </View>
                     </View>
+                    {workflow.body.kind === `nodes` && (
+                        <View className='bg-gray-200 h-10'>
+                            <NodeInstanceSheetView nodeInstance={nodeInstance} />
+                        </View>
+                    )}
                 </View>
             </MoveableView>
         </View>
+    );
+};
+
+const NodeInstanceSheetView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) => {
+    const runValueContext = useContext(RunValueContext);
+    const [runs, setRuns] = useState(undefined as typeof nodeInstance.runs);
+    useEffect(() => {
+        const sub = runValueContext.ValueChanged.subscribe(x => {
+            console.log(`NodeInstanceSheetView: changed`, { runs: nodeInstance.runs });
+            setRuns([...(nodeInstance.runs ?? [])]);
+        });
+        setRuns([...(nodeInstance.runs ?? [])]);
+        return () => {
+            sub.unsubscribe();
+        };
+    }, []);
+
+    console.log(`NodeInstanceSheetView: RENDER`, { runs: nodeInstance.runs });
+
+    if (!runs) {
+        return (
+            <View>
+                <Text>Empty</Text>
+            </View>
+        );
+    }
+    const allHeaders: SheetViewData[`header`] =
+        runs?.flatMap(r => [
+            ...r.inputs.map(x => ({ name: x.name, mode: `input` as ValueViewerMode })),
+            ...r.inner.map(x => ({ name: x.name, mode: `inner` as ValueViewerMode })),
+            ...r.outputs.map(x => ({ name: x.name, mode: `output` as ValueViewerMode })),
+        ]) ?? [];
+
+    const headers = [...new Map(allHeaders.map(x => [x.name, x])).values()];
+
+    return (
+        <SheetView
+            data={{
+                header: headers,
+                rows: runs.map(r => ({
+                    cells: headers.map(h =>
+                        h.mode === `input`
+                            ? r.inputs.find(x => x.name === h.name)?.value
+                            : h.mode === `inner`
+                            ? r.inner.find(x => x.name === h.name)?.value
+                            : h.mode === `output`
+                            ? r.outputs.find(x => x.name === h.name)?.value
+                            : undefined,
+                    ),
+                })),
+            }}
+        />
     );
 };
 

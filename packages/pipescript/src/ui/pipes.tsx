@@ -187,19 +187,19 @@ const PipeViewLine = ({
 
     useLayoutEffect(() => {
         if (!sourceEndpoint || !destinationEndpoint) {
-            console.log(`PipeView !sourceEndpoint || !destinationEndpoint`, {
-                sourceId,
-                destinationId,
-                registry,
-                sourceEndpoint,
-                destinationEndpoint,
-            });
+            // console.log(`PipeView !sourceEndpoint || !destinationEndpoint`, {
+            //     sourceId,
+            //     destinationId,
+            //     registry,
+            //     sourceEndpoint,
+            //     destinationEndpoint,
+            // });
             return;
         }
         const init = new Subject<void>();
         const sub = combineLatest([sourceEndpoint, destinationEndpoint, init]).subscribe(
             ([source, destination]) => {
-                console.log(`PipeView draw`, { source, destination });
+                // console.log(`PipeView draw`, { source, destination });
                 setPosition({ source, destination });
             },
         );
@@ -273,29 +273,29 @@ export const PipeEndpointView = ({ id }: { id: string }) => {
     const targetRef = useRef(null as null | View);
 
     useLayoutEffect(() => {
-        console.log(`PipeEndpointView useLayoutEffect`, { registry });
+        // console.log(`PipeEndpointView useLayoutEffect`, { registry });
 
         const calculate = () => {
             const h = registry.hostView;
             if (!h) {
-                console.log(`PipeEndpointView useLayoutEffect - host NOT READY`, { registry });
+                // console.log(`PipeEndpointView useLayoutEffect - host NOT READY`, { registry });
                 return;
             }
             const t = targetRef.current;
             if (!t) {
-                console.log(`PipeEndpointView useLayoutEffect - component NOT READY`, { registry });
+                // console.log(`PipeEndpointView useLayoutEffect - component NOT READY`, { registry });
                 return;
             }
 
             t.measureLayout(h, (left, top, width, height) => {
-                console.log(`PipeEndpointView useLayoutEffect measureLayout NEXT`, {
-                    id,
-                    left,
-                    top,
-                    width,
-                    height,
-                    registry,
-                });
+                // console.log(`PipeEndpointView useLayoutEffect measureLayout NEXT`, {
+                //     id,
+                //     left,
+                //     top,
+                //     width,
+                //     height,
+                //     registry,
+                // });
                 const s = getOrCreateEndpointSubject(registry, id);
                 s.next({
                     x: left + moveContext.position.x,
