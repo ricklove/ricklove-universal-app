@@ -142,14 +142,41 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
                             ))}
                         </View>
                     </View>
-                    {workflow.body.kind === `nodes` && (
-                        <View className='bg-gray-200 h-10'>
-                            <NodeInstanceSheetView nodeInstance={nodeInstance} />
-                        </View>
-                    )}
+                    {workflow.body.kind === `nodes` && <Footer nodeInstance={nodeInstance} />}
                 </View>
             </MoveableView>
         </View>
+    );
+};
+
+const Footer = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) => {
+    const tabs = [`sheet`, `code`, `both`] as const;
+    const [tab, setTab] = useState(`sheet` as (typeof tabs)[number]);
+
+    return (
+        <>
+            <View className='flex-row'>
+                {tabs.map(x => (
+                    <React.Fragment key={x}>
+                        <Pressable onPress={() => setTab(x)}>
+                            <View className={`p-1 bg-gray-200 ${tab === x ? `` : `opacity-50`}`}>
+                                <Text>{x}</Text>
+                            </View>
+                        </Pressable>
+                    </React.Fragment>
+                ))}
+            </View>
+            {(tab === `code` || tab === `both`) && (
+                <View className='bg-gray-200'>
+                    <Text className='whitespace-pre'>{nodeInstance.runs?.[0]?.code}</Text>
+                </View>
+            )}
+            {(tab === `sheet` || tab === `both`) && (
+                <View className='bg-gray-200'>
+                    <NodeInstanceSheetView nodeInstance={nodeInstance} />
+                </View>
+            )}
+        </>
     );
 };
 

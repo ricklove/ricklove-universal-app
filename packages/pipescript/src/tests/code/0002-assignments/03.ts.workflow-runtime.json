@@ -512,6 +512,7 @@
         {
           "_id_108_": "",
           "key": "4050377552330640",
+          "code": "function file_ts() {\n    const a = 42;\n    const b = a;\n    return b;\n}",
           "inputs": [],
           "inner": [
             {

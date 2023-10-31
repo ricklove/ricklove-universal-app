@@ -1302,6 +1302,7 @@
               {
                 "_id_337_": "",
                 "key": "1481463422311191",
+                "code": "function file_ts_if_body_if_body(condition: bool, b: number) {\n    const b = old;\n    return b_7;\n}",
                 "inputs": [
                   {
                     "_id_339_": "",
@@ -2044,6 +2045,7 @@
             {
               "_id_361_": "",
               "key": "1094952460947164",
+              "code": "function file_ts_if_body(condition: bool, b: number, a: number) {\n    function file_ts_if_body_if_body(condition: bool, b: number) {\n        const b = old;\n        return b_7;\n    }\n    const b = old;\n    const value = left > b;\n    const b_7 = file_ts_if_body_if_body(value, b);\n    return { b_4, a_4 };\n}",
               "inputs": [
                 {
                   "_id_363_": "",
@@ -2093,6 +2095,7 @@
         {
           "_id_404_": "",
           "key": "7664211400036707",
+          "code": "function file_ts() {\n    function file_ts_if_body(condition: bool, b: number, a: number) {\n        function file_ts_if_body_if_body(condition: bool, b: number) {\n            const b = old;\n            return b_7;\n        }\n        const b = old;\n        const value = left > b;\n        const b_7 = file_ts_if_body_if_body(value, b);\n        return { b_4, a_4 };\n    }\n    const a = 42;\n    const b = undefined;\n    const value = a > 40;\n    const { b_4, a_4 } = file_ts_if_body(value, b, a);\n    return b;\n}",
           "inputs": [],
           "inner": [
             {

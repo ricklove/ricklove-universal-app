@@ -826,6 +826,7 @@
         {
           "_id_164_": "",
           "key": "666000206768997",
+          "code": "function file_ts() {\n    const a = 42;\n    const { old, a_2 } = a++;\n    const b = old;\n    return { b, a };\n}",
           "inputs": [],
           "inner": [
             {

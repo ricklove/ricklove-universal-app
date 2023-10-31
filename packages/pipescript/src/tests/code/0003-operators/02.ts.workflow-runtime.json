@@ -959,6 +959,7 @@
         {
           "_id_192_": "",
           "key": "235931811440198",
+          "code": "function file_ts() {\n    const a = 42;\n    const b = 43;\n    const value = a + b;\n    const c = value;\n    return c;\n}",
           "inputs": [],
           "inner": [
             {

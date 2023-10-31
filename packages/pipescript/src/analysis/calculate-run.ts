@@ -1,4 +1,5 @@
 import { hashCode } from './hash';
+import { convertWorkflowToFunctionDeclaration } from '../code-generation/file';
 import {
     PipescriptBuiltinOperator,
     PipescriptNodeInstance,
@@ -49,8 +50,11 @@ const recordRun = (dataset: PipescriptNodeInstanceDataset) => {
         if (node.runs.some(x => x.key === key)) {
             return;
         }
-        node.runs.push({
+
+        const code = convertWorkflowToFunctionDeclaration(node.workflow, node.dataset);
+        node.runs.unshift({
             key,
+            code: code?.content,
             ...runValue,
         });
     });

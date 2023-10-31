@@ -1,6 +1,6 @@
-import { PipescriptRuntimeContext, loadRuntime } from '../analysis/load-data';
 import {
     PipescriptBuiltinOperator,
+    PipescriptNodeInstanceDataset,
     PipescriptType,
     PipescriptVariable,
     PipescriptWorkflow,
@@ -51,6 +51,13 @@ const operatorExpressions = [
     template: (argNames: string[]) => string;
 }[];
 
+type Builder = {
+    declaredWorkflows: {
+        workflow: PipescriptWorkflow;
+        getCallExpression: (args: string[]) => string;
+    }[];
+};
+
 /** Convert workflow to typescript file with exports
  *
  * - nested workflows are functions
@@ -58,17 +65,16 @@ const operatorExpressions = [
  * - rootNodes are flat code
  *
  */
-export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) => {
-    const { dataset, context } = loadRuntime(workflow);
-
-    const builder: Builder = {
-        ...context,
+export const convertWorkflowToTypescriptFile = (
+    workflow: PipescriptWorkflow,
+    dataset: PipescriptNodeInstanceDataset,
+    builder: Builder = {
         declaredWorkflows: [],
-    };
-
+    },
+) => {
     const nestedFunctionDeclarations =
         workflow.workflows
-            ?.map(w => convertWorkflowToFunctionDeclaration(w, builder))
+            ?.map(w => convertWorkflowToFunctionDeclaration(w, dataset, builder))
             .filter(x => x)
             .map(x => x!) ?? [];
 
@@ -81,16 +87,12 @@ export const convertWorkflowToTypescriptFile = (workflow: PipescriptWorkflow) =>
     };
 };
 
-type Builder = PipescriptRuntimeContext & {
-    declaredWorkflows: {
-        workflow: PipescriptWorkflow;
-        getCallExpression: (args: string[]) => string;
-    }[];
-};
-
-const convertWorkflowToFunctionDeclaration = (
+export const convertWorkflowToFunctionDeclaration = (
     workflow: PipescriptWorkflow,
-    builder: Builder,
+    dataset: PipescriptNodeInstanceDataset,
+    builder: Builder = {
+        declaredWorkflows: [],
+    },
 ): undefined | { content: string } => {
     if (builder.declaredWorkflows.find(x => x.workflow === workflow)) {
         return;
@@ -125,12 +127,12 @@ const convertWorkflowToFunctionDeclaration = (
 
     const nestedFunctionDeclarations =
         workflow.workflows
-            ?.map(w => convertWorkflowToFunctionDeclaration(w, builder))
+            ?.map(w => convertWorkflowToFunctionDeclaration(w, dataset, builder))
             .filter(x => x)
             .map(x => x!) ?? [];
 
     const statements = workflow.body.nodes.map(node => {
-        const nodeInstance = builder.allNodeInstances.find(x => x.node === node);
+        const nodeInstance = dataset.allNodeInstances.find(x => x.node === node);
         const workflow = nodeInstance?.workflow;
         if (!workflow) {
             return `/* missing workflow ${node.workflowUri} */`;
@@ -173,7 +175,7 @@ const convertWorkflowToFunctionDeclaration = (
         return `const ${outputsExpression} = ${funCall};`;
     });
 
-    const workflowNodeInstance = builder.allNodeInstances.find(
+    const workflowNodeInstance = dataset.allNodeInstances.find(
         x => x.node.workflowUri === workflow.workflowUri,
     );
     const getName_workflowInput = (workflowInput: PipescriptWorkflowInput) => {

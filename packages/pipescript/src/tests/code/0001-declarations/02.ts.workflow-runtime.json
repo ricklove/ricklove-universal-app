@@ -318,6 +318,7 @@
         {
           "_id_71_": "",
           "key": "2493605032774638",
+          "code": "function file_ts() {\n    const answer = 42;\n    return answer;\n}",
           "inputs": [],
           "inner": [
             {

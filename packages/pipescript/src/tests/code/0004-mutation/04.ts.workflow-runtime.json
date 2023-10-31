@@ -574,6 +574,7 @@
         {
           "_id_119_": "",
           "key": "7700649887773762",
+          "code": "function file_ts() {\n    const a = 42;\n    const { old, a_2 } = a++;\n    return a;\n}",
           "inputs": [],
           "inner": [
             {

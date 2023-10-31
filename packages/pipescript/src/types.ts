@@ -185,6 +185,7 @@ export type PipescriptNodeInstanceDataset = {
 
 export type PipescriptNodeInstanceRun = {
     key: string;
+    code: undefined | string;
     inputs: {
         name: string;
         value: unknown;

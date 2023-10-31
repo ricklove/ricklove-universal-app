@@ -563,6 +563,7 @@
         {
           "_id_118_": "",
           "key": "1621287710993478",
+          "code": "function file_ts() {\n    const answer = 42;\n    const notAnswer = 43;\n    return { notAnswer, answer };\n}",
           "inputs": [],
           "inner": [
             {

@@ -767,6 +767,7 @@
         {
           "_id_156_": "",
           "key": "1307559153432395",
+          "code": "function file_ts() {\n    const a = 42;\n    const value = a * 2;\n    const b = value;\n    return b;\n}",
           "inputs": [],
           "inner": [
             {

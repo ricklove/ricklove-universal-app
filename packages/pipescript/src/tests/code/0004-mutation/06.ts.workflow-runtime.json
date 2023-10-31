@@ -727,6 +727,7 @@
         {
           "_id_154_": "",
           "key": "1355309314168629",
+          "code": "function file_ts() {\n    const a = undefined;\n    const a_2 = a;\n    const a_3 = a_2;\n    return a;\n}",
           "inputs": [],
           "inner": [
             {

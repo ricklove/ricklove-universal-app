@@ -256,6 +256,7 @@
         {
           "_id_62_": "",
           "key": "7526427346151989",
+          "code": "function file_ts() {\n    const answer = 42;\n}",
           "inputs": [],
           "inner": [
             {

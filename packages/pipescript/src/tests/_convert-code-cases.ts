@@ -56,7 +56,7 @@ export const run = async () => {
                 ),
             );
 
-            const generatedCode = convertWorkflowToTypescriptFile(projectWorkflow);
+            const generatedCode = convertWorkflowToTypescriptFile(projectWorkflow, runtime.dataset);
             Bun.write(`${filePath}.from-workflow.gen.ts.ignore`, generatedCode.content);
         } catch (err) {
             console.error(`convert code error`, { err });

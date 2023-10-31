@@ -1799,6 +1799,7 @@
         {
           "_id_344_": "",
           "key": "7725814670911598",
+          "code": "function file_ts() {\n    const a = 42;\n    const value = a * 3;\n    const value_3 = 2 - value;\n    const value_4 = a * value_3;\n    const value_5 = a + value_4;\n    const value_6 = value_5 + 7;\n    const b = value_6;\n    return b;\n}",
           "inputs": [],
           "inner": [
             {
