@@ -1,17 +1,12 @@
-function file_ts() {
-    function file_ts_if_body(condition: bool, b: number, a: number) {
-        function file_ts_if_body_if_body(condition: bool, b: number) {
-            const b = 46;
-            return b;
-        }
-        const b_5 = 43;
-        const value = left > b_5;
-        const b = file_ts_if_body_if_body(value, b_5);
-        return { b, a };
-    }
+function file_ts(b: number) {
     const a_1 = 42;
     const b_2 = undefined;
-    const value = a_1 > 40;
-    const { b, a } = file_ts_if_body(value, b_2, a_1);
-    return b;
+    const value_3 = a_1 > 40;
+    const b_4 = 43;
+    const value_5 = a_1 > b_4;
+    const b_6 = 46;
+    const b = value_5 ? b_4 : b_6;
+    const value = value_5 ? value_5 : undefined /* disconnected */;
+    const a = value_3 ? a_1 : undefined /* disconnected */;
+    return { b, b_0 };
 }

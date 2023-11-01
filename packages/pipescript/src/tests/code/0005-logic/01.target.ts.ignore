@@ -1,0 +1,5 @@
+function file_ts() {
+    const a = 42;
+    const b = a > 40 ? 43 : undefined;
+    return b;
+}
