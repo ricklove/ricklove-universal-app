@@ -1,12 +1,11 @@
-function file_ts(b: number) {
-    const a_1 = 42;
+function file_ts() {
+    const a = 42;
     const b_2 = undefined;
-    const value_3 = a_1 > 40;
+    const value_3 = a > 40;
     const b_4 = 43;
-    const value_5 = a_1 > b_4;
+    const value_5 = a > b_4;
     const b_6 = 46;
-    const b = value_5 ? b_4 : b_6;
-    const value = value_5 ? value_5 : undefined /* disconnected */;
-    const a = value_3 ? a_1 : undefined /* disconnected */;
-    return { b, b_0 };
+    const b = value_5 ? b_6 : undefined /* disconnected */;
+    const value = value_3 ? value_5 : undefined /* disconnected */;
+    return b;
 }

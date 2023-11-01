@@ -17,23 +17,8 @@
     {
       "workflowUri": "file.ts",
       "name": "file.ts",
-      "inputs": [
-        {
-          "name": "b",
-          "type": {
-            "kind": "simple",
-            "type": "number"
-          }
-        }
-      ],
+      "inputs": [],
       "outputs": [
-        {
-          "name": "b",
-          "type": {
-            "kind": "simple",
-            "type": "number"
-          }
-        },
         {
           "name": "b",
           "type": {
@@ -41,8 +26,9 @@
             "type": "number"
           },
           "pipe": {
-            "kind": "workflow-input",
-            "workflowInputName": "b"
+            "kind": "node",
+            "sourceNodeId": "file.ts:2",
+            "sourceNodeOutputName": "b"
           }
         }
       ],
@@ -325,49 +311,6 @@
             "kind": "operator",
             "operator": "conditional-ternary"
           }
-        },
-        {
-          "workflowUri": "file.ts/if-output/a",
-          "name": "file.ts/if-output/a",
-          "inputs": [
-            {
-              "name": "condition",
-              "type": {
-                "kind": "simple",
-                "type": "bool"
-              }
-            },
-            {
-              "name": "left",
-              "type": {
-                "kind": "simple",
-                "type": "int"
-              }
-            },
-            {
-              "name": "right",
-              "type": {
-                "kind": "simple",
-                "type": "int"
-              }
-            }
-          ],
-          "outputs": [
-            {
-              "name": "a",
-              "type": {
-                "kind": "simple",
-                "type": "int"
-              },
-              "pipe": {
-                "kind": "workflow-operator"
-              }
-            }
-          ],
-          "body": {
-            "kind": "operator",
-            "operator": "conditional-ternary"
-          }
         }
       ],
       "body": {
@@ -472,12 +415,6 @@
                 "name": "left",
                 "kind": "node",
                 "sourceNodeOutputName": "b",
-                "sourceNodeId": "file.ts:4"
-              },
-              {
-                "name": "right",
-                "kind": "node",
-                "sourceNodeOutputName": "b",
                 "sourceNodeId": "file.ts:6"
               }
             ]
@@ -489,7 +426,7 @@
               {
                 "name": "condition",
                 "kind": "node",
-                "sourceNodeId": "file.ts:5",
+                "sourceNodeId": "file.ts:3",
                 "sourceNodeOutputName": "value"
               },
               {
@@ -497,24 +434,6 @@
                 "kind": "node",
                 "sourceNodeOutputName": "value",
                 "sourceNodeId": "file.ts:5"
-              }
-            ]
-          },
-          {
-            "nodeId": "file.ts:9",
-            "workflowUri": "file.ts/if-output/a",
-            "inputPipes": [
-              {
-                "name": "condition",
-                "kind": "node",
-                "sourceNodeId": "file.ts:3",
-                "sourceNodeOutputName": "value"
-              },
-              {
-                "name": "left",
-                "kind": "node",
-                "sourceNodeOutputName": "a",
-                "sourceNodeId": "file.ts:1"
               }
             ]
           }

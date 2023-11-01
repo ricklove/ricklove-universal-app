@@ -8,7 +8,11 @@ export type WorkflowBuilder = {
     };
     getNextNodeId: () => string;
     findNodeSource: (varName: string, varType: PipescriptType) => undefined | PipescriptNode;
-    findPipeSource: (varName: string, varType: PipescriptType) => PipescriptPipeValue;
+    findPipeSource: (
+        varName: string,
+        varType: PipescriptType,
+        debug?: boolean,
+    ) => PipescriptPipeValue;
     file: ts.SourceFile;
     typeChecker: ts.TypeChecker;
     pushScope: () => void;
@@ -27,7 +31,7 @@ export const createWorkflowBuilder = (
     const outputs: PipescriptWorkflow[`outputs`] = [];
     const workflows: PipescriptWorkflow[`workflows`] = [];
     const nodes: PipescriptNode[] = [];
-    const scopes = [] as PipescriptNode[][];
+    const higherScopes = [] as PipescriptNode[][];
     const nodesOutOfScope = new Set<PipescriptNode>();
 
     const workflow = {
@@ -52,8 +56,22 @@ export const createWorkflowBuilder = (
         return node;
     };
 
-    const findPipeSource = (varName: string, varType: PipescriptType): PipescriptPipeValue => {
+    const findPipeSource = (
+        varName: string,
+        varType: PipescriptType,
+        debug?: boolean,
+    ): PipescriptPipeValue => {
         const nodeSource = findNodeSource(varName, varType);
+
+        if (debug) {
+            console.log(`findPipeSource`, {
+                varName,
+                varType,
+                nodeSource,
+                nodesOutOfScope: [...nodesOutOfScope].map(x => x.workflowUri),
+                nodes: [...nodes].map(x => x.workflowUri),
+            });
+        }
 
         if (nodeSource) {
             return {
@@ -68,10 +86,16 @@ export const createWorkflowBuilder = (
                 name: varName,
                 type: varType,
             });
-            workflow.outputs.push({
-                name: varName,
-                type: varType,
-            });
+            // if (!higherScopes.length) {
+            //     workflow.outputs.push({
+            //         name: varName,
+            //         type: varType,
+            //         pipe:{
+            //             kind:`node`,
+            //             sourceNodeId:
+            //         },
+            //     });
+            // }
         }
 
         return {
@@ -89,13 +113,29 @@ export const createWorkflowBuilder = (
         typeChecker,
         pushScope: () => {
             const newNodes = nodes.filter(
-                x => !nodesOutOfScope.has(x) && !scopes.some(s => s.includes(x)),
+                x => !nodesOutOfScope.has(x) && !higherScopes.some(s => s.includes(x)),
             );
-            scopes.push(newNodes);
+            higherScopes.push(newNodes);
+
+            console.log(`pushScope`, {
+                newNodes: newNodes.map(x => x.workflowUri),
+                nodesOutOfScope: [...nodesOutOfScope].map(x => x.workflowUri),
+                nodes: nodes.map(x => x.workflowUri),
+            });
         },
         popScope: () => {
-            const topScopeNodes = scopes.pop() ?? [];
+            const newNodes = nodes.filter(
+                x => !nodesOutOfScope.has(x) && !higherScopes.some(s => s.includes(x)),
+            );
+            const topScopeNodes = newNodes;
             topScopeNodes.forEach(x => nodesOutOfScope.add(x));
+            higherScopes.pop();
+
+            console.log(`popScope`, {
+                topScopeNodes: topScopeNodes.map(x => x.workflowUri),
+                nodesOutOfScope: [...nodesOutOfScope].map(x => x.workflowUri),
+                nodes: nodes.map(x => x.workflowUri),
+            });
             return topScopeNodes;
         },
     };

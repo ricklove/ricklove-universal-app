@@ -94,10 +94,22 @@ export const parseBody = (builder: WorkflowBuilder, body: ts.Node): PipescriptWo
                     const type = typeChecker.getTypeAtLocation(e);
                     const varType = getPipescriptType(file, type);
 
+                    const pipe = findPipeSource(varName, varType, true);
+                    console.log(`parseBody: ExportDeclaration`, {
+                        varName,
+                        varType,
+                        pipe,
+                        nodes: builder.workflow.body.nodes.flatMap(
+                            x =>
+                                builder.workflow.workflows.find(
+                                    w => w.workflowUri === x.workflowUri,
+                                )?.outputs,
+                        ),
+                    });
                     outputs.push({
                         name: exportedName,
                         type: varType,
-                        pipe: findPipeSource(varName, varType),
+                        pipe,
                     });
                 }
             }
