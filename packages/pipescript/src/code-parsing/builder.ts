@@ -117,11 +117,11 @@ export const createWorkflowBuilder = (
             );
             higherScopes.push(newNodes);
 
-            console.log(`pushScope`, {
-                newNodes: newNodes.map(x => x.workflowUri),
-                nodesOutOfScope: [...nodesOutOfScope].map(x => x.workflowUri),
-                nodes: nodes.map(x => x.workflowUri),
-            });
+            // console.log(`pushScope`, {
+            //     newNodes: newNodes.map(x => x.workflowUri),
+            //     nodesOutOfScope: [...nodesOutOfScope].map(x => x.workflowUri),
+            //     nodes: nodes.map(x => x.workflowUri),
+            // });
         },
         popScope: () => {
             const newNodes = nodes.filter(
@@ -131,11 +131,11 @@ export const createWorkflowBuilder = (
             topScopeNodes.forEach(x => nodesOutOfScope.add(x));
             higherScopes.pop();
 
-            console.log(`popScope`, {
-                topScopeNodes: topScopeNodes.map(x => x.workflowUri),
-                nodesOutOfScope: [...nodesOutOfScope].map(x => x.workflowUri),
-                nodes: nodes.map(x => x.workflowUri),
-            });
+            // console.log(`popScope`, {
+            //     topScopeNodes: topScopeNodes.map(x => x.workflowUri),
+            //     nodesOutOfScope: [...nodesOutOfScope].map(x => x.workflowUri),
+            //     nodes: nodes.map(x => x.workflowUri),
+            // });
             return topScopeNodes;
         },
     };
