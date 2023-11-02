@@ -1,0 +1,35 @@
+function file_ts_orig() {
+    const a = 42;
+    let b: undefined | number = undefined;
+
+    if (a > 40) {
+        b = 43;
+
+        if (a > b) {
+            b = 46;
+        }
+    }
+
+    return b;
+}
+
+function file_ts_2() {
+    const a = 42;
+    if (a <= 40) {
+        return undefined;
+    }
+
+    const b = 43;
+    if (a < b) {
+        return 46;
+    }
+
+    return b;
+}
+
+function file_ts_3() {
+    const a = 42;
+    const b1 = a > 40 ? 43 : undefined;
+    const b = a > (b1 as number) ? 46 : undefined;
+    return b;
+}

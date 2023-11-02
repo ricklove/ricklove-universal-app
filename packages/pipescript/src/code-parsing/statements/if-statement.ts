@@ -26,167 +26,178 @@ export const parseIfStatement = (builder: WorkflowBuilder, t: ts.IfStatement) =>
     //     builder,
     // );
 
-    // const preNodes = [...builder.workflow.body.nodes];
-    builder.pushScope();
-    parseBody(builder, t.thenStatement);
-    const thenNodes = builder.popScope().map(x => ({
-        ...x,
-        workflow: builder.workflow.workflows.find(w => w.workflowUri === x.workflowUri),
-    }));
-    builder.pushScope();
-    if (t.elseStatement) {
+    const parseAtTernary = () => {
+        // const preNodes = [...builder.workflow.body.nodes];
+        builder.pushScope();
         parseBody(builder, t.thenStatement);
-    }
-    const elseNodes = builder.popScope().map(x => ({
-        ...x,
-        workflow: builder.workflow.workflows.find(w => w.workflowUri === x.workflowUri),
-    }));
+        const thenNodes = builder.popScope().map(x => ({
+            ...x,
+            workflow: builder.workflow.workflows.find(w => w.workflowUri === x.workflowUri),
+        }));
+        builder.pushScope();
+        if (t.elseStatement) {
+            parseBody(builder, t.thenStatement);
+        }
+        const elseNodes = builder.popScope().map(x => ({
+            ...x,
+            workflow: builder.workflow.workflows.find(w => w.workflowUri === x.workflowUri),
+        }));
 
-    const thenOutputs = thenNodes.flatMap(x => x.workflow?.outputs ?? []);
-    const elseOutputs = elseNodes.flatMap(x => x.workflow?.outputs ?? []);
+        // fix nested if statements, need to recreate another ternary for inner ternary
 
-    const outputs = builder.workflow.body.nodes.flatMap(
-        x => builder.workflow.workflows.find(w => w.workflowUri === x.workflowUri)?.outputs ?? [],
-    );
-    builder.workflow.body.nodes.forEach(n => {
-        outputs.forEach(x => {
-            const thenOutput = thenOutputs.find(o => o.name === x.name);
-            const elseOutput = elseOutputs.find(o => o.name === x.name);
-            if (!thenOutput && !elseOutput) {
-                return;
-            }
+        const thenOutputs = thenNodes.flatMap(x => x.workflow?.outputs ?? []);
+        const elseOutputs = elseNodes.flatMap(x => x.workflow?.outputs ?? []);
 
-            const expressionWorkflowUri = `${builder.workflow.workflowUri}/if-output/${x.name}`;
-            if (builder.workflow.workflows.some(w => w.workflowUri === expressionWorkflowUri)) {
-                return;
-            }
+        const allOutputs = builder.workflow.body.nodes.flatMap(
+            x =>
+                builder.workflow.workflows.find(w => w.workflowUri === x.workflowUri)?.outputs
+                ?? [],
+        );
+        builder.workflow.body.nodes.forEach(n => {
+            allOutputs.forEach(x => {
+                const thenOutput = thenOutputs.find(o => o.name === x.name);
+                const elseOutput = elseOutputs.find(o => o.name === x.name);
+                if (!thenOutput && !elseOutput) {
+                    return;
+                }
 
-            const expressionNodeId = builder.getNextNodeId();
-            const expressionWorkflow: PipescriptWorkflow = {
-                workflowUri: expressionWorkflowUri,
-                name: expressionWorkflowUri,
-                inputs: [
-                    {
-                        name: `condition`,
-                        type: expressionType_condition,
+                const expressionWorkflowUri = `${builder.workflow.workflowUri}/if-output/${x.name}`;
+                if (builder.workflow.workflows.some(w => w.workflowUri === expressionWorkflowUri)) {
+                    return;
+                }
+
+                const expressionNodeId = builder.getNextNodeId();
+                const expressionWorkflow: PipescriptWorkflow = {
+                    workflowUri: expressionWorkflowUri,
+                    name: expressionWorkflowUri,
+                    inputs: [
+                        {
+                            name: `condition`,
+                            type: expressionType_condition,
+                        },
+                        {
+                            name: `left`,
+                            type: x.type,
+                        },
+                        {
+                            name: `right`,
+                            type: x.type,
+                        },
+                    ],
+                    outputs: [
+                        {
+                            name: x.name,
+                            type: x.type,
+                            pipe: { kind: `workflow-operator` },
+                        },
+                    ],
+                    body: {
+                        kind: `operator`,
+                        operator: `conditional-ternary`,
                     },
-                    {
-                        name: `left`,
-                        type: x.type,
-                    },
-                    {
-                        name: `right`,
-                        type: x.type,
-                    },
-                ],
-                outputs: [
-                    {
-                        name: x.name,
-                        type: x.type,
-                        pipe: { kind: `workflow-operator` },
-                    },
-                ],
-                body: {
-                    kind: `operator`,
-                    operator: `conditional-ternary`,
-                },
-            };
+                };
 
-            const thenSourceNodeId = thenNodes.findLast(
-                n => n.workflow?.outputs.some(o => o.name === x.name),
-            )?.nodeId;
-            const elseSourceNodeId = elseNodes.findLast(
-                n => n.workflow?.outputs.some(o => o.name === x.name),
-            )?.nodeId;
-            const expressionNode: PipescriptNode = {
-                nodeId: expressionNodeId,
-                workflowUri: expressionWorkflowUri,
-                inputPipes: [
-                    {
-                        name: `condition`,
-                        ...expressionValue_condition,
-                    },
-                    ...(!thenSourceNodeId
-                        ? []
-                        : [
-                              {
-                                  name: `left`,
-                                  kind: `node`,
-                                  sourceNodeOutputName: x.name,
-                                  sourceNodeId: thenSourceNodeId,
-                              } as const,
-                          ]),
-                    ...(!elseSourceNodeId
-                        ? []
-                        : [
-                              {
-                                  name: `right`,
-                                  kind: `node`,
-                                  sourceNodeOutputName: x.name,
-                                  sourceNodeId: elseSourceNodeId,
-                              } as const,
-                          ]),
-                ],
-            };
+                const thenSourceNodeId = thenNodes.findLast(
+                    n => n.workflow?.outputs.some(o => o.name === x.name),
+                )?.nodeId;
+                const elseSourceNodeId = elseNodes.findLast(
+                    n => n.workflow?.outputs.some(o => o.name === x.name),
+                )?.nodeId;
+                const expressionNode: PipescriptNode = {
+                    nodeId: expressionNodeId,
+                    workflowUri: expressionWorkflowUri,
+                    inputPipes: [
+                        {
+                            name: `condition`,
+                            ...expressionValue_condition,
+                        },
+                        ...(!thenSourceNodeId
+                            ? []
+                            : [
+                                  {
+                                      name: `left`,
+                                      kind: `node`,
+                                      sourceNodeOutputName: x.name,
+                                      sourceNodeId: thenSourceNodeId,
+                                  } as const,
+                              ]),
+                        ...(!elseSourceNodeId
+                            ? []
+                            : [
+                                  {
+                                      name: `right`,
+                                      kind: `node`,
+                                      sourceNodeOutputName: x.name,
+                                      sourceNodeId: elseSourceNodeId,
+                                  } as const,
+                              ]),
+                    ],
+                };
 
-            // console.log(`expressionNode`, { expressionNode, expressionWorkflow });
+                // console.log(`expressionNode`, { expressionNode, expressionWorkflow });
 
-            builder.workflow.workflows.push(expressionWorkflow);
-            builder.workflow.body.nodes.push(expressionNode);
+                builder.workflow.workflows.push(expressionWorkflow);
+                builder.workflow.body.nodes.push(expressionNode);
+            });
         });
-    });
+    };
 
-    // const thenNodes = builder.workflow.body.nodes.filter(x => preNodes.includes(x));
+    const parseAsWorkflow = () => {
+        const ifBodyBuilder = createWorkflowBuilder(
+            `${builder.workflow.workflowUri}/if-body`,
+            file,
+            typeChecker,
+        );
+        parseBody(ifBodyBuilder, t.thenStatement);
 
-    // // const thenBuilder =
+        const expressionNodeId = builder.getNextNodeId();
+        const expressionWorkflow = ifBodyBuilder.workflow;
+        const expressionWorkflowUri = expressionWorkflow.workflowUri;
 
-    // const ifBodyBuilder = createWorkflowBuilder(
-    //     `${builder.workflow.workflowUri}/if-body`,
-    //     file,
-    //     typeChecker,
-    // );
-    // parseBody(ifBodyBuilder, t.thenStatement);
+        expressionWorkflow.inputs.forEach(input => {
+            expressionWorkflow.outputs.push({
+                name: input.name,
+                type: input.type,
+                pipe: ifBodyBuilder.findPipeSource(input.name, input.type),
+            });
+        });
 
-    // const expressionNodeId = builder.getNextNodeId();
-    // const expressionWorkflow = ifBodyBuilder.workflow;
-    // const expressionWorkflowUri = expressionWorkflow.workflowUri;
+        expressionWorkflow.inputs.unshift({
+            name: `condition`,
+            type: expressionType_condition,
+        });
 
-    // // expressionWorkflow.inputs.forEach(input=>{
-    // //     expressionWorkflow.
-    // // });
+        expressionWorkflow.outputs.forEach(output => {
+            if (output.pipe) {
+                return;
+            }
 
-    // expressionWorkflow.inputs.unshift({
-    //     name: `condition`,
-    //     type: expressionType_condition,
-    // });
+            output.pipe = ifBodyBuilder.findPipeSource(output.name, output.type);
+        });
 
-    // expressionWorkflow.outputs.forEach(output => {
-    //     if (output.pipe) {
-    //         return;
-    //     }
+        const expressionNode: PipescriptNode = {
+            nodeId: expressionNodeId,
+            workflowUri: expressionWorkflowUri,
+            inputPipes: [
+                {
+                    name: `condition`,
+                    ...expressionValue_condition,
+                },
+                ...expressionWorkflow.inputs
+                    .filter(x => x.name !== `condition`)
+                    .map(x => ({
+                        name: x.name,
+                        ...builder.findPipeSource(x.name, x.type),
+                    })),
+            ],
+        };
 
-    //     output.pipe = ifBodyBuilder.findPipeSource(output.name, output.type);
-    // });
+        // console.log(`expressionNode`, { expressionNode, expressionWorkflow });
 
-    // const expressionNode: PipescriptNode = {
-    //     nodeId: expressionNodeId,
-    //     workflowUri: expressionWorkflowUri,
-    //     inputPipes: [
-    //         {
-    //             name: `condition`,
-    //             ...expressionValue_condition,
-    //         },
-    //         ...expressionWorkflow.inputs
-    //             .filter(x => x.name !== `condition`)
-    //             .map(x => ({
-    //                 name: x.name,
-    //                 ...builder.findPipeSource(x.name, x.type),
-    //             })),
-    //     ],
-    // };
+        builder.workflow.workflows.push(expressionWorkflow);
+        builder.workflow.body.nodes.push(expressionNode);
+    };
 
-    // // console.log(`expressionNode`, { expressionNode, expressionWorkflow });
-
-    // builder.workflow.workflows.push(expressionWorkflow);
-    // builder.workflow.body.nodes.push(expressionNode);
+    // parseAtTernary();
+    parseAsWorkflow();
 };
