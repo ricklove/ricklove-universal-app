@@ -1,11 +1,14 @@
 import {
     PipescriptBuiltinOperator,
+    PipescriptNode,
     PipescriptNodeInstanceDataset,
     PipescriptType,
     PipescriptVariable,
     PipescriptWorkflow,
+    PipescriptWorkflowBodyNodes,
     PipescriptWorkflowInput,
     PipescriptWorkflowOutput,
+    PipescriptWorkflow_WithNodes,
 } from '../types';
 
 const indent = (text: string, depth: number = 1) => {
@@ -89,7 +92,13 @@ export const convertWorkflowToTypescriptFile = (
 
 const SIMPLIFY_SINGLE_RETURN = true;
 
-export const create_getCallExpression = (workflow: PipescriptWorkflow) => {
+export const create_getCallExpression = (
+    workflow: PipescriptWorkflow,
+    dataset: PipescriptNodeInstanceDataset,
+    builder: Builder = {
+        declaredWorkflows: [],
+    },
+) => {
     const functionName = getFunctionName(workflow);
 
     if (workflow.body.kind === `operator`) {
@@ -101,9 +110,32 @@ export const create_getCallExpression = (workflow: PipescriptWorkflow) => {
         return fun.template;
     }
 
+    if (workflow.body.control) {
+        return (args: string[]) => create_getControlBody(workflow, dataset, builder)?.(args) ?? ``;
+    }
+
     return (args: string[]) => {
         return `${functionName}(${args.join(`, `)})`;
     };
+};
+
+const create_getControlBody = (
+    workflow: PipescriptWorkflow,
+    dataset: PipescriptNodeInstanceDataset,
+    builder: Builder = {
+        declaredWorkflows: [],
+    },
+) => {
+    const workflowTypes = workflow as PipescriptWorkflow_WithNodes;
+    const control = workflowTypes.body.control;
+    if (control === `if`) {
+        const statements = createBodyStatements(workflowTypes, dataset, builder);
+        return (args: string[]) => `if(${args.slice(0, 1).join(`, `)}){
+${indent(statements.join(`\n`))}}`;
+    }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _never: undefined = control;
 };
 
 export const convertWorkflowToFunctionDeclaration = (
@@ -119,7 +151,7 @@ export const convertWorkflowToFunctionDeclaration = (
 
     const declaration: Builder[`declaredWorkflows`][number] = {
         workflow,
-        getCallExpression: create_getCallExpression(workflow),
+        getCallExpression: create_getCallExpression(workflow, dataset, builder),
     };
     builder.declaredWorkflows.push(declaration);
 
@@ -133,49 +165,11 @@ export const convertWorkflowToFunctionDeclaration = (
             .filter(x => x)
             .map(x => x!) ?? [];
 
-    const statements = workflow.body.nodes.map(node => {
-        const nodeInstance = dataset.allNodeInstances.find(x => x.node === node);
-        const workflow = nodeInstance?.workflow;
-        if (!workflow) {
-            return `/* missing workflow ${node.workflowUri} */`;
-        }
-        const fun = builder.declaredWorkflows.find(x => x.workflow === workflow);
-        if (!fun) {
-            return `/* missing workflow function ${node.workflowUri} */`;
-        }
-        const args = nodeInstance.inputs.map(x => {
-            const source = x.inflowPipe?.source;
-            if (!source) {
-                return `undefined /* disconnected */`;
-            }
-            if (source.kind === `data`) {
-                return source.json;
-            }
-            if (source.kind === `input`) {
-                return source.input.runs?.nameInScope ?? source.input.name;
-            }
-            if (source.kind === `output`) {
-                return source.output.runs?.nameInScope ?? source.output.name;
-            }
-            if (source.kind === `operator-output`) {
-                // TODO: this should not be possible
-                return `undefined /* an operator cannot an argument of the same node */`;
-            }
-
-            return `undefined /* unknown source.kind ${(source as { kind: string }).kind} */`;
-        });
-        const funCall = fun.getCallExpression(args);
-        const outputsItems = nodeInstance.outputs.map(x => {
-            return x.runs?.nameInScope ?? x.name;
-        });
-        const outputsExpression =
-            SIMPLIFY_SINGLE_RETURN && outputsItems.length === 1
-                ? `${outputsItems[0]}`
-                : outputsItems.length
-                ? `{ ${outputsItems.join(`, `)} }`
-                : `/* missing output item */ _unknown`;
-        return `const ${outputsExpression} = ${funCall};`;
-    });
+    const statements = createBodyStatements(
+        workflow as PipescriptWorkflow_WithNodes,
+        dataset,
+        builder,
+    );
 
     const workflowNodeInstance = dataset.allNodeInstances.find(
         x => x.node.workflowUri === workflow.workflowUri,
@@ -223,6 +217,10 @@ ${indent(nestedFunctionDeclarations.map(x => x.content).join(`\n\n`))}${indent(
         [...statements, returnStatement].filter(x => x).join(`\n`),
     )}}`;
 
+    if (workflow.body.control) {
+        return;
+    }
+
     return {
         content,
     };
@@ -268,3 +266,60 @@ const generateType = (type: PipescriptType): string => {
 
     return `unknown`;
 };
+function createBodyStatements(
+    workflow: PipescriptWorkflow_WithNodes,
+    dataset: PipescriptNodeInstanceDataset,
+    builder: Builder,
+) {
+    return workflow.body.nodes.map(node => {
+        const nodeInstance = dataset.allNodeInstances.find(x => x.node === node);
+        const workflow = nodeInstance?.workflow;
+        if (!workflow) {
+            return `/* missing workflow ${node.workflowUri} */`;
+        }
+        const fun = builder.declaredWorkflows.find(x => x.workflow === workflow);
+        if (!fun) {
+            return `/* missing workflow function ${node.workflowUri} */`;
+        }
+        const args = nodeInstance.inputs.map(x => {
+            const source = x.inflowPipe?.source;
+            if (!source) {
+                return `undefined /* disconnected */`;
+            }
+            if (source.kind === `data`) {
+                return source.json;
+            }
+            if (source.kind === `input`) {
+                return source.input.runs?.nameInScope ?? source.input.name;
+            }
+            if (source.kind === `output`) {
+                return source.output.runs?.nameInScope ?? source.output.name;
+            }
+            if (source.kind === `operator-output`) {
+                // TODO: this should not be possible
+                return `undefined /* an operator cannot an argument of the same node */`;
+            }
+
+            return `undefined /* unknown source.kind ${(source as { kind: string }).kind} */`;
+        });
+        const funCall = fun.getCallExpression(args);
+
+        if (workflow.body.kind === `nodes` && workflow.body.control) {
+            const control = workflow.body.control;
+            if (control === `if`) {
+                return funCall;
+            }
+        }
+
+        const outputsItems = nodeInstance.outputs.map(x => {
+            return x.runs?.nameInScope ?? x.name;
+        });
+        const outputsExpression =
+            SIMPLIFY_SINGLE_RETURN && outputsItems.length === 1
+                ? `${outputsItems[0]}`
+                : outputsItems.length
+                ? `{ ${outputsItems.join(`, `)} }`
+                : `/* missing output item */ _unknown`;
+        return `const ${outputsExpression} = ${funCall};`;
+    });
+}

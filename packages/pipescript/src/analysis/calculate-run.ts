@@ -63,7 +63,10 @@ const recordRun = (dataset: PipescriptNodeInstanceDataset) => {
         const code =
             node.workflow.body.kind === `operator`
                 ? {
-                      content: `${create_getCallExpression(node.workflow)(
+                      content: `${create_getCallExpression(
+                          node.workflow,
+                          node.dataset,
+                      )(
                           node.workflow.inputs.map(workflowInput => {
                               const nodeInput = node.inputs.find(
                                   x => x.workflowInput === workflowInput,
@@ -282,6 +285,7 @@ const calculateRunValue_input = (
         return;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const _never: never = undefined as typeof source as never;
 };
 
@@ -395,6 +399,7 @@ const calculateRunValue_operator = (
             return { dependencies, value: a !== b };
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const _never: never = undefined as typeof operator as never;
 
     return undefined;

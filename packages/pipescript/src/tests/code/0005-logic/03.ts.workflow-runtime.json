@@ -2528,7 +2528,7 @@
             {
               "_id_440_": "",
               "key": "4356143459695614",
-              "code": "function file_ts_if_body(condition: bool, b: number, a: number) {\n    function file_ts_if_body_if_body(condition: bool, b: number, a: number) {\n        const b = 46;\n        const a = 50;\n        return { b, a };\n    }\n    const b_5 = 43;\n    const value = a > b_5;\n    const { b, a } = file_ts_if_body_if_body(value, b_5, a);\n    return { b, a };\n}",
+              "code": "function file_ts_if_body(condition: bool, b: number, a: number) {\n    function file_ts_if_body_if_body(condition: bool, b: number, a: number) {\n        const b = 46;\n        const a = 50;\n        return { b, a };\n    }\n    const b_5 = 43;\n    const value = a > b_5;\n    if(value){\n        const b = 46;\n        const a = 50;\n    }\n    return { b, a };\n}",
               "inputs": [
                 {
                   "_id_442_": "",
@@ -2583,7 +2583,7 @@
         {
           "_id_484_": "",
           "key": "5078813726249094",
-          "code": "function file_ts() {\n    function file_ts_if_body(condition: bool, b: number, a: number) {\n        function file_ts_if_body_if_body(condition: bool, b: number, a: number) {\n            const b = 46;\n            const a = 50;\n            return { b, a };\n        }\n        const b_5 = 43;\n        const value = a > b_5;\n        const { b, a } = file_ts_if_body_if_body(value, b_5, a);\n        return { b, a };\n    }\n    const a_1 = 42;\n    const b_2 = undefined;\n    const value = a_1 > 40;\n    const { b, a } = file_ts_if_body(value, b_2, a_1);\n    return { a, b };\n}",
+          "code": "function file_ts() {\n    function file_ts_if_body(condition: bool, b: number, a: number) {\n        function file_ts_if_body_if_body(condition: bool, b: number, a: number) {\n            const b = 46;\n            const a = 50;\n            return { b, a };\n        }\n        const b_5 = 43;\n        const value = a > b_5;\n        if(value){\n            const b = 46;\n            const a = 50;\n        }\n        return { b, a };\n    }\n    const a_1 = 42;\n    const b_2 = undefined;\n    const value = a_1 > 40;\n    if(value){\n        const b_5 = 43;\n        const value = a > b_5;\n        if(value){\n            const b = 46;\n            const a = 50;\n        }\n    }\n    return { a, b };\n}",
           "inputs": [],
           "inner": [
             {

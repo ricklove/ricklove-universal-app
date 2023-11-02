@@ -2013,7 +2013,7 @@
             {
               "_id_352_": "",
               "key": "4381347831747625",
-              "code": "function file_ts_if_body(condition: bool, b: number, a: number) {\n    function file_ts_if_body_if_body(condition: bool, b: number) {\n        const b = 46;\n        return b;\n    }\n    const b_5 = 43;\n    const value = a > b_5;\n    const b = file_ts_if_body_if_body(value, b_5);\n    return b;\n}",
+              "code": "function file_ts_if_body(condition: bool, b: number, a: number) {\n    function file_ts_if_body_if_body(condition: bool, b: number) {\n        const b = 46;\n        return b;\n    }\n    const b_5 = 43;\n    const value = a > b_5;\n    if(value){\n        const b = 46;\n    }\n    return b;\n}",
               "inputs": [
                 {
                   "_id_354_": "",
@@ -2060,7 +2060,7 @@
         {
           "_id_394_": "",
           "key": "5595546329530275",
-          "code": "function file_ts() {\n    function file_ts_if_body(condition: bool, b: number, a: number) {\n        function file_ts_if_body_if_body(condition: bool, b: number) {\n            const b = 46;\n            return b;\n        }\n        const b_5 = 43;\n        const value = a > b_5;\n        const b = file_ts_if_body_if_body(value, b_5);\n        return b;\n    }\n    const a = 42;\n    const b_2 = undefined;\n    const value = a > 40;\n    const b = file_ts_if_body(value, b_2, a);\n    return b;\n}",
+          "code": "function file_ts() {\n    function file_ts_if_body(condition: bool, b: number, a: number) {\n        function file_ts_if_body_if_body(condition: bool, b: number) {\n            const b = 46;\n            return b;\n        }\n        const b_5 = 43;\n        const value = a > b_5;\n        if(value){\n            const b = 46;\n        }\n        return b;\n    }\n    const a = 42;\n    const b_2 = undefined;\n    const value = a > 40;\n    if(value){\n        const b_5 = 43;\n        const value = a > b_5;\n        if(value){\n            const b = 46;\n        }\n    }\n    return b;\n}",
           "inputs": [],
           "inner": [
             {

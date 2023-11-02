@@ -25,11 +25,7 @@ export type PipescriptWorkflow = {
 
     /** body = function calls, assignments */
     body:
-        | {
-              kind: `nodes`;
-              nodes: PipescriptNode[];
-              control?: `if`;
-          }
+        | PipescriptWorkflowBodyNodes
         | {
               kind: `operator`;
               nodes?: undefined;
@@ -43,6 +39,15 @@ export type PipescriptWorkflow = {
         container: undefined | PipescriptWorkflow;
         usages: PipescriptNode[];
     };
+};
+
+export type PipescriptWorkflow_WithNodes = PipescriptWorkflow & {
+    body: PipescriptWorkflowBodyNodes;
+};
+export type PipescriptWorkflowBodyNodes = {
+    kind: `nodes`;
+    nodes: PipescriptNode[];
+    control?: `if`;
 };
 
 export type PipescriptBuiltinOperator =

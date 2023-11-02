@@ -6,6 +6,8 @@ function file_ts() {
     const a = 42;
     const b_2 = undefined;
     const value = a > 40;
-    const b = file_ts_if_body(value, b_2);
+    if(value){
+        const b = 43;
+    }
     return b;
 }

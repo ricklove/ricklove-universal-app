@@ -1,10 +1,16 @@
 import ts from 'typescript';
 
-import { PipescriptNode, PipescriptPipeValue, PipescriptType, PipescriptWorkflow } from '../types';
+import {
+    PipescriptNode,
+    PipescriptPipeValue,
+    PipescriptType,
+    PipescriptWorkflow,
+    PipescriptWorkflowBodyNodes,
+} from '../types';
 
 export type WorkflowBuilder = {
     workflow: Omit<Required<PipescriptWorkflow>, `tree` | `body`> & {
-        body: { kind: `nodes`; nodes: PipescriptNode[]; control?: `if` };
+        body: PipescriptWorkflowBodyNodes;
     };
     getNextNodeId: () => string;
     findNodeSource: (varName: string, varType: PipescriptType) => undefined | PipescriptNode;

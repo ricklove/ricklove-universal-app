@@ -6,12 +6,20 @@ function file_ts() {
         }
         const b_5 = 43;
         const value = a > b_5;
-        const b = file_ts_if_body_if_body(value, b_5);
+        if(value){
+            const b = 46;
+        }
         return b;
     }
     const a = 42;
     const b_2 = undefined;
     const value = a > 40;
-    const b = file_ts_if_body(value, b_2, a);
+    if(value){
+        const b_5 = 43;
+        const value = a > b_5;
+        if(value){
+            const b = 46;
+        }
+    }
     return b;
 }
