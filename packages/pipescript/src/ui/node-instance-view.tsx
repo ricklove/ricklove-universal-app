@@ -258,6 +258,9 @@ const getPipeKey = (
     if (pipeSide.kind === `output`) {
         return getPipeConnectionKey(pipeSide.output, direction);
     }
+    if (pipeSide.kind === `conditional-output`) {
+        return getPipeConnectionKey(pipeSide.output, direction);
+    }
     if (pipeSide.kind === `data`) {
         return undefined;
     }
@@ -267,6 +270,9 @@ const getPipeKey = (
     if (pipeSide.kind === `operator-input`) {
         return undefined;
     }
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const _never: never = pipeSide;
 
     return undefined;
 };
@@ -287,6 +293,30 @@ const PipeValueView = ({
     const destinationId = getPipeKey(destination, `in`);
     if (!sourceId || !destinationId) {
         return <></>;
+    }
+
+    if (source.kind === `conditional-output`) {
+        const sourceConditionId = getPipeKey(
+            {
+                kind: `input`,
+                input: source.condition,
+            },
+            `out`,
+        );
+        const sourceDefaultId = getPipeKey(
+            {
+                kind: `input`,
+                input: source.default,
+            },
+            `out`,
+        );
+        return (
+            <>
+                <PipeView sourceId={sourceId} destinationId={destinationId} side={side} />
+                {/* <PipeView sourceId={sourceConditionId} destinationId={destinationId} side={side} /> */}
+                <PipeView sourceId={sourceDefaultId} destinationId={destinationId} side={side} />
+            </>
+        );
     }
 
     return <PipeView sourceId={sourceId} destinationId={destinationId} side={side} />;
