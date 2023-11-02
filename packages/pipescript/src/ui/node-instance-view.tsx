@@ -75,77 +75,82 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
     const workflow = nodeInstance.workflow;
 
     return (
-        <View className='p-1'>
-            <MoveableView
-                position={{
-                    x: position.x,
-                    y: position.y,
-                    scale: position.scale,
-                }}
-                onMove={moveNode}
-                mouseButton={MouseButton.Middle}
-            >
-                <View className='flex-col relative bg-slate-950/75 border-blue-100 border-solid border-[1px] m-[-1px] rounded p-1'>
-                    <Text className='text-yellow-400 self-center'>{`${nodeInstance.workflow.name} #${nodeInstance.key}`}</Text>
+        <>
+            {nodeInstance.workflow.name.endsWith(`if-body`) && (
+                <View className='basis-[100%] h-0' />
+            )}
+            <View className='p-1'>
+                <MoveableView
+                    position={{
+                        x: position.x,
+                        y: position.y,
+                        scale: position.scale,
+                    }}
+                    onMove={moveNode}
+                    mouseButton={MouseButton.Middle}
+                >
+                    <View className='flex-col relative bg-slate-950/75 border-blue-100 border-solid border-[1px] m-[-1px] rounded p-1'>
+                        <Text className='text-yellow-400 self-center'>{`${nodeInstance.workflow.name} #${nodeInstance.key}`}</Text>
 
-                    <View className='flex-col flex-1'>
-                        <View className='flex-col justify-start items-start'>
-                            {workflow.inputs.map(input => (
-                                <React.Fragment key={input.name}>
-                                    <NodeConnection
-                                        variable={input}
-                                        connection={nodeInstance.inputs.find(
-                                            x => x.workflowInput === input,
+                        <View className='flex-col flex-1'>
+                            <View className='flex-col justify-start items-start'>
+                                {workflow.inputs.map(input => (
+                                    <React.Fragment key={input.name}>
+                                        <NodeConnection
+                                            variable={input}
+                                            connection={nodeInstance.inputs.find(
+                                                x => x.workflowInput === input,
+                                            )}
+                                            hideOutput={nodeInstance.workflow.body.kind !== `nodes`}
+                                        />
+                                    </React.Fragment>
+                                ))}
+                            </View>
+                            <View className='flex-1'>
+                                <View className='flex-row'>
+                                    <View className='flex-1' />
+                                    <View className='flex-row flex-wrap'>
+                                        {nodeInstance.children.length && (
+                                            <>
+                                                {nodeInstance.children.map(x => (
+                                                    <React.Fragment key={x.key}>
+                                                        <NodeView nodeInstance={x} />
+                                                    </React.Fragment>
+                                                ))}
+                                            </>
                                         )}
-                                        hideOutput={nodeInstance.workflow.body.kind !== `nodes`}
-                                    />
-                                </React.Fragment>
-                            ))}
-                        </View>
-                        <View className='flex-1'>
-                            <View className='flex-row'>
-                                <View className='flex-1' />
-                                <View className='flex-row flex-wrap'>
-                                    {nodeInstance.children.length && (
-                                        <>
-                                            {nodeInstance.children.map(x => (
-                                                <React.Fragment key={x.key}>
-                                                    <NodeView nodeInstance={x} />
-                                                </React.Fragment>
-                                            ))}
-                                        </>
-                                    )}
-                                    {workflow.body.kind === `operator` && (
-                                        <>
-                                            <Text className='text-blue-600'>
-                                                {workflow.body.operator}
-                                            </Text>
-                                        </>
-                                    )}
-                                </View>
-                                <View className='flex-1 justify-start items-end'>
-                                    <Text className='text-white text-[10px]'>⛏</Text>
+                                        {workflow.body.kind === `operator` && (
+                                            <>
+                                                <Text className='text-blue-600'>
+                                                    {workflow.body.operator}
+                                                </Text>
+                                            </>
+                                        )}
+                                    </View>
+                                    <View className='flex-1 justify-start items-end'>
+                                        <Text className='text-white text-[10px]'>⛏</Text>
+                                    </View>
                                 </View>
                             </View>
+                            <View className='flex-col justify-end items-end'>
+                                {workflow.outputs.map(output => (
+                                    <React.Fragment key={output.name}>
+                                        <NodeConnection
+                                            variable={output}
+                                            connection={nodeInstance.outputs.find(
+                                                x => x.workflowOutput === output,
+                                            )}
+                                            hideInput={nodeInstance.workflow.body.kind !== `nodes`}
+                                        />
+                                    </React.Fragment>
+                                ))}
+                            </View>
                         </View>
-                        <View className='flex-col justify-end items-end'>
-                            {workflow.outputs.map(output => (
-                                <React.Fragment key={output.name}>
-                                    <NodeConnection
-                                        variable={output}
-                                        connection={nodeInstance.outputs.find(
-                                            x => x.workflowOutput === output,
-                                        )}
-                                        hideInput={nodeInstance.workflow.body.kind !== `nodes`}
-                                    />
-                                </React.Fragment>
-                            ))}
-                        </View>
+                        <Footer nodeInstance={nodeInstance} />
                     </View>
-                    <Footer nodeInstance={nodeInstance} />
-                </View>
-            </MoveableView>
-        </View>
+                </MoveableView>
+            </View>
+        </>
     );
 };
 
