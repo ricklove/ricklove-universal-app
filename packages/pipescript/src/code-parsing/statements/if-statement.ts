@@ -220,7 +220,6 @@ export const parseIfStatement = (builder: WorkflowBuilder, t: ts.IfStatement) =>
 
             // add ternary for each output
             const { ternaryNode, ternaryWorkflow } = createTernary(input);
-
             expressionWorkflow.workflows.push(ternaryWorkflow);
             expressionWorkflow.body.nodes.push(ternaryNode);
 

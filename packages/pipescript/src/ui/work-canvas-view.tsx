@@ -18,7 +18,7 @@ export const WorkCanvasView = ({ workflow }: { workflow: PipescriptWorkflow }) =
     const [tab, setTab] = useState(`node-instances` as (typeof tabs)[number]);
 
     return (
-        <View className='bg-slate-900 w-full h-full overflow-hidden'>
+        <View className='bg-slate-900 w-full h-full max-h-[100vh] overflow-hidden'>
             <MoveableView
                 position={{
                     x: 0,

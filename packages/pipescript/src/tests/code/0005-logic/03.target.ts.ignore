@@ -1,0 +1,58 @@
+export function file_ts_orig() {
+    let a = 42;
+    let b: undefined | number = undefined;
+
+    if (a > 40) {
+        b = 43;
+
+        if (a > b) {
+            b = 46;
+            a = 50;
+        }
+    }
+
+    return { a, b };
+}
+
+function file_ts_0_take_shortest_path_first() {
+    let a = 42;
+    let b: undefined | number = undefined;
+
+    if (a <= 40) {
+        return { a, b };
+    }
+
+    b = 43;
+    if (a <= b) {
+        return { a, b };
+    }
+
+    b = 46;
+    a = 50;
+    return { a, b };
+}
+
+function file_ts_1_simplified(a = 42) {
+    if (a <= 40) {
+        return { a, b: undefined };
+    }
+
+    const b = 43;
+    if (a <= b) {
+        return { a, b };
+    }
+
+    return { a: 50, b: 46 };
+}
+
+function file_ts_2_strictest(a = 42) {
+    if (a <= 40) {
+        return { a, b: undefined } as const;
+    }
+
+    if (a <= 43) {
+        return { a, b: 43 } as const;
+    }
+
+    return { a: 50, b: 46 } as const;
+}

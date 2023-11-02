@@ -79,7 +79,7 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
             {nodeInstance.workflow.name.endsWith(`if-body`) && (
                 <View className='basis-[100%] h-0' />
             )}
-            <View className='p-1'>
+            <View className=''>
                 <MoveableView
                     position={{
                         x: position.x,
@@ -89,11 +89,11 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
                     onMove={moveNode}
                     mouseButton={MouseButton.Middle}
                 >
-                    <View className='flex-col relative bg-slate-950/75 border-blue-100 border-solid border-[1px] m-[-1px] rounded p-1'>
+                    <View className='flex-col relative bg-slate-950/75 border-blue-100 border-solid border-[1px] rounded'>
                         <Text className='text-yellow-400 self-center'>{`${nodeInstance.workflow.name} #${nodeInstance.key}`}</Text>
 
                         <View className='flex-col flex-1'>
-                            <View className='flex-col justify-start items-start'>
+                            <View className='flex-col justify-start items-start p-1'>
                                 {workflow.inputs.map(input => (
                                     <React.Fragment key={input.name}>
                                         <NodeConnection
@@ -108,8 +108,8 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
                             </View>
                             <View className='flex-1'>
                                 <View className='flex-row'>
-                                    <View className='flex-1' />
-                                    <View className='flex-row flex-wrap'>
+                                    {/* <View className='flex-1' /> */}
+                                    <View className='flex-row flex-wrap max-w-[100vw] m-[-1px]'>
                                         {nodeInstance.children.length && (
                                             <>
                                                 {nodeInstance.children.map(x => (
@@ -127,12 +127,12 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
                                             </>
                                         )}
                                     </View>
-                                    <View className='flex-1 justify-start items-end'>
+                                    {/* <View className='flex-1 justify-start items-end'>
                                         <Text className='text-white text-[10px]'>⛏</Text>
-                                    </View>
+                                    </View> */}
                                 </View>
                             </View>
-                            <View className='flex-col justify-end items-end'>
+                            <View className='flex-col justify-end items-end p-1'>
                                 {workflow.outputs.map(output => (
                                     <React.Fragment key={output.name}>
                                         <NodeConnection

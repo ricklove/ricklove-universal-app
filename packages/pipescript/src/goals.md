@@ -28,7 +28,6 @@
         -   any module with matching input/output can be swapped
 -   runtime performance
     -   code can be profiled and compiled using fastest language implementation
-    -   for implementation code is
 
 ---
 

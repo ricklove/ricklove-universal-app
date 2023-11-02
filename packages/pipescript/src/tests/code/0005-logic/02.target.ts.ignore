@@ -1,4 +1,4 @@
-function file_ts_orig() {
+export function file_ts_orig() {
     const a = 42;
     let b: undefined | number = undefined;
 
@@ -20,7 +20,7 @@ function file_ts_2() {
     }
 
     const b = 43;
-    if (a < b) {
+    if (a > b) {
         return 46;
     }
 
