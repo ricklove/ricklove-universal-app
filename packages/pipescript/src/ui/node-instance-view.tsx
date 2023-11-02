@@ -74,11 +74,12 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
 
     const workflow = nodeInstance.workflow;
 
+    const control = workflow.body.kind === `nodes` ? workflow.body.control : undefined;
+    const operator = workflow.body.kind === `operator` ? workflow.body.operator : undefined;
+
     return (
         <>
-            {nodeInstance.workflow.name.endsWith(`if-body`) && (
-                <View className='basis-[100%] h-0' />
-            )}
+            {control && <View className='basis-[100%] h-0' />}
             <View className=''>
                 <MoveableView
                     position={{
@@ -90,8 +91,23 @@ const NodeView = ({ nodeInstance }: { nodeInstance: PipescriptNodeInstance }) =>
                     mouseButton={MouseButton.Middle}
                 >
                     <View className='flex-col relative bg-slate-950/75 border-blue-100 border-solid border-[1px] rounded'>
-                        <Text className='text-yellow-400 self-center'>{`${nodeInstance.workflow.name} #${nodeInstance.key}`}</Text>
-
+                        <View
+                            className={`flex-row items-center px-1 ${
+                                control ? `bg-yellow-900` : operator ? `bg-blue-900` : `bg-gray-800`
+                            }`}
+                        >
+                            <Text className='text-gray-400'>{`${
+                                nodeInstance.workflow.name.split(`/`).slice(-1)[0]
+                            } #${nodeInstance.key}`}</Text>
+                            <View className='flex-1' />
+                            {control && <Text className='text-yellow-400'>{`${control}`}</Text>}
+                            {operator && (
+                                <Text className='text-yellow-400'>{`${operator.substring(
+                                    0,
+                                    3,
+                                )}`}</Text>
+                            )}
+                        </View>
                         <View className='flex-col flex-1'>
                             <View className='flex-col justify-start items-start p-1'>
                                 {workflow.inputs.map(input => (
