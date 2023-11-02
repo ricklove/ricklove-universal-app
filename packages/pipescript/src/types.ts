@@ -28,6 +28,7 @@ export type PipescriptWorkflow = {
         | {
               kind: `nodes`;
               nodes: PipescriptNode[];
+              control?: `if`;
           }
         | {
               kind: `operator`;
@@ -264,6 +265,12 @@ export type PipescriptPipeValueInstance = {
         | {
               kind: `output`;
               output: PipescriptNodePipeConnectionOutputInstance;
+          }
+        | {
+              kind: `conditional-output`;
+              output: PipescriptNodePipeConnectionOutputInstance;
+              condition: PipescriptNodePipeConnectionInputInstance;
+              default: PipescriptNodePipeConnectionInputInstance;
           }
         | {
               // needed?

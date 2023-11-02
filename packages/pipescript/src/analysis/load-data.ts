@@ -204,6 +204,7 @@ const loadNodeConnections_inflows = (nodeInstance: PipescriptNodeInstance) => {
                     );
                     return undefined;
                 }
+
                 return {
                     kind: `output`,
                     output: peerNodeOutput,
@@ -276,6 +277,19 @@ const loadNodeConnections_inflows = (nodeInstance: PipescriptNodeInstance) => {
                     );
                     return undefined;
                 }
+
+                if (
+                    nodeInstance.workflow.body.kind === `nodes`
+                    && nodeInstance.workflow.body.control === `if`
+                ) {
+                    return {
+                        kind: `conditional-output`,
+                        output: innerNodeOutput,
+                        condition: nodeInstance.inputs.find(x => x.name === `condition`)!,
+                        default: nodeInstance.inputs.find(x => x.name === pipeSourceName)!,
+                    } satisfies PipescriptPipeValueInstance[`source`];
+                }
+
                 return {
                     kind: `output`,
                     output: innerNodeOutput,

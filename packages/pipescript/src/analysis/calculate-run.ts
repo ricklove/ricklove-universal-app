@@ -257,6 +257,23 @@ const calculateRunValue_input = (
         };
         return;
     }
+    if (source.kind === `conditional-output`) {
+        if (!source.condition.runs?.value) {
+            input.runs = {
+                ...input.runs,
+                value: source.default.runs?.value,
+                dependencies: [source.condition, source.default],
+            };
+            return;
+        }
+
+        input.runs = {
+            ...input.runs,
+            value: source.output.runs?.value,
+            dependencies: [source.condition, source.output],
+        };
+        return;
+    }
     if (source.kind === `operator-output`) {
         input.runs = {
             ...input.runs,

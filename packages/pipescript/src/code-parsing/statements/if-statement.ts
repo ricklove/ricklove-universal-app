@@ -218,10 +218,10 @@ export const parseIfStatement = (builder: WorkflowBuilder, t: ts.IfStatement) =>
                 return;
             }
 
-            // add ternary for each output
-            const { ternaryNode, ternaryWorkflow } = createTernary(input);
-            expressionWorkflow.workflows.push(ternaryWorkflow);
-            expressionWorkflow.body.nodes.push(ternaryNode);
+            // // add ternary for each output
+            // const { ternaryNode, ternaryWorkflow } = createTernary(input);
+            // expressionWorkflow.workflows.push(ternaryWorkflow);
+            // expressionWorkflow.body.nodes.push(ternaryNode);
 
             // add output
             expressionWorkflow.outputs.push({
@@ -230,6 +230,8 @@ export const parseIfStatement = (builder: WorkflowBuilder, t: ts.IfStatement) =>
                 pipe: ifBodyBuilder.findPipeSource(input.name, input.type),
             });
         });
+
+        expressionWorkflow.body.control = `if`;
 
         expressionWorkflow.inputs.unshift({
             name: `condition`,

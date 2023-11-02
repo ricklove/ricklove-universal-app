@@ -4,7 +4,7 @@ import { PipescriptNode, PipescriptPipeValue, PipescriptType, PipescriptWorkflow
 
 export type WorkflowBuilder = {
     workflow: Omit<Required<PipescriptWorkflow>, `tree` | `body`> & {
-        body: { kind: `nodes`; nodes: PipescriptNode[] };
+        body: { kind: `nodes`; nodes: PipescriptNode[]; control?: `if` };
     };
     getNextNodeId: () => string;
     findNodeSource: (varName: string, varType: PipescriptType) => undefined | PipescriptNode;
