@@ -1,6 +1,6 @@
 import ts from 'typescript';
 
-import { PipescriptNode, PipescriptWorkflow } from '../../types';
+import { PipescriptNode, PipescriptVariable, PipescriptWorkflow } from '../../types';
 import { parseBody } from '../body';
 import { WorkflowBuilder, createWorkflowBuilder } from '../builder';
 import { parseExpression } from '../expressions/expression';
@@ -154,7 +154,77 @@ export const parseIfStatement = (builder: WorkflowBuilder, t: ts.IfStatement) =>
         const expressionWorkflow = ifBodyBuilder.workflow;
         const expressionWorkflowUri = expressionWorkflow.workflowUri;
 
+        const createTernary = ({ name, type }: PipescriptVariable) => {
+            const ternaryNodeId = ifBodyBuilder.getNextNodeId();
+            const ternaryWorkflowUri = `${expressionWorkflowUri}/out/${name}`;
+
+            const ternaryWorkflow: PipescriptWorkflow = {
+                workflowUri: ternaryWorkflowUri,
+                name: ternaryWorkflowUri,
+                inputs: [
+                    {
+                        name: `condition`,
+                        type: expressionType_condition,
+                    },
+                    {
+                        name: `left`,
+                        type,
+                    },
+                    {
+                        name: `right`,
+                        type,
+                    },
+                ],
+                outputs: [
+                    {
+                        name,
+                        type,
+                        pipe: { kind: `workflow-operator` },
+                    },
+                ],
+                body: {
+                    kind: `operator`,
+                    operator: `conditional-ternary`,
+                },
+            };
+            const ternaryNode: PipescriptNode = {
+                nodeId: ternaryNodeId,
+                workflowUri: ternaryWorkflowUri,
+                inputPipes: [
+                    {
+                        name: `condition`,
+                        kind: `workflow-input`,
+                        workflowInputName: `condition`,
+                    },
+                    {
+                        name: `left`,
+                        ...ifBodyBuilder.findPipeSource(name, type),
+                    },
+                    {
+                        name: `right`,
+                        kind: `workflow-input`,
+                        workflowInputName: name,
+                    },
+                ],
+            };
+
+            return { ternaryWorkflow, ternaryNode };
+        };
+
         expressionWorkflow.inputs.forEach(input => {
+            const inputChangedPipe = ifBodyBuilder.findPipeSource(input.name, input.type);
+            if (inputChangedPipe.kind === `workflow-input`) {
+                // skip if not a node input
+                return;
+            }
+
+            // add ternary for each output
+            const { ternaryNode, ternaryWorkflow } = createTernary(input);
+
+            expressionWorkflow.workflows.push(ternaryWorkflow);
+            expressionWorkflow.body.nodes.push(ternaryNode);
+
+            // add output
             expressionWorkflow.outputs.push({
                 name: input.name,
                 type: input.type,

@@ -144,7 +144,7 @@
               },
               "pipe": {
                 "kind": "node",
-                "sourceNodeId": "file.ts/if-body:1",
+                "sourceNodeId": "file.ts/if-body:2",
                 "sourceNodeOutputName": "b"
               }
             }
@@ -186,6 +186,49 @@
                 "kind": "operator",
                 "operator": "="
               }
+            },
+            {
+              "workflowUri": "file.ts/if-body/out/b",
+              "name": "file.ts/if-body/out/b",
+              "inputs": [
+                {
+                  "name": "condition",
+                  "type": {
+                    "kind": "simple",
+                    "type": "bool"
+                  }
+                },
+                {
+                  "name": "left",
+                  "type": {
+                    "kind": "simple",
+                    "type": "number"
+                  }
+                },
+                {
+                  "name": "right",
+                  "type": {
+                    "kind": "simple",
+                    "type": "number"
+                  }
+                }
+              ],
+              "outputs": [
+                {
+                  "name": "b",
+                  "type": {
+                    "kind": "simple",
+                    "type": "number"
+                  },
+                  "pipe": {
+                    "kind": "workflow-operator"
+                  }
+                }
+              ],
+              "body": {
+                "kind": "operator",
+                "operator": "conditional-ternary"
+              }
             }
           ],
           "body": {
@@ -202,6 +245,28 @@
                   },
                   {
                     "name": "old",
+                    "kind": "workflow-input",
+                    "workflowInputName": "b"
+                  }
+                ]
+              },
+              {
+                "nodeId": "file.ts/if-body:2",
+                "workflowUri": "file.ts/if-body/out/b",
+                "inputPipes": [
+                  {
+                    "name": "condition",
+                    "kind": "workflow-input",
+                    "workflowInputName": "condition"
+                  },
+                  {
+                    "name": "left",
+                    "kind": "node",
+                    "sourceNodeId": "file.ts/if-body:1",
+                    "sourceNodeOutputName": "b"
+                  },
+                  {
+                    "name": "right",
                     "kind": "workflow-input",
                     "workflowInputName": "b"
                   }
