@@ -170,7 +170,9 @@ const loadNodeConnections_inflows = (nodeInstance: PipescriptNodeInstance) => {
                 } satisfies PipescriptPipeValueInstance[`source`];
             }
             if (pipeSource.kind === `workflow-input`) {
-                const nodeWorkflowInput = nodeInstance.inputs.find(x => x.name === pipeSource.name);
+                const nodeWorkflowInput = nodeInstance.parent?.inputs.find(
+                    x => x.name === pipeSource.workflowInputName,
+                );
                 if (!nodeWorkflowInput) {
                     console.warn(
                         `loadNodeConnections: getInflowSource: Missing nodeWorkflowInput ${pipeSource.name}`,

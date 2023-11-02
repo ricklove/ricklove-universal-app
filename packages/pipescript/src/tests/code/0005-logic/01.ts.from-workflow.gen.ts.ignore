@@ -1,7 +1,7 @@
 function file_ts() {
     function file_ts_if_body(condition: bool, b: number) {
         const b_5 = 43;
-        const b = condition ? b_5 : right;
+        const b = condition ? b_5 : b;
         return b;
     }
     const a = 42;

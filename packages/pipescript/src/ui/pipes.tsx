@@ -317,7 +317,7 @@ export const PipeEndpointView = ({ id }: { id: string }) => {
 
     const debug = false;
     return (
-        <View className='w-2 h-2 justify-center items-center'>
+        <View testID={`PipeEndpointView:${id}`} className='w-2 h-2 justify-center items-center'>
             <View ref={targetRef} className='w-0 h-0 absolute pt-1'>
                 <View
                     className='bg-blue-400 border-[1px] border-blue-950 rounded-full'
