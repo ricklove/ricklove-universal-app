@@ -1,27 +1,15 @@
 function file_ts() {
-    function file_ts_if_body(condition: bool, b: number, a: number) {
-        function file_ts_if_body_if_body(condition: bool, b: number, a: number) {
-            const b = 46;
-            const a = 50;
-            return { b, a };
-        }
-        const b_5 = 43;
-        const value = a > b_5;
-        if(value){
-            const b = 46;
-            const a = 50;
-        }
-        return { b, a };
-    }
     const a_1 = 42;
     const b_2 = undefined;
     const value = a_1 > 40;
-    if(value){
+    let { b, a };
+    if (value) {
         const b_5 = 43;
         const value = a > b_5;
-        if(value){
-            const b = 46;
-            const a = 50;
+        let { b, a };
+        if (value) {
+            b = 46;
+            a = 50;
         }
     }
     return { a, b };

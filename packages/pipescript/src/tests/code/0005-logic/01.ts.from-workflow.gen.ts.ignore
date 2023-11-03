@@ -1,13 +1,10 @@
 function file_ts() {
-    function file_ts_if_body(condition: bool, b: number) {
-        const b = 43;
-        return b;
-    }
     const a = 42;
     const b_2 = undefined;
     const value = a > 40;
-    if(value){
-        const b = 43;
+    let b;
+    if (value) {
+        b = 43;
     }
     return b;
 }

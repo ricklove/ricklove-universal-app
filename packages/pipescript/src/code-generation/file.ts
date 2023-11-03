@@ -1,11 +1,9 @@
 import {
     PipescriptBuiltinOperator,
-    PipescriptNode,
     PipescriptNodeInstanceDataset,
     PipescriptType,
     PipescriptVariable,
     PipescriptWorkflow,
-    PipescriptWorkflowBodyNodes,
     PipescriptWorkflowInput,
     PipescriptWorkflowOutput,
     PipescriptWorkflow_WithNodes,
@@ -126,12 +124,29 @@ const create_getControlBody = (
         declaredWorkflows: [],
     },
 ) => {
-    const workflowTypes = workflow as PipescriptWorkflow_WithNodes;
-    const control = workflowTypes.body.control;
+    const workflowTyped = workflow as PipescriptWorkflow_WithNodes;
+    const control = workflowTyped.body.control;
     if (control === `if`) {
-        const statements = createBodyStatements(workflowTypes, dataset, builder);
-        return (args: string[]) => `if(${args.slice(0, 1).join(`, `)}){
+        return (args: string[]) => {
+            const workflowNodeInstance = dataset.allNodeInstances.find(
+                x => x.node.workflowUri === workflow.workflowUri,
+            );
+            const namesInScope = workflowNodeInstance?.inputs.map(
+                x => x.runs?.nameInScope ?? x.name,
+            );
+            const outputNames =
+                workflowNodeInstance?.outputs.map(x => x.runs?.nameInScope ?? x.name) ?? [];
+            const statements = createBodyStatements(workflowTyped, dataset, builder, namesInScope);
+            return `${
+                (outputNames?.length ?? 0) > 1
+                    ? `let { ${outputNames.join(`, `)} };`
+                    : outputNames.length === 1
+                    ? `let ${outputNames[0]};`
+                    : ``
+            }
+if (${args.slice(0, 1).join(`, `)}) {
 ${indent(statements.join(`\n`))}}`;
+        };
     }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -270,6 +285,7 @@ function createBodyStatements(
     workflow: PipescriptWorkflow_WithNodes,
     dataset: PipescriptNodeInstanceDataset,
     builder: Builder,
+    namesInScope?: string[],
 ) {
     return workflow.body.nodes.map(node => {
         const nodeInstance = dataset.allNodeInstances.find(x => x.node === node);
@@ -320,6 +336,11 @@ function createBodyStatements(
                 : outputsItems.length
                 ? `{ ${outputsItems.join(`, `)} }`
                 : `/* missing output item */ _unknown`;
+
+        if (namesInScope?.some(x => outputsItems.some(o => o === x))) {
+            return `${outputsExpression} = ${funCall};`;
+        }
+
         return `const ${outputsExpression} = ${funCall};`;
     });
 }

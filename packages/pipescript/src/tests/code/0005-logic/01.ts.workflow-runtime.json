@@ -1161,7 +1161,6 @@
             {
               "_id_199_": "",
               "key": "96304811115551",
-              "code": "function file_ts_if_body(condition: bool, b: number) {\n    const b = 43;\n    return b;\n}",
               "inputs": [
                 {
                   "_id_201_": "",
@@ -1194,7 +1193,7 @@
         {
           "_id_238_": "",
           "key": "5595546329530275",
-          "code": "function file_ts() {\n    function file_ts_if_body(condition: bool, b: number) {\n        const b = 43;\n        return b;\n    }\n    const a = 42;\n    const b_2 = undefined;\n    const value = a > 40;\n    if(value){\n        const b = 43;\n    }\n    return b;\n}",
+          "code": "function file_ts() {\n    const a = 42;\n    const b_2 = undefined;\n    const value = a > 40;\n    let b;\n    if (value) {\n        b = 43;\n    }\n    return b;\n}",
           "inputs": [],
           "inner": [
             {

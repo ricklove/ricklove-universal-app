@@ -1356,7 +1356,6 @@
               {
                 "_id_294_": "",
                 "key": "1859040525755565",
-                "code": "function file_ts_if_body_if_body(condition: bool, b: number) {\n    const b = 46;\n    return b;\n}",
                 "inputs": [
                   {
                     "_id_296_": "",
@@ -2013,7 +2012,6 @@
             {
               "_id_352_": "",
               "key": "4381347831747625",
-              "code": "function file_ts_if_body(condition: bool, b: number, a: number) {\n    function file_ts_if_body_if_body(condition: bool, b: number) {\n        const b = 46;\n        return b;\n    }\n    const b_5 = 43;\n    const value = a > b_5;\n    if(value){\n        const b = 46;\n    }\n    return b;\n}",
               "inputs": [
                 {
                   "_id_354_": "",
@@ -2060,7 +2058,7 @@
         {
           "_id_394_": "",
           "key": "5595546329530275",
-          "code": "function file_ts() {\n    function file_ts_if_body(condition: bool, b: number, a: number) {\n        function file_ts_if_body_if_body(condition: bool, b: number) {\n            const b = 46;\n            return b;\n        }\n        const b_5 = 43;\n        const value = a > b_5;\n        if(value){\n            const b = 46;\n        }\n        return b;\n    }\n    const a = 42;\n    const b_2 = undefined;\n    const value = a > 40;\n    if(value){\n        const b_5 = 43;\n        const value = a > b_5;\n        if(value){\n            const b = 46;\n        }\n    }\n    return b;\n}",
+          "code": "function file_ts() {\n    const a = 42;\n    const b_2 = undefined;\n    const value = a > 40;\n    let b;\n    if (value) {\n        const b_5 = 43;\n        const value = a > b_5;\n        let b;\n        if (value) {\n            b = 46;\n        }\n    }\n    return b;\n}",
           "inputs": [],
           "inner": [
             {
